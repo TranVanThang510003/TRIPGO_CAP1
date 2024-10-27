@@ -5,7 +5,7 @@ import IconHeart from "../icon/IconHeart";
 
 const FunActivitiesCard = ({ activity }) => {
   return (
-    <div className="w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-xl overflow-hidden shadow-lg bg-white">
+    <div className="w-[260px] h-[360px] mt-4 rounded-xl overflow-hidden shadow-lg bg-white">
       {/* Hình ảnh nhà hàng */}
       <div className="relative">
         <img

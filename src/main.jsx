@@ -15,6 +15,8 @@ import FunActivitiesPage from "./Page/FunActivitiesPage";
 import HotelDetails from "./Page/HotelDetail";
 import "../src/index.css";
 import RestantantDetails from "./Page/RestantantDetails";
+import CamPingPage from "./Page/CamPingPage";
+import CampingDetail from "./Page/CampingDetail";
 
 const Main = () => {
   return (
@@ -27,8 +29,9 @@ const Main = () => {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/tours" element={<TourPage />} />
         <Route path="/funactivities" element={<FunActivitiesPage />} />
-        <Route path="/restaurantsdetails" element={<RestantantDetails/>} />
-
+        <Route path="/restaurantsdetails" element={<RestantantDetails />} />
+        <Route path="/campings" element={<CamPingPage />} />
+        <Route path="/campingsdetails" element={<CampingDetail />} />
       </Routes>
     </Router>
   );
