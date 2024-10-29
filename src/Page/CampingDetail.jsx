@@ -1,5 +1,6 @@
 import InformationCamping from "../components/CampingDetail/InformationCamping";
-import EvaluateList from "../components/RestaurantDetail/EvaluateList";
+import EvaluateList from "../components/Evaluate/EvaluateList";
+
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
 const CampingDetail = () => {

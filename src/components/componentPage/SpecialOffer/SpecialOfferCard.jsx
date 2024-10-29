@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import IconHeart from "../icon/IconHeart";
+import IconHeart from "../../icon/IconHeart";
 
 const SpecialOfferCard = () => {
   return (

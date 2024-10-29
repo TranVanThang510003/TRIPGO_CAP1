@@ -1,8 +1,6 @@
-
-import SpecialOfferCard from "./SpecialOfferCard";
+import SpecialOfferList from "./SpecialOfferList";
 
 const SpecialOffer = () => {
-
   return (
     <div className="flex flex-col items-center py-8 bg-gray-50 mt-[100px]">
       {/* Tiêu đề */}
@@ -22,10 +20,8 @@ const SpecialOffer = () => {
       </div>
 
       {/* Cards */}
-      <div className="flex gap-10">
-      <SpecialOfferCard/>
-      <SpecialOfferCard/>
-      <SpecialOfferCard/>
+      <div>
+        <SpecialOfferList/>
       </div>
     </div>
   );
@@ -33,8 +29,8 @@ const SpecialOffer = () => {
 
 export default SpecialOffer;
 
-
-{/* <div className="grid grid-cols-3 gap-12">
+{
+  /* <div className="grid grid-cols-3 gap-12">
 {[0, 1, 2].map((index) => (
   <div
     key={index}
@@ -46,17 +42,18 @@ export default SpecialOffer;
         alt="Tour Bà Nà Hills"
         className="w-full h-56 object-cover"
       />
-      {/* Nút trái tim */}
+      {/* Nút trái tim */
+}
 //       <button
 //         className="absolute top-4 right-4 bg-white p-2 rounded-full shadow"
-//         onClick={() => toggleFavorite(index)} 
+//         onClick={() => toggleFavorite(index)}
 //       >
 //         <svg
 //           xmlns="http://www.w3.org/2000/svg"
 //           className="h-6 w-6"
-//           fill={favorites[index] ? "#ff6b6b" : "white"} 
+//           fill={favorites[index] ? "#ff6b6b" : "white"}
 //           viewBox="0 0 24 24"
-//           stroke="#ff6b6b" 
+//           stroke="#ff6b6b"
 //         >
 //           <path
 //             fillRule="evenodd"

@@ -1,4 +1,4 @@
-import EvaluateList from "../components/RestaurantDetail/EvaluateList";
+import EvaluateList from "../components/Evaluate/EvaluateList";
 import InformationRestaurant from "../components/RestaurantDetail/InformationRestaurant";
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
