@@ -5,20 +5,30 @@ import '@fontsource/roboto/700.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import HomePage from './Page/HomePage'; // Import Home Page
-import Restaurant from './Page/Restaurant'; // Import Restaurant Page
-import HotelPage from './Page/hotelpages/Hotel'; // Import Hotel Page
-import HotelDetails from './Page/hotelpages/HotelDetail'; // Import Hotel Details Page
-import TourPage from './Page/tourpages/TourPage'; // Import Tour Page
-import TourDetailPage from './Page/tourpages/TourDetailPage'; // Import Tour Detail Page
+import Restaurant from './Page/Restaurant'; 
+import HomePage from './Page/HomePage'; 
+import HotelPage from './Page/Hotel'; 
+import TourPage from './Page/TourPage';
+import FunActivitiesPage from './Page/FunActivitiesPage';
+import HotelDetails from './Page/HotelDetail';
+
+import UserProfile from './Page/UserProfile'; 
+import UserFavourite from './Page/UserFavourite.jsx';
+import UserSetting from './Page/UserSetting.jsx';
+
+import HomePage from './Page/HomePage'; 
+import Restaurant from './Page/Restaurant'; 
+import HotelPage from './Page/hotelpages/Hotel'; 
+import HotelDetails from './Page/hotelpages/HotelDetail'; 
+import TourPage from './Page/tourpages/TourPage'; 
+import TourDetailPage from './Page/tourpages/TourDetailPage'; 
 import FunActivitiesPage from './Page/FunActivitiyPages/FunActivitiesPage'; 
 import FunActivityDetail from './Page/FunActivitiyPages/FunActivityDetail'; 
-import UserProfile from './Page/UserProfile';
 import BookingCheckOutPage from './Page/bookingpage/BookingCheckOutPage';
 import WaitingScreen  from './Page/bookingpage/WaitingScreen';
-import './index.css'; 
+import './index.css';
 
 const Main = () => {
   return (
@@ -44,6 +54,10 @@ const Main = () => {
         
         {/* Trang hồ sơ người dùng */}
         <Route path="/profile" element={<UserProfile />} /> {/* Trang hồ sơ người dùng */}
+        <Route path="/favourite" element={<UserFavourite/>} /> {/* Trang yêu thích */}
+        <Route path="/setting" element={<UserSetting/>} /> {/* Trang cài đặt */}
+        
+        {/* Trang khác */}
         <Route path="/bookingcheckoutpage" element={<BookingCheckOutPage />} /> 
         <Route path="/waitingscreen" element={<WaitingScreen />} />
       </Routes>
