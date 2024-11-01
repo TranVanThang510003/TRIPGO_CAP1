@@ -13,7 +13,7 @@ const RestaurantCard = ({ restaurant }) => {
           alt={restaurant.name}
         />
         <button className="absolute top-2 right-2 p-2 ">
-          <IconHeart/>
+          <IconHeart />
         </button>
       </div>
 
