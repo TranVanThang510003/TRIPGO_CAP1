@@ -1,5 +1,6 @@
 
 import { Icon } from "@iconify/react/dist/iconify.js";
+
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import 'react-datepicker/dist/react-datepicker.css'; // Import CSS của DatePicker
@@ -13,6 +14,7 @@ const SearchBar = () => {
     const [rooms, setRooms] = useState(1); // Số phòng
     const [adults, setAdults] = useState(2); // Số người lớn
     const [children, setChildren] = useState(0);
+   
 
     // Hàm để tính ngày hôm sau
     const getNextDay = (date) => {
@@ -184,6 +186,7 @@ const SearchBar = () => {
                     <button className="mt-5 w-36 h-16 rounded-xl bg-customBlue text-white font-semibold flex justify-center items-center hover:bg-blue-700 duration-300">
                         Tìm kiếm
                     </button> 
+             
                 </div>
             </div>
         </div>

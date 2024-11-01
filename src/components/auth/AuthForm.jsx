@@ -90,8 +90,7 @@ function AuthForm({ type, onSubmit, onClose }) {
             });
         }
     }
-};
-
+  };
 
   // Xử lý khi form đăng ký được gửi
   const handleContinue = (e) => {
@@ -173,8 +172,6 @@ function AuthForm({ type, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
-      {" "}
-      {/* Modal overlay */}
       <div className="auth-container">
         <div className="auth-box">
           {/* Nút đóng */}

@@ -24,11 +24,11 @@ const Header = () => {
     }
   }, []);
 
-  // // Hàm đăng xuất người dùng
-  // const handleLogout = () => {
-  //   localStorage.removeItem('user'); // Xóa thông tin người dùng khỏi localStorage
-  //   setLoggedInUser(null); // Cập nhật state
-  // };
+  // Hàm đăng xuất người dùng
+  const handleLogout = () => {
+    localStorage.removeItem('user'); // Xóa thông tin người dùng khỏi localStorage
+    setLoggedInUser(null); // Cập nhật state
+  };
 
   // Handle closing of modals
   const handleClose = () => {
@@ -81,7 +81,7 @@ const Header = () => {
 
       <nav className="flex items-center space-x-4">
         <a href="#" className="text-gray-600 hover:text-gray-800 font-medium flex items-center gap-2">
-        {<Icon icon="twemoji:flag-vietnam" className='text-2xl' />}
+          {<Icon icon="twemoji:flag-vietnam" className='text-2xl' />}
           VN|VND
         </a>
         <FontAwesomeIcon icon={faChevronDown} />
@@ -97,13 +97,11 @@ const Header = () => {
         {/* Hiển thị avatar hoặc nút đăng nhập/đăng ký */}
         {loggedInUser ? (
           <div className="relative flex items-center space-x-2">
-      
             <div className="cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <FontAwesomeIcon icon={faUserCircle} className="text-gray-600 " onClick={handleShowProfile} style={{ fontSize: '50px' }} />
-   
             </div>
 
-            {/* Dropdown xuất hiện khi click
+            {/* Dropdown xuất hiện khi click */}
             {isDropdownOpen && (
               <div className="absolute right-0 top-12 w-48 bg-white border rounded-lg shadow-lg z-10">
                 <ul className="py-2">
@@ -118,7 +116,7 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-            )} */}
+            )}
           </div>
         ) : (
           <>

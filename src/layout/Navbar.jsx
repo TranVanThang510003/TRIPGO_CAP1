@@ -2,13 +2,13 @@
 const Navbar = () => {
   return (
     <div
-      className="relative bg-cover bg-center h-screen "
+      className="relative bg-cover bg-center h-[500px] "
       style={{
         backgroundImage: "url('public/pexels-francesco-ungaro-2835436 1.png')",
       }}
     >
       {/* Lớp phủ đen mờ */}
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-5"></div>
 
       {/* Nội dung */}
       <div className="relative z-10 flex flex-col items-center text-center text-white pt-24 ">

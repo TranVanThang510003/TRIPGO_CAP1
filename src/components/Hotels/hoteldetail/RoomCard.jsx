@@ -2,12 +2,14 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 
 const RoomCard = ({ room }) => {
+  const baseURL = 'http://localhost:3000'; // Đường dẫn cơ sở cho hình ảnh
+
   return (
     <div className="flex flex-col lg:flex-row rounded-lg shadow-lg mb-6 border border-gray-200 overflow-hidden">
       {/* Room Images Section */}
       <div className="w-full lg:w-1/3 p-2">
         <img
-          src={room.image}
+          src={room.image ? `${baseURL}${room.image}` : '/default-room.jpg'} // Sử dụng baseURL cho hình chính
           alt={`Room image for ${room.title}`}
           className="w-full h-[170px] rounded-md object-cover mb-2 transition-transform duration-300 hover:scale-105"
         />
@@ -15,7 +17,7 @@ const RoomCard = ({ room }) => {
           {room.additionalImages.slice(0, 2).map((image, index) => (
             <img
               key={index}
-              src={image}
+              src={`${baseURL}${image}`} // Sử dụng baseURL cho các hình bổ sung
               alt={`Additional image ${index + 1} for ${room.title}`}
               className="w-full h-[85px] rounded-md object-cover transition-transform duration-300 hover:scale-105"
             />

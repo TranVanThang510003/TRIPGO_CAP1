@@ -10,13 +10,12 @@ import RoomCard from '../../components/Hotels/hoteldetail/RoomCard';
 import ImageGallery from '../../components/common/ImageGallery';
 import SearchBar from '../../components/Hotels/hoteldetail/SearchBar';
 import { fetchHotelDetails } from '../../components/services/api';
-
+import ReturnButton from '../../components/common/returnButton';
 const HotelDetails = () => {
   const { hotelId } = useParams();
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const baseURL = 'http://localhost:3000';
 
   // Function to ensure there are exactly 4 images (for ImageGallery)
   const ensureFourImages = (images) => {
@@ -47,9 +46,9 @@ const HotelDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const imageUrl = `${baseURL}${hotel?.imageUrl}`;
+  const imageUrl = hotel?.imageUrl; 
   const additionalImages = ensureFourImages(
-    [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => `${baseURL}${img}`) || [])]
+    [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => img) || [])]
   );
 
   return (
@@ -57,14 +56,17 @@ const HotelDetails = () => {
       <Header />
       <div className="container mx-auto mt-[80px] w-4/5">
         <SearchBar />
+       
         <div className='pt-[115px]'>
+          <div className='my-3'><ReturnButton/></div>
+           
           <ImageGallery images={additionalImages} />
         </div>
 
         <TitleAndDescription 
-          name={hotel?.name || "No Name Available"} 
-          rating={hotel?.hotelType || "No Rating"} 
-          description={hotel?.description || "No Description Available"} 
+          name={hotel?.name || "Không có tên"} 
+          rating={hotel?.hotelType || "Không có xếp hạng"} 
+          description={hotel?.description || "Không có mô tả"} 
           pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "Liên hệ"} 
         />
 
@@ -72,34 +74,38 @@ const HotelDetails = () => {
           <RatingAndComments 
             rating={hotel?.averageRating || 0} 
             comments={hotel?.reviewCount || 0} 
-            latestComment={hotel?.latestComment || "No recent comments available"} 
-            userName={hotel?.userName || "Anonymous"} 
+            latestComment={hotel?.latestComment || "Không có bình luận gần đây"} 
+            userName={hotel?.userName || "Vô danh"} 
           />
           <Amenities amenities={hotel?.amenities ? hotel.amenities.split(', ') : []} />
           <Location 
-            address={hotel?.location || "No location provided"} 
+            address={hotel?.location || "Không có địa chỉ"} 
             airportDistance={hotel?.airportTransfer ? 'Có xe đưa đón sân bay' : 'Không có xe đưa đón sân bay'} 
           />
         </div>
 
         <h4 className="text-3xl font-medium mb-4 mt-4">Chọn phòng của bạn</h4>
         <div className="flex flex-col w-full">
-          {hotel?.roomTypes?.map((type) => (
-            <RoomCard 
-              key={type.roomTypeId}
-              room={{
-                title: type.roomName,
-                price: type.roomPrice,
-                mealPlans: type.mealPlans,
-                refundPolicy: hotel.isFreeCancellation ? "Hủy miễn phí" : "Không hoàn tiền",
-                availability: type.maxOccupancy,
-                size: type.roomSize,
-                description: type.roomDescription,
-                image: type.bedImages?.[0] ? `${baseURL}${type.bedImages[0]}` : `${baseURL}/default-room.jpg`,
-                additionalImages: ensureFourImages(type.bedImages?.slice(0, 2).map(img => `${baseURL}${img}`))
-              }} 
-            />
-          )) || <p>No rooms available</p>}
+          {hotel?.roomTypes?.length > 0 ? (
+            hotel.roomTypes.map((type) => (
+              <RoomCard 
+                key={type.roomTypeId}
+                room={{
+                  title: type.roomName,
+                  price: type.roomPrice,
+                  mealPlans: type.mealPlans,
+                  refundPolicy: hotel.isFreeCancellation ? "Hủy miễn phí" : "Không hoàn tiền",
+                  availability: type.maxOccupancy,
+                  size: type.roomSize,
+                  description: type.roomDescription,
+                  image: type.bedImages?.[0] || '/default-room.jpg', 
+                  additionalImages: ensureFourImages(type.bedImages?.slice(0, 2) || [])
+                }} 
+              />
+            ))
+          ) : (
+            <p>Không có phòng nào có sẵn.</p> // Hiển thị thông báo nếu không có phòng
+          )}
         </div>
       </div>
       <Footer />

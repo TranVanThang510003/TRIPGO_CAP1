@@ -39,7 +39,7 @@ const TourTitleAndRating = ({ title, rating, reviewsCount, location, duration })
         
       </div>
       
-      <p className="text-gray-600">{location}</p>
+      <p className="text-gray-600">Địa điểm: {location}</p>
       <p className="text-gray-600 mt-2 mb-2">Thời lượng: {duration}</p>
     </div>
   );
