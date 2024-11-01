@@ -57,7 +57,7 @@ function AuthForm({ type, onSubmit, onClose }) {
 
     try {
       // Gửi yêu cầu POST đến API đăng nhập
-      const response = await axios.post("http://localhost:3000/users", {
+      const response = await axios.post("http://localhost:3000/api/login", {
         emailOrPhone,
         password,
       });

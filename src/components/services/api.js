@@ -2,18 +2,22 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://example.com/api',  // Thay bằng URL API của bạn
+  baseURL: 'http://localhost:3000/api', // Thay bằng URL API của bạn
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-export const fetchHotelDetails = async (hotelId) => {
-  const response = await api.get(`/hotels/${hotelId}`);
+// Hàm gọi API để lấy danh sách các tour
+export const fetchTours = async (page = 1, limit = 9) => {
+  const response = await api.get('/public-tours', {
+    params: { page, limit },
+  });
   return response.data;
 };
 
-export const fetchRooms = async (hotelId) => {
-  const response = await api.get(`/hotels/${hotelId}/rooms`);
+// Hàm gọi API để lấy chi tiết một tour cụ thể
+export const fetchTourDetails = async (tourId) => {
+  const response = await api.get(`/public-tours/${tourId}`);
   return response.data;
 };

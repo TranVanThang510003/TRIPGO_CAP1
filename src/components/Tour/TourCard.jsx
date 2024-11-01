@@ -3,18 +3,19 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import locationIcon from "@iconify/icons-mdi/map-marker"; // Biểu tượng vị trí
 import starIcon from "@iconify/icons-mdi/star"; // Biểu tượng sao
 import IconHeart from "../icon/IconHeart";
+
 const TourCard = ({ tour }) => {
   return (
     <div className="w-[260px] mt-4 rounded-xl overflow-hidden shadow-lg bg-white">
-      {/* Hình ảnh nhà hàng */}
+      {/* Hình ảnh tour */}
       <div className="relative">
         <img
           className="w-full h-[150px] object-cover"
-          src={tour.imageUrl}
-          alt="hoi an"
+          src={`http://localhost:3000${tour.imageUrl}`} // Sử dụng đường dẫn từ API
+          alt={tour.name} // Sử dụng name từ API
         />
-        <button className="absolute top-2 right-2 p-2 ">
-          <IconHeart/>
+        <button className="absolute top-2 right-2 p-2">
+          <IconHeart />
         </button>
       </div>
 
@@ -24,9 +25,11 @@ const TourCard = ({ tour }) => {
           <div className="bg-pink-200 rounded-full w-[75px] h-[22px] flex items-center justify-center">
             Relex
           </div>
-          <p className="ml-5 text-slate-500">{tour.nub_day} ngày</p>
+          <p className="ml-5 text-slate-500">{tour.nub_day} ngày</p> {/* Sử dụng nub_day từ API */}
         </div>
-        <h2 className="text-xl font-bold text-blue-900 mt-3">{tour.name}</h2>
+        <h2 className="text-xl font-bold text-blue-900 mt-3">
+          {tour.name} {/* Sử dụng name từ API */}
+        </h2>
         <div className="text-sm flex mt-3">
           <Icon
             icon={locationIcon}
@@ -34,7 +37,7 @@ const TourCard = ({ tour }) => {
             height="18"
             className="text-pink-400"
           />
-          <p className="text-gray-700 ml-1">{tour.location}</p>
+          <p className="text-gray-700 ml-1">{tour.location}</p> {/* Sử dụng location từ API */}
         </div>
         <div className="text-sm flex mt-2">
           <Icon
@@ -43,12 +46,12 @@ const TourCard = ({ tour }) => {
             height="18"
             className="text-yellow-500"
           />
-          <p className="text-yellow-400 ml-1">{tour.rating}</p>
-          <p className="text-gray-700 ml-2">({tour.reviews})</p>
-          <p className="text-gray-500 ml-2">{tour.nub_booking}</p>
+          <p className="text-yellow-400 ml-1">{tour.rating}</p> {/* Sử dụng rating từ API */}
+          <p className="text-gray-700 ml-2">({tour.nub_booking} đánh giá)</p> {/* Sử dụng nub_booking từ API */}
+          <p className="text-gray-500 ml-2">{tour.nub_booking} đặt chỗ</p> {/* Sử dụng nub_booking từ API */}
         </div>
         <div className="text-xl flex justify-between items-center mt-4">
-          <h1 className="text-gray-700 font-bold">{tour.price}/Người</h1>
+          <h1 className="text-gray-700 font-bold">{tour.price} USD/Người</h1> {/* Sử dụng price từ API */}
           <button className="h-[37px] w-[80px] bg-blue-900 text-white rounded-2xl hover:bg-blue-700 text-sm">
             Đặt ngay
           </button>

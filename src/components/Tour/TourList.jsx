@@ -1,175 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TourCard from "./TourCard";
 import Pagination from "../common/Pagination";
-const tourData = [
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "3",
-    imageUrl:
-      "https://sakos.vn/wp-content/uploads/2023/04/song-hoai-5f928a50141ac-1.jpeg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "s",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "1",
-    imageUrl:
-      "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-    location: " Đà Nẵng",
-    rating: 4.5,
-    reviews: "7K đánh giá",
-    nub_booking: "5k+",
-    price: "110.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "2",
-    imageUrl:
-      "https://vidoco.vn/uploads/news/2019_04/1kinh-doanh-nha-hang_1.jpg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "3",
-    imageUrl:
-      "https://sakos.vn/wp-content/uploads/2023/04/song-hoai-5f928a50141ac-1.jpeg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "s",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "1",
-    imageUrl:
-      "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-    location: " Đà Nẵng",
-    rating: 4.5,
-    reviews: "7K đánh giá",
-    nub_booking: "5k+",
-    price: "110.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "2",
-    imageUrl:
-      "https://vidoco.vn/uploads/news/2019_04/1kinh-doanh-nha-hang_1.jpg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "3",
-    imageUrl:
-      "https://sakos.vn/wp-content/uploads/2023/04/song-hoai-5f928a50141ac-1.jpeg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "s",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "1",
-    imageUrl:
-      "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-    location: " Đà Nẵng",
-    rating: 4.5,
-    reviews: "7K đánh giá",
-    nub_booking: "5k+",
-    price: "110.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "2",
-    imageUrl:
-      "https://vidoco.vn/uploads/news/2019_04/1kinh-doanh-nha-hang_1.jpg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "3",
-    imageUrl:
-      "https://sakos.vn/wp-content/uploads/2023/04/song-hoai-5f928a50141ac-1.jpeg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-  {
-    status: "s",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "1",
-    imageUrl:
-      "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-    location: " Đà Nẵng",
-    rating: 4.5,
-    reviews: "7K đánh giá",
-    nub_booking: "5k+",
-    price: "110.000đ",
-  },
-  {
-    status: "Relex  ",
-    name: "Tour Đà Nẵng - Hội An",
-    nub_day: "2",
-    imageUrl:
-      "https://vidoco.vn/uploads/news/2019_04/1kinh-doanh-nha-hang_1.jpg",
-    location: "Khởi hành từ Đà Nẵng",
-    rating: 4.5,
-    reviews: "5K đánh giá",
-    nub_booking: "5k+",
-    price: "950.000đ",
-  },
-];
+import { fetchTours } from "../services/api"; // Import fetchTours từ api.js
+
 const TOUR_PER_PAGE = 9;
+
 const TourList = () => {
-  // Trạng thái quản lý trang hiện tại
+  const [tours, setTours] = useState([]); // Khởi tạo tours là mảng rỗng
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Tính toán số trang
-  const totalPages = Math.ceil(tourData.length / TOUR_PER_PAGE);
+  useEffect(() => {
+    const loadTours = async () => {
+      try {
+        const data = await fetchTours(currentPage, TOUR_PER_PAGE);
+        console.log("API response:", data); // Kiểm tra phản hồi từ API
+        setTours(data.tours || []); // Đặt tours là mảng từ phản hồi API nếu tồn tại
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách tours:", error);
+      }
+    };
 
-  // Lấy danh sách khách sạn cho trang hiện tại
-  const currentTour = tourData.slice(
-    (currentPage - 1) * TOUR_PER_PAGE,
-    currentPage * TOUR_PER_PAGE
-  );
+    loadTours();
+  }, [currentPage]);
 
-  //   Hàm xử lý khi người dùng chuyển trang
+  // Kiểm tra nếu `tours` là một mảng trước khi gọi `.map()`
+  if (!Array.isArray(tours) || tours.length === 0) {
+    return <p>Không có dữ liệu tours</p>;
+  }
+
+  const totalPages = Math.ceil(tours.length / TOUR_PER_PAGE);
+
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
+
   return (
-    <div className="flex flex-wrap  justify-between w-full">
-      {currentTour.map((tour, index) => (
+    <div className="flex flex-wrap justify-between w-full">
+      {tours.map((tour, index) => (
         <TourCard key={index} tour={tour} />
       ))}
 
