@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
 // config/db.js
-=======
-import dotenv from 'dotenv';
-dotenv.config();
-import sql from 'mssql';
->>>>>>> Stashed changes
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -21,8 +15,8 @@ const dbConfig = {
   // eslint-disable-next-line no-undef
   port: parseInt(process.env.DB_PORT, 10),
   options: {
-    encrypt: true,
-    trustServerCertificate: true
+    encrypt: true, // Sử dụng mã hóa SSL nếu cần
+    trustServerCertificate: true // Đối với chứng chỉ tự ký
   }
 };
 
@@ -38,4 +32,8 @@ const poolPromise = new sql.ConnectionPool(dbConfig)
     process.exit(1);
   });
 
-export { sql, poolPromise };
+// eslint-disable-next-line no-undef
+module.exports = {
+  sql,
+  poolPromise
+};

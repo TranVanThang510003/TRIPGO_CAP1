@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 // authRoutes.js
 
 import express from 'express';
@@ -15,17 +14,4 @@ router.get('/register', (req, res) => {
 });
 
 // Export the router as the default export
-=======
-import express from 'express';
-import { register, googleLogin, facebookLogin, sendOTP, verifyOTPHandler } from '../../controllers/authController.js';
-
-const router = express.Router();
-
-router.post('/register', register);
-router.post('/google-login', googleLogin);
-router.post('/facebook-login', facebookLogin);
-router.post('/send-otp', sendOTP);
-router.post('/verify-otp', verifyOTPHandler); // Đổi tên verifyOTP thành verifyOTPHandler để không bị trùng tên
-
->>>>>>> Stashed changes
 export default router;
