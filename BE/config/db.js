@@ -1,9 +1,8 @@
 // config/db.js
-// eslint-disable-next-line no-undef
-require('dotenv').config();
-// eslint-disable-next-line no-undef
-const sql = require('mssql');
 
+import dotenv from 'dotenv';
+dotenv.config();
+import sql from 'mssql';
 const dbConfig = {
   // eslint-disable-next-line no-undef
   user: process.env.DB_USER,

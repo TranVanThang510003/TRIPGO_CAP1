@@ -1,6 +1,5 @@
-// eslint-disable-next-line no-undef
-const otpGenerator = require('otp-generator');
 
+import otpGenerator from 'otp-generator';
 const otps = new Map();
 
 function generateOTP() {

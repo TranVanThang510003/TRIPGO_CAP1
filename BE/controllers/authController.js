@@ -1,15 +1,17 @@
-// eslint-disable-next-line no-undef
-const { poolPromise, sql } = require('../config/db');
-// eslint-disable-next-line no-undef
-const otpService = require('../services/otpService');
-// eslint-disable-next-line no-undef
-const { OAuth2Client } = require('google-auth-library');
-// eslint-disable-next-line no-undef
-const axios = require('axios');
-// eslint-disable-next-line no-undef
-const nodemailer = require('nodemailer');
+
+import { poolPromise, sql } from '../config/db.js';
+
+import otpService from '../services/otpService.js';
+
+import { OAuth2Client } from 'google-auth-library';
+
+import axios from 'axios';
+
+import nodemailer from 'nodemailer';
+
 // eslint-disable-next-line no-undef
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 // eslint-disable-next-line no-undef
 exports.register = async (req, res) => {
