@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 import { poolPromise, sql } from '../config/db.js';
 
@@ -7,14 +8,24 @@ import { OAuth2Client } from 'google-auth-library';
 
 import axios from 'axios';
 
+=======
+import { poolPromise, sql } from '../config/db.js';
+import { generateOTP, saveOTP, verifyOTP } from '../services/otpService.js';  
+import { OAuth2Client } from 'google-auth-library';
+import axios from 'axios';
+>>>>>>> Stashed changes
 import nodemailer from 'nodemailer';
 
 // eslint-disable-next-line no-undef
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+<<<<<<< Updated upstream
 
 // eslint-disable-next-line no-undef
 exports.register = async (req, res) => {
+=======
+export const register = async (req, res) => {
+>>>>>>> Stashed changes
   const { username, email, password } = req.body;
   try {
     const pool = await poolPromise;
@@ -29,8 +40,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// eslint-disable-next-line no-undef
-exports.googleLogin = async (req, res) => {
+export const googleLogin = async (req, res) => {
   const { token } = req.body;
   try {
     // eslint-disable-next-line no-undef
@@ -38,28 +48,26 @@ exports.googleLogin = async (req, res) => {
     const payload = ticket.getPayload();
     const { email } = payload;
     res.json({ message: `User ${email} logged in with Google` });
-  } catch  {
+  } catch {
     res.status(400).json({ error: 'Google authentication failed' });
   }
 };
 
-// eslint-disable-next-line no-undef
-exports.facebookLogin = async (req, res) => {
+export const facebookLogin = async (req, res) => {
   const { accessToken } = req.body;
   try {
     const response = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email`);
     const { email } = response.data;
     res.json({ message: `User ${email} logged in with Facebook` });
-  } catch  {
+  } catch {
     res.status(400).json({ error: 'Facebook authentication failed' });
   }
 };
 
-// eslint-disable-next-line no-undef
-exports.sendOTP = async (req, res) => {
+export const sendOTP = async (req, res) => {
   const { email } = req.body;
-  const otp = otpService.generateOTP();
-  otpService.saveOTP(email, otp);
+  const otp = generateOTP();
+  saveOTP(email, otp);
   
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -77,10 +85,10 @@ exports.sendOTP = async (req, res) => {
   res.json({ message: 'OTP sent' });
 };
 
-// eslint-disable-next-line no-undef
-exports.verifyOTP = async (req, res) => {
+// Đổi tên hàm từ `verifyOTP` thành `verifyOTPHandler`
+export const verifyOTPHandler = async (req, res) => {
   const { email, otp } = req.body;
-  if (otpService.verifyOTP(email, otp)) {
+  if (verifyOTP(email, otp)) {
     res.json({ message: 'OTP verified successfully' });
   } else {
     res.status(400).json({ error: 'Invalid OTP' });
