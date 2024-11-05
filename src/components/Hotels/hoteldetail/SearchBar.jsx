@@ -1,9 +1,12 @@
-import { useState } from 'react';
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
 import 'react-datepicker/dist/react-datepicker.css'; // Import CSS của DatePicker
-
+import { useState, useEffect } from 'react';
 const SearchBar = () => {
+    const [destinations, setDestinations] = useState([]); // Lưu danh sách các tỉnh thành
+    const [selectedDestination, setSelectedDestination] = useState('');
     const [checkInDate, setCheckInDate] = useState(null);
     const [checkOutDate, setCheckOutDate] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false); // Quản lý dropdown
@@ -25,7 +28,18 @@ const SearchBar = () => {
         // Hàm để tăng/giảm số phòng, người lớn, trẻ em
         const increment = (setter, value) => setter(value + 1);
         const decrement = (setter, value) => value > 0 && setter(value - 1);
-
+        useEffect(() => {
+            const fetchDestinations = async () => {
+                try {
+                    const response = await axios.get('https://provinces.open-api.vn/api/p/');
+                    setDestinations(response.data); // Lưu danh sách tỉnh/thành vào state
+                } catch (error) {
+                    console.error("Lỗi khi lấy danh sách tỉnh/thành:", error);
+                }
+            };
+    
+            fetchDestinations();
+        }, []);
     return (
         <div className="mt-[60px] z-50 fixed mx-auto marker:h-auto w-full  ">
            
@@ -40,12 +54,16 @@ const SearchBar = () => {
                         <div className="text-sm text-slate-600 font-medium">Điểm đến</div>
                         <div className="w-64 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex justify-between items-center">
                             <Icon icon="mdi:location" className="w-7 h-7" />
-                            <select className="px-2 w-full">
+                            <select 
+                                value={selectedDestination} 
+                                onChange={(e) => setSelectedDestination(e.target.value)} 
+                                className="px-2 w-full"
+                            >
                                 <option>Chọn điểm đến</option>
-                                <option>Đà Nẵng</option>
-                                <option>Hà Nội</option>
-                                <option>TP.HCM</option>
-                            </select>
+                                {destinations.map((destination) => (
+                                    <option key={destination.code} value={destination.name}>{destination.name}</option>
+                                ))}
+                            </select>   
                         </div>
                     </div>   
                     

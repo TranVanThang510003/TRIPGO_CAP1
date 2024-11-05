@@ -5,25 +5,24 @@ import { fetchTours } from "../services/api"; // Import fetchTours từ api.js
 
 const TOUR_PER_PAGE = 9;
 
-const TourList = () => {
-  const [tours, setTours] = useState([]); // Khởi tạo tours là mảng rỗng
+const TourList = ({ priceOrder, ratingOrder }) => {
+  const [tours, setTours] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const loadTours = async () => {
       try {
-        const data = await fetchTours(currentPage, TOUR_PER_PAGE);
-        console.log("API response:", data); // Kiểm tra phản hồi từ API
-        setTours(data.tours || []); // Đặt tours là mảng từ phản hồi API nếu tồn tại
+        const data = await fetchTours(currentPage, TOUR_PER_PAGE, priceOrder, ratingOrder);
+        console.log("API response:", data);
+        setTours(data.tours || []);
       } catch (error) {
         console.error("Lỗi khi lấy danh sách tours:", error);
       }
     };
 
     loadTours();
-  }, [currentPage]);
+  }, [currentPage, priceOrder, ratingOrder]);
 
-  // Kiểm tra nếu `tours` là một mảng trước khi gọi `.map()`
   if (!Array.isArray(tours) || tours.length === 0) {
     return <p>Không có dữ liệu tours</p>;
   }
@@ -38,8 +37,8 @@ const TourList = () => {
 
   return (
     <div className="flex flex-wrap justify-between w-full">
-      {tours.map((tour, index) => (
-        <TourCard key={index} tour={tour} />
+      {tours.map((tour) => (
+        <TourCard key={tour.id} tour={tour} />
       ))}
 
       <div className="flex ml-[350px]">

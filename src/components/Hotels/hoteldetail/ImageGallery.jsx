@@ -1,13 +1,11 @@
-/* eslint-disable react/prop-types */
-
-
+// src/components/common/ImageGallery.js
 const ImageGallery = ({ images }) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-4">
       {/* Large image */}
       <div className="w-full md:w-2/3">
         <img
-          src={images[0]}
+          src={images[0]} // Chắc chắn rằng đây là đường dẫn đúng đến ảnh
           alt="Khách sạn chính"
           className="w-full h-[470px] object-cover rounded-md"
         />
@@ -26,6 +24,11 @@ const ImageGallery = ({ images }) => {
       </div>
     </div>
   );
+};
+
+// Định nghĩa propTypes để kiểm tra loại dữ liệu
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ImageGallery;

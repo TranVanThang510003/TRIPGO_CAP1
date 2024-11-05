@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RatingAndComments = ({ rating, comments }) => {
+const RatingAndComments = ({ rating, comments, latestComment, userName }) => {
   return (
     <div className="text-left border rounded-xl p-2 bg-white col-span-1">
       <div className="flex">
@@ -11,10 +11,12 @@ const RatingAndComments = ({ rating, comments }) => {
         </div>
       </div>
       <div className="mt-2 flex items-center">
-        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-white font-semibold">N</div>
-        <p className="font-semibold text-gray-700 ml-2">Người dùng </p>
+        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold">
+          {userName?.charAt(0).toUpperCase() || "N"}
+        </div>
+        <p className="font-semibold text-gray-700 ml-2">{userName || "Người dùng"}</p>
       </div>
-      <p className="text-gray-600 mt-2">Good. Tuyệt vời chỉ có vị trí hơi khó đi khi bắt tài xế kiếm dễ đón khách ..</p>
+      <p className="text-gray-600 mt-2">{latestComment || "Chưa có bình luận nào."}</p>
     </div>
   );
 };

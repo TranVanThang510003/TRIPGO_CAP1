@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DatePicker from 'react-datepicker';  // Để sử dụng DatePicker của react-datepicker
+import DatePicker from 'react-datepicker';  
 import 'react-datepicker/dist/react-datepicker.css'; 
-
+import axios from 'axios';
 const SearchBar = () => {
+    const [destinations, setDestinations] = useState([]); // Lưu danh sách các tỉnh thành
+    const [selectedDestination, setSelectedDestination] = useState(''); // Lưu điểm đến đã chọn
     const [checkInDate, setCheckInDate] = useState(null);  
     const [checkOutDate, setCheckOutDate] = useState(null);  
     const [rooms, setRooms] = useState(1); 
     const [adults, setAdults] = useState(1);  
     const [children, setChildren] = useState(0);  
     const [showDropdown, setShowDropdown] = useState(false);  
+
     // Hàm để tính ngày hôm sau cho ngày trả phòng
     const getNextDay = (date) => {
         const nextDay = new Date(date);
@@ -25,6 +28,20 @@ const SearchBar = () => {
     // Hàm để tăng/giảm số phòng, người lớn, trẻ em
     const increment = (setter, value) => setter(value + 1);
     const decrement = (setter, value) => value > 0 && setter(value - 1);
+
+    // Gọi API để lấy danh sách tỉnh thành phố từ endpoint
+    useEffect(() => {
+        const fetchDestinations = async () => {
+            try {
+                const response = await axios.get('https://provinces.open-api.vn/api/p/');
+                setDestinations(response.data); // Lưu danh sách tỉnh/thành vào state
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách tỉnh/thành:", error);
+            }
+        };
+
+        fetchDestinations();
+    }, []);
 
     return (
         <div className="mt-[80px] marker:h-auto w-full flex flex-col justify-center">
@@ -50,12 +67,16 @@ const SearchBar = () => {
                         <div className="text-sm text-slate-600 font-medium">Điểm đến</div>
                         <div className="w-64 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex justify-between items-center">
                             <Icon icon="mdi:location" className="w-7 h-7" />
-                            <select className="px-2 w-full">
+                            <select 
+                                value={selectedDestination} 
+                                onChange={(e) => setSelectedDestination(e.target.value)} 
+                                className="px-2 w-full"
+                            >
                                 <option>Chọn điểm đến</option>
-                                <option>Đà Nẵng</option>
-                                <option>Hà Nội</option>
-                                <option>TP.HCM</option>
-                            </select>
+                                {destinations.map((destination) => (
+                                    <option key={destination.code} value={destination.name}>{destination.name}</option>
+                                ))}
+                            </select>   
                         </div>
                     </div>   
 

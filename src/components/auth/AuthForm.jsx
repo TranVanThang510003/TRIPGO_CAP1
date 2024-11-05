@@ -42,48 +42,56 @@ function AuthForm({ type, onSubmit, onClose }) {
 
     // Kiểm tra email hoặc số điện thoại
     if (!validateEmail(emailOrPhone) && !validatePhone(emailOrPhone)) {
-      emailOrPhoneError = "Email hoặc số điện thoại không hợp lệ!";
+        emailOrPhoneError = "Email hoặc số điện thoại không hợp lệ!";
     }
 
     // Kiểm tra mật khẩu
     if (!validatePassword(password)) {
-      passwordError = "Mật khẩu không hợp lệ!";
+        passwordError = "Mật khẩu không hợp lệ!";
     }
 
     if (emailOrPhoneError || passwordError) {
-      setErrors({ emailOrPhone: emailOrPhoneError, password: passwordError });
-      return; // Dừng hàm nếu có lỗi
+        setErrors({ emailOrPhone: emailOrPhoneError, password: passwordError });
+        return; // Dừng hàm nếu có lỗi
     }
 
     try {
-      // Gửi yêu cầu POST đến API đăng nhập
-      const response = await axios.post("http://localhost:3000/api/login", {
-        emailOrPhone,
-        password,
-      });
+        // Gửi yêu cầu POST đến API đăng nhập
+        const response = await axios.post("http://localhost:3000/api/login", {
+            emailOrPhone,
+            password,
+        });
 
-      // Kiểm tra phản hồi từ API
-      if (response.data.success) {
-        const user = response.data.user;
+        // Kiểm tra phản hồi từ API
+        if (response.data.success) {
+            const user = response.data.user;
 
-        // Lưu thông tin người dùng vào localStorage
-        localStorage.setItem("user", JSON.stringify(user));
+            // Lưu thông tin người dùng vào localStorage
+            localStorage.setItem("user", JSON.stringify(user));
 
-        // Truyền dữ liệu cho `onSubmit` để cập nhật giao diện trong `Header`
-        onSubmit(user);
-      } else {
-        setErrors({ password: response.data.message });
-      }
+            // Truyền dữ liệu cho `onSubmit` để cập nhật giao diện trong `Header`
+            onSubmit(user);
+        } else {
+            // Nếu phản hồi không thành công, hiển thị thông báo lỗi cụ thể
+            setErrors({ password: response.data.message });
+        }
     } catch (error) {
-      console.error(
-        "Lỗi khi xử lý đăng nhập:",
-        error.response ? error.response.data : error.message
-      );
-      setErrors({
-        password: "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.",
-      });
+        console.error("Lỗi khi xử lý đăng nhập:", error.response ? error.response.data : error.message);
+        
+        // Thông báo lỗi tùy chỉnh cho các trường hợp cụ thể
+        if (error.response && error.response.status === 404) {
+            setErrors({ emailOrPhone: "Người dùng không tồn tại!" });
+        } else if (error.response && error.response.status === 401) {
+            setErrors({ password: "Mật khẩu không đúng!" });
+        } else {
+            // Thông báo lỗi chung nếu không có thông tin chi tiết
+            setErrors({
+                password: "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.",
+            });
+        }
     }
-  };
+};
+
 
   // Xử lý khi form đăng ký được gửi
   const handleContinue = (e) => {

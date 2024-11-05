@@ -1,4 +1,5 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../../layout/Header';
 import Footer from '../../layout/Footer';
 import RatingAndComments from '../../components/Hotels/hoteldetail/RatingAndComments';
@@ -8,116 +9,101 @@ import TitleAndDescription from '../../components/Hotels/hoteldetail/TitleAndDes
 import RoomCard from '../../components/Hotels/hoteldetail/RoomCard';
 import ImageGallery from '../../components/common/ImageGallery';
 import SearchBar from '../../components/Hotels/hoteldetail/SearchBar';
-// Dữ liệu cứng đầy đủ để hiển thị giao diện
-const mockHotelData = {
-  name: "Khách sạn Alibaba Đà Nẵng",
-  description: "Khách sạn Alibaba ở Sơn Trà, Đà Nẵng, cách Bãi biển Mỹ Khê và Sông Hàn 5 phút lái xe. Khách sạn bãi biển này cách Cầu Rồng 1,7 mi (2,8 km) và cách Chợ Hàn 1,8 mi (3 km).",
-  rating: 4.5,
-  commentsCount: 16,
-  amenities: [
-    { name: "Quầy bar", icon: "🍹" },
-    { name: "Restaurant", icon: "🍽️" },
-    { name: "WiFi", icon: "📶" },
-    { name: "Chỗ cất hành lý", icon: "🧳" },
-    { name: "Đưa đón đến trạm xe bus, sân bay", icon: "🚐" }
-  ],
-  address: "02 An Tư Công Chúa Street, Mỹ An Ward, Ngũ Hành Sơn District, Đà Nẵng, Việt Nam",
-  airportDistance: 4.4,
-  images: [
-    "../../public/img/alibaba-hotel.jpg",
-    "../../public/img/alibaba-hotel.jpg",
-    "../../public/img/alibaba-hotel.jpg",
-    "../../public/img/alibaba-hotel.jpg",
-  ],
-  rooms: [
-    {
-      title: "Superior Double Room",
-      price: 180533,
-      breakfastIncluded: false,
-      refundPolicy: "Hoàn tiền một phần",
-      availability: "Chỉ còn 1 phòng!",
-      size: 26,
-      image: "../../public/img/alibaba-hotel.jpg",
-      additionalImages: [
-       "../../public/img/alibaba-hotel.jpg",
-       "../../public/img/alibaba-hotel.jpg",
-      ]
-    },
-    {
-      title: "Deluxe Triple Room with City View",
-      price: 411928,
-      breakfastIncluded: true,
-      refundPolicy: "Hủy miễn phí đến 21:00, 26/10/2024",
-      availability: "Còn 2 phòng!",
-      size: 30,
-      image: "../../public/img/alibaba-hotel.jpg",
-      additionalImages: [
-        "../../public/img/alibaba-hotel.jpg",
-       "../../public/img/alibaba-hotel.jpg",
-      ]
-    }
-  ]
-};
-
+import { fetchHotelDetails } from '../../components/services/api';
 
 const HotelDetails = () => {
+  const { hotelId } = useParams();
   const [hotel, setHotel] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const baseURL = 'http://localhost:3000';
 
-  // Giả lập call API bằng cách sử dụng dữ liệu cứng
+  // Function to ensure there are exactly 4 images (for ImageGallery)
+  const ensureFourImages = (images) => {
+    if (!images || images.length === 0) return [];
+    if (images.length >= 4) return images.slice(0, 4);
+    const clonedImages = [...images];
+    while (clonedImages.length < 4) {
+      clonedImages.push(...images);
+    }
+    return clonedImages.slice(0, 4);
+  };
+
+  // Fetch hotel details from the API
   useEffect(() => {
-    const fetchData = async () => {
-      setHotel(mockHotelData);
+    const getHotelDetails = async () => {
+      try {
+        const data = await fetchHotelDetails(hotelId);
+        setHotel(data.hotel);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
+    getHotelDetails();
+  }, [hotelId]);
 
-    fetchData();
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
-  if (!hotel) {
-    return <p>Loading...</p>; // Hiển thị loading khi dữ liệu chưa có
-  }
+  const imageUrl = `${baseURL}${hotel?.imageUrl}`;
+  const additionalImages = ensureFourImages(
+    [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => `${baseURL}${img}`) || [])]
+  );
 
   return (
-     <div className='bg-[#F8F8F8]'>
-
-    <div className="container mx-auto mt-[80px] w-4/5 ">
+    <div className='bg-[#F8F8F8]'>
       <Header />
-      <SearchBar/>
-      <div className='pt-[115px]'>
-      <ImageGallery images={hotel.images}/></div>
+      <div className="container mx-auto mt-[80px] w-4/5">
+        <SearchBar />
+        <div className='pt-[115px]'>
+          <ImageGallery images={additionalImages} />
+        </div>
 
-      {/* Tiêu đề và mô tả khách sạn */}
-     <TitleAndDescription 
-  name={hotel.name} 
-  rating={hotel.rating}
-  description={hotel.description} 
-  pricePerNight={hotel.rooms[0].price} 
-/>
+        <TitleAndDescription 
+          name={hotel?.name || "No Name Available"} 
+          rating={hotel?.hotelType || "No Rating"} 
+          description={hotel?.description || "No Description Available"} 
+          pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "Liên hệ"} 
+        />
 
+        <div className="w-full bg-white mx-auto mt-5 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-4">
+          <RatingAndComments 
+            rating={hotel?.averageRating || 0} 
+            comments={hotel?.reviewCount || 0} 
+            latestComment={hotel?.latestComment || "No recent comments available"} 
+            userName={hotel?.userName || "Anonymous"} 
+          />
+          <Amenities amenities={hotel?.amenities ? hotel.amenities.split(', ') : []} />
+          <Location 
+            address={hotel?.location || "No location provided"} 
+            airportDistance={hotel?.airportTransfer ? 'Có xe đưa đón sân bay' : 'Không có xe đưa đón sân bay'} 
+          />
+        </div>
 
-      {/* Rating, Amenities, and Location Overview Section */}
-      <div className="w-full bg-white mx-auto mt-5 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-4 space-y-4 md:space-y-0">
-        {/* Rating and comments */}
-        <RatingAndComments rating={hotel.rating} comments={hotel.commentsCount} />
-
-        {/* Amenities */}
-        <Amenities amenities={hotel.amenities} />
-
-        {/* Location */}
-        <Location address={hotel.address} airportDistance={hotel.airportDistance} />
+        <h4 className="text-3xl font-medium mb-4 mt-4">Chọn phòng của bạn</h4>
+        <div className="flex flex-col w-full">
+          {hotel?.roomTypes?.map((type) => (
+            <RoomCard 
+              key={type.roomTypeId}
+              room={{
+                title: type.roomName,
+                price: type.roomPrice,
+                mealPlans: type.mealPlans,
+                refundPolicy: hotel.isFreeCancellation ? "Hủy miễn phí" : "Không hoàn tiền",
+                availability: type.maxOccupancy,
+                size: type.roomSize,
+                description: type.roomDescription,
+                image: type.bedImages?.[0] ? `${baseURL}${type.bedImages[0]}` : `${baseURL}/default-room.jpg`,
+                additionalImages: ensureFourImages(type.bedImages?.slice(0, 2).map(img => `${baseURL}${img}`))
+              }} 
+            />
+          )) || <p>No rooms available</p>}
+        </div>
       </div>
-
-      {/* Room selection */}
-      <h4 className="text-3xl font-medium mb-4 mt-4">Chọn phòng của bạn</h4>
-      <div className="flex flex-col w-full">
-        {hotel.rooms.map((room, index) => (
-          <RoomCard room={room} key={index} />
-        ))}
-      </div>
-
-    
-    </div> 
-     <Footer />
-     </div>
+      <Footer />
+    </div>
   );
 };
 
