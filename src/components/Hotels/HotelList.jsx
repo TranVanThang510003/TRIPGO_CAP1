@@ -1,165 +1,33 @@
-
-import HotelCard from './HotelCard'; // Đảm bảo đường dẫn đúng đến file HotelCard.jsx
+import { useState, useEffect } from "react";
+import HotelCard from './HotelCard'; 
 import Pagination from '../common/Pagination';
-import { useState } from 'react';
-// Danh sách dữ liệu khách sạn
-const hotelData = [
-    {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    },
-    // Thêm các khách sạn khác vào đây
-    {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    }, {
-        name: 'Khách sạn Alibaba Đà Nẵng',
-        imageUrl: 'public/img/khachsan.jpg', // Thay thế bằng URL ảnh thực tế
-        stars: 4,
-        amenities: ['Mát-xa', 'Dịch vụ Spa'],
-        location: 'Phước Mỹ, Sơn Trà, Đà Nẵng',
-        rating: 4.5,
-        reviews: '5K',
-        price: '564,000',
-    },
-];
+import { fetchHotels } from "../services/api"; // Import fetchHotels từ api.js
 
 const HOTELS_PER_PAGE = 7;
 
 const HotelList = () => {
-    // Trạng thái quản lý trang hiện tại
+    const [hotels, setHotels] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Tính toán số trang
-    const totalPages = Math.ceil(hotelData.length / HOTELS_PER_PAGE);
+    useEffect(() => {
+        const loadHotels = async () => {
+            try {
+                const data = await fetchHotels(); // Lấy dữ liệu khách sạn từ API
+                setHotels(data.hotels || []); // Đặt hotels là mảng từ phản hồi API nếu tồn tại
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách khách sạn:", error);
+            }
+        };
 
-    // Lấy danh sách khách sạn cho trang hiện tại
-    const currentHotels = hotelData.slice(
+        loadHotels();
+    }, []);
+
+    const totalPages = Math.ceil(hotels.length / HOTELS_PER_PAGE);
+    const currentHotels = hotels.slice(
         (currentPage - 1) * HOTELS_PER_PAGE,
         currentPage * HOTELS_PER_PAGE
     );
 
-    // Hàm xử lý khi người dùng chuyển trang
     const handlePageChange = (pageNumber) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
@@ -168,14 +36,12 @@ const HotelList = () => {
 
     return (
         <div>
-            {/* Danh sách khách sạn */}
             <div className="grid grid-cols-1 gap-4 w-full">
                 {currentHotels.map((hotel, index) => (
-                    <HotelCard key={index} hotel={hotel} />
+                    <HotelCard key={`${hotel.id}-${index}`} hotel={hotel} />
                 ))}
             </div>
 
-            {/* Phân trang */}
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -1,4 +1,21 @@
-const SortBar = () => {
+import { useState } from 'react';
+
+const SortBar = ({ onSortChange }) => {
+    const [priceOrder, setPriceOrder] = useState('low-to-high');
+    const [ratingOrder, setRatingOrder] = useState('high-to-low');
+
+    const handlePriceChange = (e) => {
+        const selectedValue = e.target.value;
+        setPriceOrder(selectedValue);
+        onSortChange(selectedValue, ratingOrder);
+    };
+
+    const handleRatingChange = (e) => {
+        const selectedValue = e.target.value;
+        setRatingOrder(selectedValue);
+        onSortChange(priceOrder, selectedValue);
+    };
+
     return (
         <div className="w-full float-right flex justify-center items-center bg-white p-4 rounded-lg shadow-md border border-gray-200 gap-12">
             <div className="flex items-center space-x-2">
@@ -9,7 +26,11 @@ const SortBar = () => {
             <div className="flex items-center space-x-6">
                 <div className="flex items-center">
                     <label className="text-gray-500 font-medium mr-2">Giá</label>
-                    <select className="border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none">
+                    <select 
+                        value={priceOrder} 
+                        onChange={handlePriceChange} 
+                        className="border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none"
+                    >
                         <option value="low-to-high">Từ thấp đến cao</option>
                         <option value="high-to-low">Từ cao đến thấp</option>
                     </select>
@@ -19,7 +40,11 @@ const SortBar = () => {
 
                 <div className="flex items-center">
                     <label className="text-gray-500 font-medium mr-2">Đánh giá</label>
-                    <select className="border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none">
+                    <select 
+                        value={ratingOrder} 
+                        onChange={handleRatingChange} 
+                        className="border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none"
+                    >
                         <option value="high-to-low">Từ cao đến thấp</option>
                         <option value="low-to-high">Từ thấp đến cao</option>
                     </select>
