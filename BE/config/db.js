@@ -1,8 +1,7 @@
-// config/db.js
-
 import dotenv from 'dotenv';
 dotenv.config();
 import sql from 'mssql';
+
 const dbConfig = {
   // eslint-disable-next-line no-undef
   user: process.env.DB_USER,
@@ -32,8 +31,4 @@ const poolPromise = new sql.ConnectionPool(dbConfig)
     process.exit(1);
   });
 
-// eslint-disable-next-line no-undef
-module.exports = {
-  sql,
-  poolPromise
-};
+export { sql, poolPromise };
