@@ -62,9 +62,20 @@ function AuthForm({ type, onSubmit, onClose }) {
             password,
         });
 
+        // In phản hồi từ API ra console để kiểm tra
+        console.log("API response:", response.data);
+
         // Kiểm tra phản hồi từ API
         if (response.data.success) {
             const user = response.data.user;
+
+            // Kiểm tra xem `user` có `role` không
+            if (user.role) {
+                console.log("User role:", user.role); // In ra role để kiểm tra
+                localStorage.setItem("role", user.role); // Lưu vào localStorage
+            } else {
+                console.log("Không tìm thấy thông tin role trong dữ liệu người dùng.");
+            }
 
             // Lưu thông tin người dùng vào localStorage
             localStorage.setItem("user", JSON.stringify(user));
@@ -90,7 +101,9 @@ function AuthForm({ type, onSubmit, onClose }) {
             });
         }
     }
-  };
+};
+
+
 
   // Xử lý khi form đăng ký được gửi
   const handleContinue = (e) => {

@@ -39,6 +39,22 @@ export const fetchTourDetails = async (tourId) => {
   const response = await api.get(`/public-tours/${tourId}`);
   return response.data;
 };
+export const fetchToursByCreator = async (creatorId, page = 1, limit = 9, priceOrder = 'low-to-high', ratingOrder = 'high-to-low') => {
+  const response = await api.get(`/public-tours/by-creator/${creatorId}`, {
+    params: { page, limit, priceOrder, ratingOrder },
+  });
+  return response.data;
+};
+
+// hàm lấy thông tin tài khoản của admin
+export const fetchUserAccounts = async () => {
+  const response = await api.get(`/accounts`);
+  return response.data;
+};
+//hàm update role của addmin
+export const updateUserRole = async (userId, role) => {
+  return await api.put(`/accounts/${userId}/role`, { role });
+};
 
 // Hàm gọi API để lấy danh sách các tỉnh thành
 export const fetchProvinces = async () => {

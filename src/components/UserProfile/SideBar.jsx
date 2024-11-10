@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { FaHeart, FaCog, FaSignOutAlt, FaBars } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaHeart, FaCog, FaSignOutAlt, FaBars, FaHotel, FaChartBar, FaPlusCircle, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Toggle sidebar open/close
+  const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false); // Toggle service menu open/close
+  const [role, setRole] = useState(null); // Lưu vai trò người dùng
+
+  // Lấy vai trò từ localStorage khi component được mount
+  useEffect(() => {
+    const storedRole = localStorage.getItem('role'); // Lấy role từ localStorage
+    setRole(storedRole); // Cập nhật role vào state
+  }, []);
 
   const handleNavigate = (label) => {
     onSectionChange(label);
@@ -14,12 +22,25 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
       navigate("/setting");
     } else if (label === "Đăng xuất") {
       localStorage.removeItem('user'); // Clear user info if stored
+      localStorage.removeItem('role'); // Xóa role khi đăng xuất
       navigate("/"); // Redirect to home
+    } else if (label === "Thêm Dịch Vụ") {
+      navigate("/add-service");
+    } else if (label === "Quản lý thông tin hóa đơn") {
+      navigate("/manage-bills");
+    } else if (label === "Quản lý tour") {
+      navigate("/manage-tours");
+    } else if (label === "Thống Kê Doanh Thu") {
+      navigate("/revenue-statistics");
     }
   };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleServiceMenu = () => {
+    setIsServiceMenuOpen(!isServiceMenuOpen);
   };
 
   return (
@@ -63,6 +84,54 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
           onClick={() => handleNavigate("Cài đặt")}
           isSidebarOpen={isSidebarOpen}
         />
+
+        {/* Chỉ hiển thị các mục này nếu vai trò người dùng là `staff` */}
+        {role === "staff" && (
+          <>
+            <MenuItem 
+              icon={<FaPlusCircle />} 
+              label="Thêm Dịch Vụ" 
+              isSelected={selectedSection === "Thêm Dịch Vụ"}
+              onClick={() => handleNavigate("Thêm Dịch Vụ")}
+              isSidebarOpen={isSidebarOpen}
+            />
+
+            {/* Menu con cho Quản Lý Dịch Vụ */}
+            <div>
+              <MenuItem
+                icon={<FaHotel />}
+                label="Quản Lý Dịch Vụ"
+                isSelected={selectedSection === "Quản Lý Dịch Vụ"}
+                onClick={toggleServiceMenu}
+                isSidebarOpen={isSidebarOpen}
+                dropdownIcon={isServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+              />
+              {isServiceMenuOpen && (
+                <div className="pl-8">
+                  <MenuItem 
+                    label="Quản lý thông tin hóa đơn" 
+                    onClick={() => handleNavigate("Quản lý thông tin hóa đơn")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem 
+                    label="Quản lý tour" 
+                    onClick={() => handleNavigate("Quản lý tour")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                </div>
+              )}
+            </div>
+
+            <MenuItem 
+              icon={<FaChartBar />} 
+              label="Thống Kê Doanh Thu" 
+              isSelected={selectedSection === "Thống Kê Doanh Thu"}
+              onClick={() => handleNavigate("Thống Kê Doanh Thu")}
+              isSidebarOpen={isSidebarOpen}
+            />
+          </>
+        )}
+
         <MenuItem 
           icon={<FaSignOutAlt />} 
           label="Đăng xuất" 
@@ -74,7 +143,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
   );
 };
 
-const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen }) => (
+const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen, dropdownIcon }) => (
   <div 
     onClick={onClick} 
     className={`flex items-center py-2.5 text-lg cursor-pointer transition-colors ${
@@ -82,7 +151,8 @@ const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen }) => (
     }`}
   >
     <span className="mr-2.5">{icon}</span>
-    {isSidebarOpen && <span>{label}</span>}
+    {isSidebarOpen && <span className="flex-1">{label}</span>}
+    {dropdownIcon && <span>{dropdownIcon}</span>}
   </div>
 );
 

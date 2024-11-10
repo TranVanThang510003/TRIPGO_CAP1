@@ -11,22 +11,16 @@ import ImageGallery from '../../components/common/ImageGallery';
 import SearchBar from '../../components/Hotels/hoteldetail/SearchBar';
 import { fetchHotelDetails } from '../../components/services/api';
 import ReturnButton from '../../components/common/returnButton';
+
 const HotelDetails = () => {
   const { hotelId } = useParams();
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Function to ensure there are exactly 4 images (for ImageGallery)
-  const ensureFourImages = (images) => {
-    if (!images || images.length === 0) return [];
-    if (images.length >= 4) return images.slice(0, 4);
-    const clonedImages = [...images];
-    while (clonedImages.length < 4) {
-      clonedImages.push(...images);
-    }
-    return clonedImages.slice(0, 4);
-  };
+  // Lấy thông tin người dùng từ localStorage
+  const [userRole, setUserRole] = useState(localStorage.getItem('role'));
+  const [userId, setUserId] = useState(parseInt(JSON.parse(localStorage.getItem("user")).id), 10); // Lấy ID người dùng từ localStorage và chuyển đổi thành số
 
   // Fetch hotel details from the API
   useEffect(() => {
@@ -46,10 +40,24 @@ const HotelDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  // Function to ensure there are exactly 4 images (for ImageGallery)
+  const ensureFourImages = (images) => {
+    if (!images || images.length === 0) return [];
+    if (images.length >= 4) return images.slice(0, 4);
+    const clonedImages = [...images];
+    while (clonedImages.length < 4) {
+      clonedImages.push(...images);
+    }
+    return clonedImages.slice(0, 4);
+  };
+
   const imageUrl = hotel?.imageUrl; 
   const additionalImages = ensureFourImages(
     [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => img) || [])]
   );
+
+  // Điều kiện để hiển thị nút "Chỉnh sửa"
+  const canEdit = userRole === 'staff' && hotel?.createdBy === userId;
 
   return (
     <div className='bg-[#F8F8F8]'>
@@ -107,6 +115,16 @@ const HotelDetails = () => {
             <p>Không có phòng nào có sẵn.</p> // Hiển thị thông báo nếu không có phòng
           )}
         </div>
+
+        {/* Nút "Chỉnh sửa" chỉ hiển thị khi điều kiện canEdit là true */}
+        {canEdit && (
+          <button 
+            className="fixed bottom-10 right-10 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
+            onClick={() => alert('Đi tới trang chỉnh sửa')} // Thay bằng chức năng điều hướng tới trang chỉnh sửa
+          >
+            Chỉnh sửa
+          </button>
+        )}
       </div>
       <Footer />
     </div>

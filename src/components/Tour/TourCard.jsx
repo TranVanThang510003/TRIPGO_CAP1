@@ -8,6 +8,11 @@ import IconHeart from "../icon/IconHeart";
 const TourCard = ({ tour }) => {
   const navigate = useNavigate(); // Khởi tạo hook navigate
 
+
+
+  // Chuẩn hóa đường dẫn imageUrl
+  const imageUrl = tour.imageUrl.startsWith('/') ? tour.imageUrl : `/${tour.imageUrl}`;
+
   const handleBookNowClick = () => {
     navigate(`/tours/${tour.id}`); // Chuyển hướng đến trang chi tiết tour với ID tương ứng
   };
@@ -18,7 +23,7 @@ const TourCard = ({ tour }) => {
       <div className="relative">
         <img
           className="w-full h-[150px] object-cover"
-          src={`http://localhost:3000${tour.imageUrl}`} // Sử dụng đường dẫn từ API
+          src={`http://localhost:3000${imageUrl}`} // Sử dụng đường dẫn từ API
           alt={tour.name}
         />
         <button className="absolute top-2 right-2 p-2">
@@ -63,7 +68,7 @@ const TourCard = ({ tour }) => {
             className="h-[37px] w-[80px] bg-blue-900 text-white rounded-2xl hover:bg-blue-700 text-sm"
             onClick={handleBookNowClick} // Thêm sự kiện click
           >
-            Đặt ngay
+            Xem
           </button>
         </div>
       </div>

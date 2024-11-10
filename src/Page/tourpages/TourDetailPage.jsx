@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import Header from '../../layout/Header';
+import Footer from '../../layout/Footer';
 import ImageGallery from '../../components/common/ImageGallery';
 import TourTitleAndRating from '../../components/common/TitleAndRating';
 import HighlightSection from '../../components/common/HighlightSection';
 import DetailSection from '../../components/common/DetailSection';
 import BookingCard from '../../components/common/BookingCard';
-import Header from '../../layout/Header';
 import LikeButton from '../../components/common/LikeButton';
 import ShareButton from '../../components/common/ShareButton';
 import BookingForm from '../../components/Tour/TourDetail/BookingForm';
-import Footer from '../../layout/Footer';
-import { fetchTourDetails } from '../../components/services/api'; 
-import { useParams } from 'react-router-dom'; 
 import ReturnButton from '../../components/common/returnButton';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { fetchTourDetails } from '../../components/services/api';
+
 const TourDetailPage = () => {
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
   const { tourId } = useParams(); 
+  const navigate = useNavigate(); // Khởi tạo hook navigate
+
+  // Lấy thông tin người dùng từ localStorage
+  const [userRole, setUserRole] = useState(localStorage.getItem('role'));
+  const [userId, setUserId] = useState(parseInt(JSON.parse(localStorage.getItem("user")).id, 10)); 
 
   useEffect(() => {
     const loadTourDetails = async () => {
@@ -47,8 +54,17 @@ const TourDetailPage = () => {
     console.log("Đã nhấn đặt tour!");
   };
 
+
+  console.log("User role:", userRole); // Kiểm tra userRole
+  console.log("User ID:", userId, "Tour createdBy:", tour?.createdBy); // Kiểm tra userId và createdBy
+
+  // Điều kiện để hiển thị nút "Chỉnh sửa"
+  const canEdit = userRole === 'staff' && tour?.createdBy === userId;
+  console.log("Can Edit:", canEdit); // Kiểm tra điều kiện canEdit
+
   // Truyền vào 4 hình ảnh cho ImageGallery
   const images = tour.imageUrl ? [tour.imageUrl, tour.imageUrl, tour.imageUrl, tour.imageUrl] : [];
+
 
   return (
     <div className='bg-[#F8F8F8]'>
@@ -83,6 +99,17 @@ const TourDetailPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Nút "Chỉnh sửa" chỉ hiển thị khi điều kiện canEdit là true */}
+        {canEdit && (
+          <button 
+            className=" text-6xl fixed bottom-20 right-20  text-blue-500 bg-white rounded-full shadow-lg p-4 hover:bg-blue-700 hover:text-white transition"
+            onClick={() => navigate(`/edit-tour/${tourId}`)} // Sử dụng navigate để chuyển hướng đến trang chỉnh sửa
+          >
+             <Icon icon="game-icons:feather" /> 
+           
+          </button>
+        )}
       </div>
       <Footer />
     </div>
