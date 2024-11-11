@@ -5,6 +5,7 @@ const CreateTourForm = () => {
   const [PUCLIC_TOUR_NAME, setPUCLIC_TOUR_NAME] = useState("");
   const [address, setAddress] = useState("");
   const [DESCRIPIONS_HIGHLIGHT, setDESCRIPIONS_HIGHLIGHT] = useState("");
+  const [PUCLIC_TOUR_TYPE, setPUCLIC_TOUR_TYPE] = useState("");
   const [DESCRIPTIONS, setDESCRIPTIONS] = useState("");
   const [IMAGE, setIMAGE] = useState(null);
   const [START_DAY, setSTART_DAY] = useState(""); // Ngày bắt đầu
@@ -19,6 +20,7 @@ const CreateTourForm = () => {
 
     const formData = new FormData();
     formData.append("PUCLIC_TOUR_NAME", PUCLIC_TOUR_NAME);
+    formData.append("PUCLIC_TOUR_TYPE", PUCLIC_TOUR_TYPE);
     formData.append("address", address);
     formData.append("DESCRIPIONS_HIGHLIGHT", DESCRIPIONS_HIGHLIGHT);
     formData.append("DESCRIPTIONS", DESCRIPTIONS);
@@ -68,6 +70,21 @@ const CreateTourForm = () => {
           />
         </div>
 
+        {/* Loại Tour */}
+        <div className="col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Loại tour
+          </label>
+          <input
+            type="text"
+            value={PUCLIC_TOUR_TYPE}
+            onChange={(e) => setPUCLIC_TOUR_TYPE(e.target.value)}
+            placeholder="Loại tour"
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        {/* Điểm nổi bật */}
         <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Điểm nổi bật
@@ -79,7 +96,7 @@ const CreateTourForm = () => {
             className="w-full p-2 border border-gray-300 rounded-md"
           ></textarea>
         </div>
-
+        {/* Địa chỉ */}
         <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Địa chỉ
@@ -92,7 +109,7 @@ const CreateTourForm = () => {
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
-
+        {/* Chi tiết gói dịch vụ */}
         <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Chi tiết gói dịch vụ
