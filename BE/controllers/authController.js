@@ -1,5 +1,5 @@
 import { poolPromise, sql } from '../config/db.js';
-import otpService from '../services/otpService.js';
+import * as otpService from '../services/otpService.js';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import nodemailer from 'nodemailer';

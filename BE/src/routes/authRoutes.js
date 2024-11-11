@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, googleLogin, facebookLogin, sendOTP, verifyOTP } from '../controllers/authController.js';
+import { register, googleLogin, facebookLogin, sendOTP, verifyOTP } from '../../controllers/authController.js';
 
 const router = express.Router();
 

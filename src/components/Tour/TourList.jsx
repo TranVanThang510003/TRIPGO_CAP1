@@ -5,6 +5,7 @@ import { fetchTours } from "../services/api"; // Import fetchTours từ api.js
 
 const TOUR_PER_PAGE = 9;
 
+// eslint-disable-next-line react/prop-types
 const TourList = ({ priceOrder, ratingOrder }) => {
   const [tours, setTours] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
