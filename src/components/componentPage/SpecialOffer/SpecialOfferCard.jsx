@@ -1,13 +1,13 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import IconHeart from "../../icon/IconHeart";
 
-const SpecialOfferCard = () => {
+const SpecialOfferCard = ({ special }) => {
   return (
     <div className="w-[370px] h-[490px]  rounded-3xl border border-blue-300">
       <div className="relative">
         <img
           className="w-[324px] h-[272px] rounded-3xl mt-6 ml-6 relative"
-          src="https://vcdn1-dulich.vnecdn.net/2023/07/12/hl1-1689130193-1689130212-5586-1689130358.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=JDE3nuzFT6QKZqQ73hmZug"
+          src={special.imageUrl}
         />
         <button className="absolute top-2 right-8 p-2 ">
           <IconHeart className="w-10 h-10" />
@@ -22,7 +22,7 @@ const SpecialOfferCard = () => {
           </div>
           <p className="text-slate-600">3 ngày</p>
         </div>
-        <h1 className="text-3xl font-bold">Vịnh Hạ Long</h1>
+        <h1 className="text-3xl font-bold">{special.name}</h1>
         <div className="flex items-center gap-2 mt-2">
           <Icon
             icon="mdi:map-marker" // Sử dụng tên icon trực tiếp

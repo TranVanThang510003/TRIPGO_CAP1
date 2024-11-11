@@ -6,7 +6,7 @@ import TravelSection from "../components/componentPage/TravelSection";
 import DestinationSuggestions from "../components/componentPage/DestinationSuggestions ";
 import TestimonialCard from "../components/componentPage/TestimonialCard";
 import Sidebar from "../layout/Sidebar";
-import SpecialOffer from "../components/componentPage/SpecialOffer/SpecialOffer";
+import SpecialOfferList from "../components/componentPage/SpecialOffer/SpecialOfferList";
 
 const HomePage = () => {
   return (
@@ -14,10 +14,12 @@ const HomePage = () => {
       <Header />
       <Sidebar />
       <Navbar />
-      <SpecialOffer />
+      <div className="w-4/5 flex justify-center flex-col items-center mx-auto">
+      <SpecialOfferList />
       <TravelSection />
       <DestinationSuggestions />
       <TestimonialCard />
+      </div>
       <Footer />
     </div>
   );

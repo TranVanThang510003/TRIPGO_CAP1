@@ -17,6 +17,7 @@ import "../src/index.css";
 import RestantantDetails from "./Page/RestantantDetails";
 import CamPingPage from "./Page/CamPingPage";
 import CampingDetail from "./Page/CampingDetail";
+import CreateTourForm from "./components/CreateTour/CreateTourForm";
 
 const Main = () => {
   return (
@@ -32,6 +33,7 @@ const Main = () => {
         <Route path="/restaurantsdetails" element={<RestantantDetails />} />
         <Route path="/campings" element={<CamPingPage />} />
         <Route path="/campingsdetails" element={<CampingDetail />} />
+        <Route path="/createtours" element={<CreateTourForm />} />
       </Routes>
     </Router>
   );
