@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
+import ImageUploader from "../UploadImage/ImageUploader";
 
 const CreateTourForm = () => {
-  const [PUCLIC_TOUR_NAME, setPUCLIC_TOUR_NAME] = useState("");
-  const [address, setAddress] = useState("");
+  const [PUCLIC_TOUR_NAME, setPUCLIC_TOUR_NAME] = useState("");//Tên Tour
+  const [address, setAddress] = useState("");//Địa Điểm
   const [DESCRIPIONS_HIGHLIGHT, setDESCRIPIONS_HIGHLIGHT] = useState("");
-  const [PUCLIC_TOUR_TYPE, setPUCLIC_TOUR_TYPE] = useState("");
-  const [DESCRIPTIONS, setDESCRIPTIONS] = useState("");
-  const [IMAGE, setIMAGE] = useState(null);
+  const [PUCLIC_TOUR_TYPE, setPUCLIC_TOUR_TYPE] = useState("");//Loại Tour
+  const [DESCRIPTIONS, setDESCRIPTIONS] = useState("");//
+  const [IMAGE, setIMAGE] = useState(null);//Ảnh
   const [START_DAY, setSTART_DAY] = useState(""); // Ngày bắt đầu
   const [END_DAY, setEND_DAY] = useState(""); // Ngày kết thúc
   const [ADULT_COUNT, setADULT_COUNT] = useState(""); // Số lượng
@@ -18,6 +19,12 @@ const CreateTourForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Kiểm tra nếu ngày bắt đầu trước ngày kết thúc
+    if (new Date(START_DAY) >= new Date(END_DAY)) {
+      alert("Ngày kết thúc phải sau ngày bắt đầu.");
+      return; // Dừng lại nếu điều kiện không thỏa mãn
+    }
+
     const formData = new FormData();
     formData.append("PUCLIC_TOUR_NAME", PUCLIC_TOUR_NAME);
     formData.append("PUCLIC_TOUR_TYPE", PUCLIC_TOUR_TYPE);
@@ -25,10 +32,10 @@ const CreateTourForm = () => {
     formData.append("DESCRIPIONS_HIGHLIGHT", DESCRIPIONS_HIGHLIGHT);
     formData.append("DESCRIPTIONS", DESCRIPTIONS);
     formData.append("IMAGE", IMAGE);
-    formData.append("START_DAY", START_DAY); // Thêm ngày bắt đầu
-    formData.append("END_DAY", END_DAY); // Thêm ngày kết thúc
+    formData.append("START_DAY", START_DAY); // ngày bắt đầu
+    formData.append("END_DAY", END_DAY); //  ngày kết thúc
     formData.append("ADULT_COUNT", ADULT_COUNT); // Số lượng
-    formData.append("INSTRUCTION_LANGUAGE", INSTRUCTION_LANGUAGE); // Thêm ngôn ngữ
+    formData.append("INSTRUCTION_LANGUAGE", INSTRUCTION_LANGUAGE); // ngôn ngữ
     formData.append("adultPrice", adultPrice); // Giá người lớn
     formData.append("childPrice", childPrice); // Giá trẻ em
 
@@ -129,6 +136,7 @@ const CreateTourForm = () => {
           </label>
           <input
             type="number"
+            min="0"
             value={adultPrice}
             onChange={(e) => setAdultPrice(e.target.value)}
             placeholder="Giá người lớn"
@@ -143,6 +151,7 @@ const CreateTourForm = () => {
           </label>
           <input
             type="number"
+            min="0"
             value={childPrice}
             onChange={(e) => setChildPrice(e.target.value)}
             placeholder="Giá trẻ em"
@@ -150,13 +159,14 @@ const CreateTourForm = () => {
           />
         </div>
 
-        {/* Số lượng*/}
+        {/* Số lượng */}
         <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Số lượng
           </label>
           <input
             type="number"
+            min="0"
             value={ADULT_COUNT}
             onChange={(e) => setADULT_COUNT(e.target.value)}
             placeholder="Số lượng"
@@ -206,14 +216,7 @@ const CreateTourForm = () => {
         </div>
 
         <div className="col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Tải lên hình ảnh
-          </label>
-          <input
-            type="file"
-            onChange={(e) => setIMAGE(e.target.files[0])}
-            className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md p-2"
-          />
+          <ImageUploader value={IMAGE} onChange={setIMAGE} />
         </div>
 
         <div className="col-span-2">
