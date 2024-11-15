@@ -25,7 +25,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
       localStorage.removeItem('role'); // Xóa role khi đăng xuất
       navigate("/"); // Redirect to home
     } else if (label === "Thêm Dịch Vụ") {
-      navigate("/add-service");
+      navigate("/create-tour");
     } else if (label === "Quản lý thông tin hóa đơn") {
       navigate("/manage-bills");
     } else if (label === "Quản lý tour") {

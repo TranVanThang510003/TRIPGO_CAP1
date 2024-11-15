@@ -37,7 +37,7 @@ const TourCard = ({ tour }) => {
           <div className="bg-pink-200 rounded-full w-[75px] h-[22px] flex items-center justify-center">
             Relex
           </div>
-          <p className="ml-5 text-slate-500">{tour.duration}</p>
+          <p className="ml-5 text-slate-500">{tour.duration} ngày</p>
         </div>
         <h2 className="text-xl font-bold text-blue-900 mt-3">
           {tour.name}
@@ -63,7 +63,7 @@ const TourCard = ({ tour }) => {
           <p className="text-gray-500 ml-2">{tour.nub_booking} đặt chỗ</p>
         </div>
         <div className="text-xl flex justify-between items-center mt-4">
-          <h1 className="text-gray-700 font-bold">{tour.price} đ/Người</h1>
+          <h1 className="text-gray-700 font-bold">{tour.priceAdult} đ/Người</h1>
           <button 
             className="h-[37px] w-[80px] bg-blue-900 text-white rounded-2xl hover:bg-blue-700 text-sm"
             onClick={handleBookNowClick} // Thêm sự kiện click

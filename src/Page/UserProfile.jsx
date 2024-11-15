@@ -18,7 +18,7 @@ const UserProfile = () => {
             return;
         }
         try {
-            const response = await axios.get(`http://localhost:3000/api/users/${userId}`);
+            const response = await axios.get(`http://localhost:3000/users/${userId}`);
             setUser(response.data);
         } catch (error) {
             console.error('Lỗi khi lấy thông tin người dùng:', error);
@@ -46,7 +46,7 @@ const UserProfile = () => {
             }
 
             // Gửi yêu cầu cập nhật
-            await axios.put(`http://localhost:3000/api/users/${userId}`, {
+            await axios.put(`http://localhost:3000/users/${userId}`, {
                 USERNAME: user.USERNAME,
                 EMAIL: user.EMAIL,
                 PHONE: user.PHONE,

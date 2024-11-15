@@ -19,6 +19,7 @@ const UserFavourite = lazy(() => import('./Page/UserFavourite'));
 const UserSetting = lazy(() => import('./Page/UserSetting'));
 const AdminPage = lazy(() => import('./Page/AdminPage/AdminPage'));
 const  TourManagement= lazy(() => import('../src/components/Staff/TourManagement'));
+const  CreateTour= lazy(() => import('../src/components/createServices/CreateTour'));
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 
 const Loading = () => (
@@ -47,6 +48,8 @@ const Main = () => {
           <Route path="/setting" element={<UserSetting />} />
           <Route path="/bookingcheckoutpage" element={<BookingCheckOutPage />} />
           <Route path="/waitingscreen" element={<WaitingScreen />} />
+          <Route path="/create-tour" element={< CreateTour />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

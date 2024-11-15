@@ -57,7 +57,7 @@ function AuthForm({ type, onSubmit, onClose }) {
 
     try {
         // Gửi yêu cầu POST đến API đăng nhập
-        const response = await axios.post("http://localhost:3000/api/login", {
+        const response = await axios.post("http://localhost:3000/login", {
             emailOrPhone,
             password,
         });
@@ -153,7 +153,7 @@ function AuthForm({ type, onSubmit, onClose }) {
       try {
         // Gửi dữ liệu đăng ký đến backend
         const response = await axios.post(
-          "http://localhost:3000/api/register",
+          "http://localhost:3000/register",
           {
             fullName,
             emailOrPhone,

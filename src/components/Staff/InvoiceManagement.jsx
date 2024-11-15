@@ -8,7 +8,7 @@ const InvoiceManagement = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/transactions'); // API URL
+        const response = await axios.get('http://localhost:3000/transactions'); // API URL
         setTransactions(response.data);
         setLoading(false);
       } catch (error) {

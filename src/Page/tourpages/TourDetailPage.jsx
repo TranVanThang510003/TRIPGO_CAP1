@@ -88,11 +88,16 @@ const TourDetailPage = () => {
             <HighlightSection highlights={tour.highlights} />
   
             <DetailSection details={tour.services} />
-            <BookingForm />
+            <BookingForm
+            priceAdult={tour.priceAdult}
+            priceChild={tour.priceChild}
+            tour_id={tour.id} 
+            
+            />
           </div>
   
           <div className="md:col-span-1">
-            <BookingCard price={tour.price} onBookingClick={handleBookingClick} />
+            <BookingCard price={tour.priceAdult} onBookingClick={handleBookingClick} />
             <div className='flex justify-between mt-2'>
               <LikeButton />
               <ShareButton />
