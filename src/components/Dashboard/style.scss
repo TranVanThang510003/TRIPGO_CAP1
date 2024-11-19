@@ -1,0 +1,280 @@
+/* Define common variables */
+$primary-bg: #fff;
+$secondary-bg: #f0f4f8;
+$header-bg: #fff;
+$card-bg: #fff;
+$text-color: #000;
+$padding: 20px;
+$border-radius: 8px;
+$gap: 20px;
+$chart-height: 250px;
+$stats-card-width: 250px;
+
+/* Mixins */
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin card-style($bg: $card-bg) {
+  background: $bg;
+  padding: $padding;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main layout */
+.app {
+  display: flex;
+  // height: 100vh;
+  flex-direction: row;
+  /* Sidebar styles */
+  .sidebar {
+    width: 200px;
+    background: $primary-bg;
+    color: $text-color;
+    display: flex;
+    flex-direction: column;
+    // height: 100vh;
+
+    h2 {
+      padding: $padding;
+      font-size: 1.5em;
+      text-align: center;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        svg {
+          margin-right: 10px;
+        }
+
+        &:hover {
+          background: lighten($primary-bg, 10%);
+        }
+      }
+    }
+  }
+
+  /* Main content styles */
+  .main-content {
+    flex: 1;
+    background: $secondary-bg;
+    color: $text-color;
+    padding: $padding;
+    display: flex;
+    flex-direction: column;
+    // height: 100vh;
+
+    .table-container {
+      border: 1px solid #ddd; /* Viền xung quanh */
+      border-radius: 8px; /* Làm tròn góc */
+      overflow: hidden; /* Đảm bảo không bị tràn */
+      background-color: #fff; /* Màu nền */
+      padding: 10px; /* Tạo khoảng cách bên trong */
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse; /* Xóa khoảng trống giữa các ô */
+    }
+
+    .table thead {
+      background-color: #f9f9f9; /* Màu nền cho phần tiêu đề */
+    }
+
+    .table th {
+      text-align: center;
+      color: #666;
+      font-weight: bold;
+      padding: 15px;
+      border-bottom: 1px solid #ddd; /* Viền dưới */
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid #ddd; /* Viền dưới */
+    }
+
+    .table tbody tr:last-child {
+      border-bottom: none; /* Không viền cho hàng cuối cùng */
+    }
+
+    .table td {
+      padding: 15px;
+    }
+
+    /* Header styles */
+    .header {
+      @include flex-center;
+      justify-content: end;
+      background: $header-bg;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+
+        span {
+          margin-right: 10px;
+          font-weight: bold;
+        }
+
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    /* Dashboard main section styles */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-top: $gap;
+
+      /* Stats section */
+      .stats-section {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: $gap;
+        margin-bottom: $gap;
+
+        .stats-card {
+          @include card-style($card-bg);
+          flex: 1;
+          min-width: $stats-card-width;
+          max-width: 300px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          margin: 10px;
+
+          h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+          }
+
+          p {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+
+          span {
+            font-size: 0.9em;
+            // color: lighten($text-color, 20%);
+            color: #219654;
+          }
+        }
+      }
+
+      .charts-section {
+        display: flex;
+        gap: $gap;
+        margin-top: $gap;
+        flex: 1;
+
+        .chart-container {
+          @include card-style($card-bg);
+          padding: $padding;
+          height: 400px; // Set the height explicitly if needed
+          margin: 0 10px;
+          position: relative;
+        }
+        s .yearly-chart {
+          flex: 3; // 2 parts of the width
+          // min-width: 450px;
+        }
+
+        .revenue-chart {
+          flex: 1; // 1 part of the width
+          // min-width: 150px;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+
+    .main-content {
+      padding: 10px;
+    }
+
+    .sidebar {
+      width: 100%;
+      height: auto;
+    }
+
+    .dashboard {
+      flex-direction: column;
+    }
+
+    .stats-section,
+    .charts-section {
+      flex-direction: column;
+      gap: $gap;
+    }
+
+    .chart-container {
+      min-width: 250px;
+      max-width: 100%;
+    }
+  }
+}
+
+/* Additional styles for very small screens */
+@media (max-width: 480px) {
+  .dashboard {
+    .stats-section,
+    .charts-section {
+      flex-direction: column;
+    }
+
+    .chart-container {
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+/* For table layout inside VisitCity component */
+.table-container .table th,
+.table-container .table td {
+  padding: 5px 10px; /* Reduced padding for closer columns */
+  text-align: center;
+}
+
+/* If VisitCity uses a flex layout */
+.visit-city-container {
+  display: flex;
+  gap: 10px; /* Reduced the gap between columns */
+}
+
+.visit-city-item {
+  flex: 1;
+  padding: 5px; /* Adjust padding inside each item */
+}

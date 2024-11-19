@@ -17,9 +17,10 @@ import "../src/index.css";
 import RestantantDetails from "./Page/RestantantDetails";
 import CamPingPage from "./Page/CamPingPage";
 import CampingDetail from "./Page/CampingDetail";
-import DBStaff from "./components/Dashboard/DBStaff";
+
 import CreateTourForm from "./components/CreateServer/CreateTourForm";
 import CreateHotelForm from "./components/CreateServer/CreateHotelForm";
+import MainDashboard from "./components/Dashboard/MainDashboard";
 
 const Main = () => {
   return (
@@ -37,7 +38,7 @@ const Main = () => {
         <Route path="/campingsdetails" element={<CampingDetail />} />
         <Route path="/createtours" element={<CreateTourForm />} />
         <Route path="/createhotels" element={<CreateHotelForm />} />
-        <Route path="/dashboardstaff" element={<DBStaff />} />
+        <Route path="/dashboardstaff" element={<MainDashboard />} />
       </Routes>
     </Router>
   );
