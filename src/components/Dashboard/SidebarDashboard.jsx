@@ -1,24 +1,16 @@
-/* eslint-disable no-unused-vars */
-
 import {
   FaHome,
-  FaChartLine,
-  FaFileInvoiceDollar,
-  FaTasks,
-  FaCalendar,
 } from "react-icons/fa";
 
 const SidebarDashboard = () => {
   return (
-    <div className="sidebar">
-      <h2 className="text-3xl">TripGo</h2>
+    <div className="bg-blue-200 w-[160px] h-[900px]">
+      <h2 className="text-2xl font-bold m-8">TripGo</h2>
       <ul>
-        <li>
+        <li className="flex gap-3 mt-7 ml-2">
           <FaHome /> Dashboard
         </li>
-        <li>
-          <FaChartLine /> LogOut
-        </li>
+        
       </ul>
     </div>
   );

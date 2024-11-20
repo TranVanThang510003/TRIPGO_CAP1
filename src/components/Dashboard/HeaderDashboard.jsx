@@ -1,8 +1,8 @@
 
 const HeaderDashboard = () => {
   return (
-    <header className="header flex items-center p-4 bg-gray-100">
-      <div className="user-info flex items-center">
+    <header className=" flex items-center justify-end p-4 bg-gray-200">
+      <div className="flex items-center">
         <img
           src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png"
           alt="User Avatar"

@@ -22,6 +22,8 @@ import CreateTourForm from "./components/CreateServer/CreateTourForm";
 import CreateHotelForm from "./components/CreateServer/CreateHotelForm";
 import MainDashboard from "./components/Dashboard/MainDashboard";
 
+
+// eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
   return (
     <Router>
