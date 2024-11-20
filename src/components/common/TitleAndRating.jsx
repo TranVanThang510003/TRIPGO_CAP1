@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TourTitleAndRating = ({ title, rating, reviewsCount, location, duration }) => {
+const TourTitleAndRating = ({ title, rating, reviewsCount, location, serviceType , language,tourType}) => {
   // Tính toán số sao đầy đủ và nửa sao
   const fullStars = Math.floor(rating); // Số sao đầy đủ
   const hasHalfStar = rating % 1 !== 0; // Nếu có phần thập phân thì có nửa sao
@@ -12,9 +12,8 @@ const TourTitleAndRating = ({ title, rating, reviewsCount, location, duration })
       
       {/* Tabs section */}
       <div className="flex space-x-2 mt-2 mb-2">
-        <span className="bg-gray-200 text-gray-600 py-1 px-3 rounded-full">Bán chạy</span>
-        <span className="bg-gray-200 text-gray-600 py-1 px-3 rounded-full">Tiếng Anh/Tiếng Việt</span>
-        <span className="bg-gray-200 text-gray-600 py-1 px-3 rounded-full">Tour ghép & Tour riêng</span>
+        <span className="bg-gray-200 text-gray-600 py-1 px-3 rounded-full">{tourType}</span>
+        <span className="bg-gray-200 text-gray-600 py-1 px-3 rounded-full">{language}</span>
       </div>
 
       {/* Hiển thị rating */}
@@ -40,7 +39,7 @@ const TourTitleAndRating = ({ title, rating, reviewsCount, location, duration })
       </div>
       
       <p className="text-gray-600">Địa điểm: {location}</p>
-      <p className="text-gray-600 mt-2 mb-2">Thời lượng: {duration} ngày</p>
+      <p className="text-gray-600 mt-2 mb-2">Thời lượng: {serviceType} </p>
     </div>
   );
 };

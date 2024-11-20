@@ -19,7 +19,7 @@ const UserFavourite = lazy(() => import('./Page/UserFavourite'));
 const UserSetting = lazy(() => import('./Page/UserSetting'));
 const AdminPage = lazy(() => import('./Page/AdminPage/AdminPage'));
 const  TourManagement= lazy(() => import('../src/components/Staff/TourManagement'));
-const  CreateTour= lazy(() => import('../src/components/createServices/CreateTour'));
+const  CreateTour= lazy(() => import('../src/components/createServices/createTour/createTourForm'));
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 
 const Loading = () => (

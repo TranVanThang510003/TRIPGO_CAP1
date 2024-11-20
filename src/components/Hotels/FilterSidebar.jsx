@@ -1,8 +1,11 @@
 import { useState } from 'react';
-
+import Map from '../common/Map';
 const FilterSidebar = () => {
     const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
-
+    const [showMap, setShowMap] = useState(false); 
+    const handleShowMap = () => {
+        setShowMap(true); // Hiển thị bản đồ khi click
+      };
     const popularFilters = [
         "Miễn phí hủy phòng", 
         "Mức giá tốt", 
@@ -41,12 +44,43 @@ const FilterSidebar = () => {
     return (
         <div className="w-80 flex flex-col">
             {/* Hoạt động trên bản đồ */}
-            <div className="mb-4 w-80 bg-white h-56 rounded-3xl border border-[#ACACAC]">
-                <div className="h-44 bg-gray-100 rounded-t-3xl flex justify-center items-center">
-                    <img src="../../../public/img/MAP.jpg" alt="Map" className="h-full w-full object-cover rounded-t-3xl" />
-                </div>
-                <p className="text-center text-sm font-medium mt-2">Hoạt động trên bản đồ</p>
+            <div>
+      {!showMap && (
+        <div className="w-80 flex flex-col">
+          {/* Hoạt động trên bản đồ */}
+          <div
+            className="mb-4 w-80 bg-white h-56 rounded-3xl border border-[#ACACAC] cursor-pointer"
+            onClick={handleShowMap}
+          >
+            <div className="h-44 bg-gray-100 rounded-t-3xl flex justify-center items-center">
+              <img
+                src="../../../public/img/MAP.jpg"
+                alt="Map"
+                className="h-full w-full object-cover rounded-t-3xl"
+              />
             </div>
+            <p className="text-center text-sm font-medium mt-2">Hoạt động trên bản đồ</p>
+          </div>
+
+          {/* Các bộ lọc (ẩn khi bản đồ mở) */}
+          <div className="w-80 bg-white flex flex-col items-center rounded-3xl border border-[#ACACAC]">
+            <div className="font-medium text-3xl text-center border-b-4 w-80 h-20 rounded-t-3xl flex items-center justify-center">
+              Lựa chọn
+            </div>
+            {/* Bộ lọc và các phần khác */}
+            {/* ... */}
+          </div>
+        </div>
+      )}
+
+      {/* Bản đồ toàn màn hình */}
+      {showMap && (
+        <div className="fixed inset-0 z-50 bg-white">
+         
+          <Map />
+        </div>
+      )}
+    </div>
 
             {/* Lựa chọn */}
             <div className="w-80 bg-white flex flex-col items-center rounded-3xl border border-[#ACACAC]">

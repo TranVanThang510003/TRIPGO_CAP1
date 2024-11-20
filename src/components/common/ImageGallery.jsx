@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-const baseURL = 'http://localhost:3000'; // Đường dẫn cơ sở
+const baseURL = 'http://localhost:3000/'; // Đường dẫn cơ sở
 
 const ImageGallery = ({ images }) => {
   // Kiểm tra điều kiện để tránh lỗi nếu `images` là rỗng hoặc không hợp lệ

@@ -6,6 +6,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Toggle sidebar open/close
   const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false); // Toggle service menu open/close
+  const [isAddServiceMenuOpen, setIsAddServiceMenuOpen] = useState(false); // Toggle add service sub-menu
   const [role, setRole] = useState(null); // Lưu vai trò người dùng
 
   // Lấy vai trò từ localStorage khi component được mount
@@ -24,8 +25,15 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
       localStorage.removeItem('user'); // Clear user info if stored
       localStorage.removeItem('role'); // Xóa role khi đăng xuất
       navigate("/"); // Redirect to home
-    } else if (label === "Thêm Dịch Vụ") {
+    } 
+     else if (label === "Thêm Tour") {
       navigate("/create-tour");
+    } else if (label === "Thêm Hotel") {
+      navigate("/add-hotel");
+    } else if (label === "Thêm Activity") {
+      navigate("/add-activity");
+    } else if (label === "Thêm Restaurant") {
+      navigate("/add-restaurant");
     } else if (label === "Quản lý thông tin hóa đơn") {
       navigate("/manage-bills");
     } else if (label === "Quản lý tour") {
@@ -41,6 +49,10 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
 
   const toggleServiceMenu = () => {
     setIsServiceMenuOpen(!isServiceMenuOpen);
+  };
+
+  const toggleAddServiceMenu = () => {
+    setIsAddServiceMenuOpen(!isAddServiceMenuOpen);
   };
 
   return (
@@ -88,13 +100,41 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
         {/* Chỉ hiển thị các mục này nếu vai trò người dùng là `staff` */}
         {role === "staff" && (
           <>
-            <MenuItem 
-              icon={<FaPlusCircle />} 
-              label="Thêm Dịch Vụ" 
-              isSelected={selectedSection === "Thêm Dịch Vụ"}
-              onClick={() => handleNavigate("Thêm Dịch Vụ")}
-              isSidebarOpen={isSidebarOpen}
-            />
+            {/* Thêm Dịch Vụ với menu con */}
+            <div>
+              <MenuItem
+                icon={<FaPlusCircle />}
+                label="Thêm Dịch Vụ"
+                isSelected={selectedSection === "Thêm Dịch Vụ"}
+                onClick={toggleAddServiceMenu}
+                isSidebarOpen={isSidebarOpen}
+                dropdownIcon={isAddServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+              />
+              {isAddServiceMenuOpen && (
+                <div className="pl-8">
+                  <MenuItem 
+                    label="Thêm Tour" 
+                    onClick={() => handleNavigate("Thêm Tour")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem 
+                    label="Thêm Hotel" 
+                    onClick={() => handleNavigate("Thêm Hotel")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem 
+                    label="Thêm Activity" 
+                    onClick={() => handleNavigate("Thêm Activity")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem 
+                    label="Thêm Restaurant" 
+                    onClick={() => handleNavigate("Thêm Restaurant")}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                </div>
+              )}
+            </div>
 
             {/* Menu con cho Quản Lý Dịch Vụ */}
             <div>
@@ -142,7 +182,6 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
     </div>
   );
 };
-
 const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen, dropdownIcon }) => (
   <div 
     onClick={onClick} 
