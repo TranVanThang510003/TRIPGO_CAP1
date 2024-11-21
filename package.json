@@ -10,15 +10,37 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@iconify/react": "^5.0.2",
+    "@mui/lab": "^6.0.0-beta.14",
+    "@mui/material": "^6.1.6",
+    "@mui/x-date-pickers": "^7.22.1",
+    "@mui/x-date-pickers-pro": "^7.22.1",
+    "@react-google-maps/api": "^2.20.3",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.6",
+    "dayjs": "^1.11.13",
+    "flowbite-react": "^0.10.2",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
+    "react-chartjs-2": "^5.2.0",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-icons": "^5.3.0",
+    "react-leaflet": "^4.2.1",
+    "react-map-gl": "^7.1.7",
+    "react-router-dom": "^6.27.0",
+    "recharts": "^2.13.3",
+    "sass": "^1.80.3",
+    "startbootstrap-sb-admin": "^7.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -33,6 +55,6 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "tailwindcss": "^3.4.13",
-    "vite": "^5.4.8"
+    "vite": "^5.4.10"
   }
 }
