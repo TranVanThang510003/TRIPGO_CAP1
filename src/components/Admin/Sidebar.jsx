@@ -1,6 +1,6 @@
-const SidebarDashboard = () => {
+const Sidebar = () => {
   return (
-    <div className="w-120 bg-blue-800 text-white flex flex-col p-4">
+    <div className="w-64 bg-blue-800 text-white flex flex-col p-4">
       <h2 className="text-xl font-bold mb-6">Trang chủ Admin</h2>
       <nav>
         <ul>
@@ -8,11 +8,11 @@ const SidebarDashboard = () => {
           <li className="mb-4 hover:bg-blue-700 p-2 rounded">
             Quản lý giao dịch
           </li>
-          <li className="mb-4  hover:bg-blue-700 p-2 rounded">Dashboard</li>
+          <li className="mb-4 hover:bg-blue-700 p-2 rounded">Dashboard</li>
         </ul>
       </nav>
     </div>
   );
 };
 
-export default SidebarDashboard;
+export default Sidebar;

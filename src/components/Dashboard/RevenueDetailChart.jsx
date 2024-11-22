@@ -20,7 +20,7 @@ const RevenueDetailChart = ({ selectedYear }) => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3000/dashboard/totaltourandhotel/${selectedYear}`
+          `http://localhost:3000/dashboard/admin/totaltourandhotel/${selectedYear}`
         );
         const responseData = await response.json();
 
@@ -92,7 +92,10 @@ const RevenueDetailChart = ({ selectedYear }) => {
   };
 
   return (
-    <div className="bg-slate-100 " style={{ width: "100%", height: "450px", padding: "20px" }}>
+    <div
+      className="bg-slate-100 "
+      style={{ width: "100%", height: "450px", padding: "20px" }}
+    >
       <h3>Doanh thu Tour và Khách sạn</h3>
       {loading ? (
         <p>Đang tải dữ liệu...</p>

@@ -1,88 +1,143 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate từ react-router-dom
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Header from '../layout/Header';
+import SideBar from '../components/UserProfile/SideBar';
 
 const UserProfile = () => {
-  const navigate = useNavigate(); // Khởi tạo hook useNavigate
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [updateMessage, setUpdateMessage] = useState('');
 
-  // Dữ liệu cứng để test giao diện
-  const users = [
-    {
-      id: "1",
-      fullName: "Trần Văn Thắng",
-      email: "tvt@gmail.com",
-      phone: "0931951269",
-      cccd: "098955933333",
-      password: "Thangtran00030@"
-    },
-    {
-      id: "2",
-      fullName: "Nguyễn Văn A",
-      email: "nva@gmail.com",
-      phone: "0933555777",
-      cccd: "0987777666",
-      password: "Password123"
-    },
-    {
-      id: "3",
-      fullName: "Lê Thị B",
-      email: "ltb@gmail.com",
-      phone: "0933444555",
-      cccd: "0985555444",
-      password: "LeThiB456"
-    }
-  ];
+    // Lấy thông tin người dùng
+    const fetchUserData = async () => {
+        const userId = JSON.parse(localStorage.getItem("user"))?.id; // Lấy ID người dùng từ localStorage
+        if (!userId) {
+            navigate("/login"); // Nếu không tìm thấy ID, điều hướng đến trang đăng nhập
+            return;
+        }
+        try {
+            const response = await axios.get(`http://localhost:3000/users/${userId}`);
+            setUser(response.data);
+        } catch (error) {
+            console.error('Lỗi khi lấy thông tin người dùng:', error);
+        }
+    };
 
-  return (
-    <div className='bg-[#f8f8f8] w-full min-h-screen overflow-auto'>
-      <Header />
-      
-      <div className="w-full max-w-screen-lg flex flex-col md:flex-row h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 rounded-3xl">
-        {/* Sidebar */}
-        <div className="w-full md:w-1/4 mr-0 md:mr-4 bg-white flex flex-col items-center p-6 rounded-xl shadow-md">
-          <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-4xl text-gray-400">👤</span> {/* Placeholder cho Avatar */}
-          </div>
-          <h2 className="mt-4 text-xl text-[#181E4B] font-semibold">{users[0].fullName}</h2> {/* Hiển thị tên người dùng đầu tiên */}
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    const handleEdit = () => {
+        setIsEditing(true);
+        setUpdateMessage(''); // Reset message khi bắt đầu chỉnh sửa
+    };
+
+    const handleUpdate = async () => {
+        try {
+            const userId = JSON.parse(localStorage.getItem("user"))?.id; // Lấy ID người dùng từ localStorage
+
+            // Kiểm tra xem các trường có giá trị hay không
+            if (!user.USERNAME || !user.EMAIL || !user.PHONE || !user.ADDRESS || !user.BIRTHDAY) {
+                console.error("Một hoặc nhiều trường không có giá trị.");
+                setUpdateMessage("Vui lòng điền đầy đủ thông tin.");
+                return;
+            }
+
+            // Gửi yêu cầu cập nhật
+            await axios.put(`http://localhost:3000/users/${userId}`, {
+                USERNAME: user.USERNAME,
+                EMAIL: user.EMAIL,
+                PHONE: user.PHONE,
+                ADDRESS: user.ADDRESS,
+                BIRTHDAY: user.BIRTHDAY, // Sử dụng giá trị đã nhập
+            });
+
+            setIsEditing(false);
+            setUpdateMessage("Cập nhật thông tin thành công!"); // Thông báo cập nhật thành công
+        } catch (error) {
+            console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+            setUpdateMessage("Cập nhật thông tin thất bại."); // Thông báo thất bại
+        }
+    };
+
+    const formatDateForDisplay = (isoDate) => {
+        if (!isoDate) return '';
+        const date = new Date(isoDate);
+        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`; // Định dạng lại thành DD/MM/YYYY
+    };
+
+    if (!user) return <div>Loading...</div>; // Thay thế với loading spinner nếu cần
+
+    return (
+        <div className='bg-[#f8f8f8] w-full min-h-screen overflow-auto'>
+            <Header />
+            <div className="w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%]">
+                {/* Sidebar */}
+                <div className="mr-2">
+                    <SideBar />
+                </div>
+                {/* Main content */}
+                <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0">
+                    <h1 className="text-[30px] text-[#181E4B] font-bold mb-4">Thông tin cá nhân</h1>
+                    {/* Personal Information */}
+                    <div className="space-y-6 text-[14px] text-[#8A8A8A]">
+                        <InfoRow label="Tên" value={user.USERNAME} isEditing={isEditing} setValue={(value) => setUser({ ...user, USERNAME: value })} />
+                        <InfoRow
+                            label="Ngày sinh"
+                            value={isEditing ? user.BIRTHDAY.split('T')[0] : formatDateForDisplay(user.BIRTHDAY)} // Hiển thị giá trị trong định dạng mong muốn
+                            isEditing={isEditing}
+                            setValue={(value) => setUser({ ...user, BIRTHDAY: value })} // Cập nhật giá trị từ input
+                            inputType="date" // Đặt loại input là date
+                        />
+                        <InfoRow label="Số điện thoại" value={user.PHONE} isEditing={isEditing} setValue={(value) => setUser({ ...user, PHONE: value })} />
+                        <InfoRow label="Email" value={user.EMAIL} isEditing={isEditing} setValue={(value) => setUser({ ...user, EMAIL: value })} />
+                        <InfoRow label="Địa chỉ" value={user.ADDRESS} isEditing={isEditing} setValue={(value) => setUser({ ...user, ADDRESS: value })} />
+                    </div>
+                    {/* Update button */}
+                    <div className="mt-12">
+                        {isEditing ? (
+                            <button
+                                className="px-6 py-2 float-right bg-[#03387E] text-white font-medium rounded hover:bg-[#03255B] focus:ring-2 focus:ring-[#03387E] focus:outline-none"
+                                onClick={handleUpdate}
+                            >
+                                Cập nhật
+                            </button>
+                        ) : (
+                            <button
+                                className="px-6 py-2 float-right bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                onClick={handleEdit}
+                            >
+                                Chỉnh sửa
+                            </button>
+                        )}
+                    </div>
+                    {updateMessage && <div className="text-red-500 mt-4">{updateMessage}</div>} {/* Hiển thị thông báo cập nhật */}
+                </div>
+            </div>
         </div>
-
-        {/* Main content */}
-        <div className="flex-grow bg-white p-8 rounded-xl shadow-md mt-6 md:mt-0">
-          <h1 className="text-[20px] text-[#181E4B] font-bold mb-6">Thông tin cá nhân</h1>
-
-          {/* Thông tin cá nhân */}
-          <div className="space-y-6 text-[14px] text-[#8A8A8A]">
-            <InfoRow label="Tên" value={users[0].fullName} />
-            <InfoRow label="Số điện thoại" value={users[0].phone} />
-            <InfoRow label="Email" value={users[0].email} />
-            <InfoRow label="CCCD" value={users[0].cccd} />
-            <InfoRow label="Password" value="********" /> {/* Ẩn mật khẩu */}
-          </div>
-
-          {/* Nút quay lại */}
-          <div className="mt-12">
-            <button 
-              className="px-6 py-2 float-right bg-customBlue text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              onClick={() => navigate(-1)} // Điều hướng về trang trước đó
-            >
-              Quay lại
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-// Component để hiển thị từng hàng thông tin
-const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between items-center border-b pb-2">
-    <div>
-      <span className="block font-normal">{label}</span>
-      <span className="text-[16px] text-[#181E4B] font-normal">{value}</span>
+// Component to display each row of information
+const InfoRow = ({ label, value, isEditing, setValue, inputType }) => (
+    <div className="flex justify-between items-center border-b pb-2">
+        <div>
+            <span className="block font-medium">{label}</span>
+            {isEditing ? (
+                <input
+                    type={inputType || "text"} // Sử dụng loại input truyền vào (date hoặc text)
+                    value={value} // Giá trị từ state
+                    onChange={(e) => setValue(e.target.value)} // Cập nhật state
+                    className="text-[16px] text-[#181E4B] font-normal border-b border-gray-300 focus:outline-none"
+                />
+            ) : (
+                <span className="text-[16px] text-[#181E4B] font-normal">{value}</span>
+            )}
+        </div>
     </div>
-    <button className="text-blue-600 hover:underline focus:outline-none">edit</button>
-  </div>
 );
 
 export default UserProfile;

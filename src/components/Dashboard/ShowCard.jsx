@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-constant-binary-expression */
 import { useState, useEffect } from "react";
 import StatsCard from "./StatsCard";
@@ -11,7 +12,7 @@ const ShowCard = ({ selectedYear }) => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3000/dashboard/totalrevenue/${selectedYear}`
+          `http://localhost:3000/dashboard/admin/totalrevenue/${selectedYear}`
         );
         const data = await response.json();
 

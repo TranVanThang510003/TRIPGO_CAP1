@@ -21,7 +21,7 @@ import CampingDetail from "./Page/CampingDetail";
 import CreateTourForm from "./components/CreateServer/CreateTourForm";
 import CreateHotelForm from "./components/CreateServer/CreateHotelForm";
 import MainDashboard from "./components/Dashboard/MainDashboard";
-
+import AdminPage from "./Page/AdminPage/AdminPage";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
@@ -41,6 +41,8 @@ const Main = () => {
         <Route path="/createtours" element={<CreateTourForm />} />
         <Route path="/createhotels" element={<CreateHotelForm />} />
         <Route path="/dashboardstaff" element={<MainDashboard />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>
   );
