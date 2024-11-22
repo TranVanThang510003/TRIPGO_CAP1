@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 import FormHeader from '../../components/createServices/createTour/FormHeader';
 import LocationSelector from '../../components/createServices/createTour/LocationSelector';
 import TourDetails from '../../components/createServices/createTour/TourDetails';
@@ -22,10 +23,13 @@ const UpdateTourForm = () => {
   const [PUCLIC_TOUR_TYPE, setPUCLIC_TOUR_TYPE] = useState('');
   const [DESCRIPTIONS, setDESCRIPTIONS] = useState('');
   const [IMAGE, setIMAGE] = useState(null);
+  const [newImages, setNewImages] = useState([]); // Lưu danh sách file hình ảnh mới tải lên
   const [LANGUAGE, setLANGUAGE] = useState('vi');
   const [schedules, setSchedules] = useState([]);
   const [multiDaySchedules, setMultiDaySchedules] = useState([]); // Lịch trình cho nhiều ngày
   const [scheduleDetails, setScheduleDetails] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+
   const [errors, setErrors] = useState({});
 
   // Lịch khởi hành
@@ -127,6 +131,22 @@ const UpdateTourForm = () => {
       return []; // Trả về mảng trống nếu gặp lỗi
     }
   };
+  const processMultiDaySchedules = (services, numDays) => {
+    const schedules = [];
+
+    // Sắp xếp lại dữ liệu theo dayNumber
+    services.sort((a, b) => a.dayNumber - b.dayNumber);
+
+    for (let i = 0; i < numDays; i++) {
+      const day = services.find((service) => service.dayNumber === i + 1);
+      schedules.push({
+        title: day?.title || '',
+        description: day?.description || '',
+      });
+    }
+
+    return schedules;
+  };
 
   const fetchTourDetails = async () => {
     try {
@@ -137,17 +157,17 @@ const UpdateTourForm = () => {
 
       const tour = response.data.tour;
       // Đặt giá trị cho loại tour
-      if (tour.serviceType === 'Tour trong ngày') {
+      if (tour.serviceType === 'trong ngày') {
         setTourType('day');
-      } else if (tour.serviceType === 'Tour nhiều ngày') {
+      } else if (tour.serviceType === 'nhiều ngày') {
         setTourType('multi');
       }
-      const formattedSchedules = tour.services.map((service) => ({
-        dayNumber: service.dayNumber,
-        title: service.title || '',
-        description: service.description || '',
-        time: service.time || '',
-      }));
+      const formattedSchedules = processMultiDaySchedules(
+        tour.services,
+        tour.services.length
+      );
+      setMultiDaySchedules(formattedSchedules);
+      setNumDays(formattedSchedules.length);
 
       setMultiDaySchedules(formattedSchedules);
 
@@ -296,7 +316,9 @@ const UpdateTourForm = () => {
   const editSchedule = (index) => {
     const schedule = schedules[index];
     setEditingIndex(index); // Lưu vị trí đang chỉnh sửa
-    setDepartureDate(schedule.departureDate);
+    setDepartureDate(
+      moment(schedule.departureDate).format('YYYY-MM-DD') // Đảm bảo định dạng đúng
+    );
     setPriceAdult(schedule.priceAdult);
     setPriceChild(schedule.priceChild);
     setAvailableAdultCount(schedule.availableAdultCount);
@@ -348,7 +370,10 @@ const UpdateTourForm = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  const updateImages = (updatedExistingImages, updatedNewImages) => {
+    setExistingImages(updatedExistingImages); // Cập nhật ảnh cũ
+    setNewImages(updatedNewImages); // Cập nhật ảnh mới
+  };
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -373,10 +398,14 @@ const UpdateTourForm = () => {
       formData.append('multiDaySchedules', JSON.stringify(multiDaySchedules));
     }
 
-    if (IMAGE) {
-      formData.append('IMAGE', IMAGE);
-    }
+    // Đưa danh sách URL ảnh cũ (sau khi đã xử lý xóa)
+    existingImages.forEach((imgUrl) =>
+      formData.append('existingImages', imgUrl)
+    );
 
+    // Đưa các file ảnh mới (nếu có)
+
+    newImages.forEach((file) => formData.append('newImages', file));
     try {
       await axios.put(
         `http://localhost:3000/public-tours/${tourId}`,
@@ -493,8 +522,14 @@ const UpdateTourForm = () => {
           <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
           <FileUploader
             IMAGE={IMAGE}
-            setIMAGE={setIMAGE}
-            existingImages={IMAGE}
+            setIMAGE={(files) => {
+              if (files.length > 0) {
+                setNewImages(files); // Lưu các file mới tải lên
+              }
+            }}
+            existingImages={IMAGE.filter((img) => typeof img === 'string')}
+            newImages={newImages} // Pass newImages to FileUploader
+            setNewImages={setNewImages} // Pass setNewImages to FileUploader
           />
         </div>
 
