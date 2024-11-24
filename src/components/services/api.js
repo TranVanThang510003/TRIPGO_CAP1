@@ -26,10 +26,9 @@ export const fetchActivities = async () => {
   return response.data; // Trả về dữ liệu từ API
 };
 
-// Hàm gọi API để lấy danh sách các tour
-export const fetchTours = async (page = 1, limit = 9, priceOrder = 'low-to-high', ratingOrder = 'high-to-low') => {
+export const fetchTours = async (page = 1, limit = 9) => {
   const response = await api.get('/public-tours', {
-    params: { page, limit, priceOrder, ratingOrder }, // Thêm các tham số sắp xếp
+    params: { page, limit }, // Chỉ lấy dữ liệu cơ bản
   });
   return response.data;
 };
@@ -39,7 +38,13 @@ export const fetchTourDetails = async (tourId) => {
   const response = await api.get(`/public-tours/${tourId}`);
   return response.data;
 };
-export const fetchToursByCreator = async (creatorId, page = 1, limit = 9, priceOrder = 'low-to-high', ratingOrder = 'high-to-low') => {
+export const fetchToursByCreator = async (
+  creatorId,
+  page = 1,
+  limit = 9,
+  priceOrder = 'low-to-high',
+  ratingOrder = 'high-to-low'
+) => {
   const response = await api.get(`/public-tours/by-creator/${creatorId}`, {
     params: { page, limit, priceOrder, ratingOrder },
   });

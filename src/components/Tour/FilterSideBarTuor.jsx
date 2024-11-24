@@ -1,15 +1,26 @@
 import { useState } from 'react';
 import TourListAndMap from './mapTour/tourListAndMap';
 
-const FilterSideBarTour = () => {
+const FilterSideBarTour = ({ onTourTypeChange }) => {
   const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
   const [showMap, setShowMap] = useState(false);
+  const [selectedTourTypes, setSelectedTourTypes] = useState([]);
   const handleShowMap = () => {
     setShowMap(true); // Hiển thị bản đồ khi click
   };
+  const handleCheckboxChange = (event) => {
+    const { id, checked } = event.target;
+    const updatedTourTypes = checked
+      ? [...selectedTourTypes, id]
+      : selectedTourTypes.filter((type) => type !== id);
+
+    setSelectedTourTypes(updatedTourTypes);
+    onTourTypeChange(updatedTourTypes);
+  };
+
   const tour_type = [
     'Tour mạo hiểm',
-    'Tuor văn hóa',
+    'Tour văn hóa',
     'Tour nghỉ dưỡng',
     'Tour sinh thái',
     'Tour đi thuyền',
@@ -116,7 +127,13 @@ const FilterSideBarTour = () => {
             <div className="mt-4">
               {tour_type.map((filter, idx) => (
                 <div key={idx} className="flex items-center mb-2">
-                  <input type="checkbox" id={filter} className="mr-2 w-6 h-6" />
+                  <input
+                    type="checkbox"
+                    id={filter}
+                    className="mr-2 w-6 h-6"
+                    onChange={handleCheckboxChange}
+                  />
+
                   <label htmlFor={filter} className="text-base">
                     {filter}
                   </label>
