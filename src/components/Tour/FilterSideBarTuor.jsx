@@ -1,26 +1,30 @@
-import { useState } from "react";
+import { useState } from 'react';
+import TourListAndMap from './mapTour/tourListAndMap';
 
 const FilterSideBarTour = () => {
   const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
-
+  const [showMap, setShowMap] = useState(false);
+  const handleShowMap = () => {
+    setShowMap(true); // Hiển thị bản đồ khi click
+  };
   const tour_type = [
-    "Tour mạo hiểm",
-    "Tuor văn hóa",
-    "Tour nghỉ dưỡng",
-    "Tour sinh thái",
-    "Tour đi thuyền",
-    "Tour ẩm thực",
-    "Tour khám phá đảo",
+    'Tour mạo hiểm',
+    'Tuor văn hóa',
+    'Tour nghỉ dưỡng',
+    'Tour sinh thái',
+    'Tour đi thuyền',
+    'Tour ẩm thực',
+    'Tour khám phá đảo',
   ];
-  const ratings = ["3.0+", "3.5+", "4.0+", "4.5+"];
-  const time = ["Tour nữa ngày", "Tour trong ngày", "Tour nhiều ngày"];
+  const ratings = ['3.0+', '3.5+', '4.0+', '4.5+'];
+  const time = ['Tour nữa ngày', 'Tour trong ngày', 'Tour nhiều ngày'];
   const service = [
-    "Tour riêng",
-    "Đón tại khách sạn ",
-    "Hoàn tiền dễ dàng",
-    "Đảm bảo khới hành",
+    'Tour riêng',
+    'Đón tại khách sạn ',
+    'Hoàn tiền dễ dàng',
+    'Đảm bảo khới hành',
   ];
-  const language = ["Hưỡng dẫn tiếng anh", "Hưỡng dẫn tiếng việt"];
+  const language = ['Hưỡng dẫn tiếng anh', 'Hưỡng dẫn tiếng việt'];
 
   // Hàm xử lý khi người dùng thay đổi giá trị thanh trượt
   const handlePriceChange = (e) => {
@@ -31,17 +35,43 @@ const FilterSideBarTour = () => {
   return (
     <div className="w-80 flex flex-col">
       {/* Hoạt động trên bản đồ */}
-      <div className="mb-4 w-80 bg-white h-56 rounded-3xl border border-[#ACACAC]">
-        <div className="h-44 bg-gray-100 rounded-t-3xl flex justify-center items-center">
-          <img
-            src="https://www.techtimes.vn/wp-content/uploads/2023/05/google-maps-icon-on-map.jpg"
-            alt="Map"
-            className="h-full w-full object-cover rounded-t-3xl text-justify    "
-          />
-        </div>
-        <p className="text-center text-sm font-medium mt-2">
-          Hoạt động trên bản đồ
-        </p>
+      <div>
+        {!showMap && (
+          <div className="w-80 flex flex-col">
+            {/* Hoạt động trên bản đồ */}
+            <div
+              className="mb-4 w-80 bg-white h-56 rounded-3xl border border-[#ACACAC] cursor-pointer"
+              onClick={handleShowMap}
+            >
+              <div className="h-44 bg-gray-100 rounded-t-3xl flex justify-center items-center">
+                <img
+                  src="../../../public/img/MAP.jpg"
+                  alt="Map"
+                  className="h-full w-full object-cover rounded-t-3xl"
+                />
+              </div>
+              <p className="text-center text-sm font-medium mt-2">
+                Hoạt động trên bản đồ
+              </p>
+            </div>
+
+            {/* Các bộ lọc (ẩn khi bản đồ mở) */}
+            <div className="w-80 bg-white flex flex-col items-center rounded-3xl border border-[#ACACAC]">
+              <div className="font-medium text-3xl text-center border-b-4 w-80 h-20 rounded-t-3xl flex items-center justify-center">
+                Lựa chọn
+              </div>
+              {/* Bộ lọc và các phần khác */}
+              {/* ... */}
+            </div>
+          </div>
+        )}
+
+        {/* Bản đồ toàn màn hình */}
+        {showMap && (
+          <div className="fixed inset-0 z-50 bg-white">
+            <TourListAndMap />
+          </div>
+        )}
       </div>
 
       {/* Lựa chọn */}
@@ -65,16 +95,16 @@ const FilterSideBarTour = () => {
             />
             <div className="flex justify-between">
               <div className="w-[100px] h-[25px] border border-spacing-[0.5] border-black rounded-xl flex justify-center items-center">
-                {priceRange[0].toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
+                {priceRange[0].toLocaleString('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
                 })}
               </div>
               <span>đến</span>
               <div className="w-[100px] h-[25px] border border-spacing-[0.5] border-black rounded-xl flex justify-center items-center">
-                {priceRange[1].toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
+                {priceRange[1].toLocaleString('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
                 })}
               </div>
             </div>
@@ -128,7 +158,7 @@ const FilterSideBarTour = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Ngôn ngữ hưỡng dẫn */}
           <div className="mb-6">
             <h4 className="font-medium text-2xl text-center">
@@ -148,7 +178,9 @@ const FilterSideBarTour = () => {
 
           {/* bộ lọc Dịch vụ khới hành*/}
           <div className="mb-6">
-            <h4 className="font-medium text-2xl text-center">Dịch vụ khới hành</h4>
+            <h4 className="font-medium text-2xl text-center">
+              Dịch vụ khới hành
+            </h4>
             <div className="mt-2">
               {service.map((type, idx) => (
                 <div key={idx} className="flex items-center mb-2">
@@ -160,7 +192,6 @@ const FilterSideBarTour = () => {
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </div>

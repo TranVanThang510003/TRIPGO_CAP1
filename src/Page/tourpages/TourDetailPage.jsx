@@ -1,4 +1,4 @@
-// import { useEffect, useState } from 'react'; 
+// import { useEffect, useState } from 'react';
 // import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 // import Header from '../../layout/Header';
 // import Footer from '../../layout/Footer';
@@ -17,20 +17,20 @@
 // const TourDetailPage = () => {
 //   const [tour, setTour] = useState(null);
 //   const [loading, setLoading] = useState(true);
-//   const { tourId } = useParams(); 
+//   const { tourId } = useParams();
 //   const navigate = useNavigate(); // Khởi tạo hook navigate
 
 //   // Lấy thông tin người dùng từ localStorage
 //   const [userRole, setUserRole] = useState(localStorage.getItem('role'));
-//   const [userId, setUserId] = useState(parseInt(JSON.parse(localStorage.getItem("user")).id, 10)); 
+//   const [userId, setUserId] = useState(parseInt(JSON.parse(localStorage.getItem("user")).id, 10));
 
 //   useEffect(() => {
 //     const loadTourDetails = async () => {
 //       try {
 //         if (!tourId) {
-//           throw new Error('Tour ID is missing in the URL.'); 
+//           throw new Error('Tour ID is missing in the URL.');
 //         }
-//         const data = await fetchTourDetails(tourId); 
+//         const data = await fetchTourDetails(tourId);
 //         setTour(data.tour);
 //       } catch (error) {
 //         console.error("Lỗi khi lấy thông tin tour:", error.message);
@@ -43,11 +43,11 @@
 //   }, [tourId]);
 
 //   if (loading) {
-//     return <p>Loading...</p>; 
+//     return <p>Loading...</p>;
 //   }
 
 //   if (!tour) {
-//     return <p>Không tìm thấy thông tin tour.</p>; 
+//     return <p>Không tìm thấy thông tin tour.</p>;
 //   }
 
 //   const handleBookingClick = () => {
@@ -58,7 +58,7 @@
 //   const canEdit = userRole === 'staff' && tour?.createdBy === userId;
 
 //   // Tạo danh sách 4 ảnh từ tour.images
-//   const images = tour.images && tour.images.length > 0 
+//   const images = tour.images && tour.images.length > 0
 //     ? Array(4).fill(tour.images[0].imageUrl) // Lặp lại URL ảnh đầu tiên 4 lần
 //     : []; // Nếu không có ảnh, trả về mảng rỗng
 
@@ -84,7 +84,7 @@
 
 //         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 //           <div className="md:col-span-2">
-//             <TourTitleAndRating 
+//             <TourTitleAndRating
 //               title={tour.name}
 //               rating={tour.averageRating}
 //               reviewsCount={tour.reviewCount}
@@ -95,7 +95,7 @@
 //             />
 
 //             <HighlightSection highlights={tour.highlights} />
-  
+
 //             <DetailSection details={tour.services} />
 //             <BookingForm
 //               priceAdult={tour.priceAdult}
@@ -104,7 +104,7 @@
 //               schedules={tour.schedules}
 //             />
 //           </div>
-  
+
 //           <div className="md:col-span-1">
 //             <BookingCard price={priceAdult} onBookingClick={handleBookingClick} />
 //             <div className='flex justify-between mt-2'>
@@ -116,11 +116,11 @@
 
 //         {/* Nút "Chỉnh sửa" chỉ hiển thị khi điều kiện canEdit là true */}
 //         {canEdit && (
-//           <button 
+//           <button
 //             className="text-6xl fixed bottom-20 right-20 text-blue-500 bg-white rounded-full shadow-lg p-4 hover:bg-blue-700 hover:text-white transition"
 //             onClick={() => navigate(`/edit-tour/${tourId}`)} // Sử dụng navigate để chuyển hướng đến trang chỉnh sửa
 //           >
-//              <Icon icon="game-icons:feather" /> 
+//              <Icon icon="game-icons:feather" />
 //           </button>
 //         )}
 //       </div>
@@ -130,7 +130,7 @@
 // };
 
 // export default TourDetailPage;
-import { useEffect, useState } from 'react'; 
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Header from '../../layout/Header';
 import Footer from '../../layout/Footer';
@@ -153,7 +153,9 @@ const TourDetailPage = () => {
   const [isEditing, setIsEditing] = useState(false); // Trạng thái hiển thị form chỉnh sửa
   const { tourId } = useParams();
 
-  const [userRole, setUserRole] = useState(localStorage.getItem('role') || null);
+  const [userRole, setUserRole] = useState(
+    localStorage.getItem('role') || null
+  );
   const [userId, setUserId] = useState(() => {
     const user = localStorage.getItem('user');
     return user ? parseInt(JSON.parse(user).id, 10) : null;
@@ -166,7 +168,7 @@ const TourDetailPage = () => {
         const data = await fetchTourDetails(tourId);
         setTour(data.tour);
       } catch (error) {
-        console.error("Error fetching tour details:", error.message);
+        console.error('Error fetching tour details:', error.message);
       } finally {
         setLoading(false);
       }
@@ -181,7 +183,7 @@ const TourDetailPage = () => {
   const canEdit = userRole === 'staff' && tour?.createdBy === userId;
 
   return (
-    <div className='bg-[#F8F8F8]'>
+    <div className="bg-[#F8F8F8]">
       <div className="w-4/5 mx-auto mt-[80px]">
         <Header />
 
@@ -195,12 +197,16 @@ const TourDetailPage = () => {
         ) : (
           // Hiển thị chi tiết tour
           <>
-            <div className='my-3'><ReturnButton /></div>
-            <ImageGallery images={tour.images?.map(img => img.imageUrl) || []} />
+            <div className="my-3">
+              <ReturnButton />
+            </div>
+            <ImageGallery
+              images={tour.images?.map((img) => img.imageUrl) || []}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="md:col-span-2">
-                <TourTitleAndRating 
+                <TourTitleAndRating
                   title={tour.name}
                   rating={tour.averageRating}
                   reviewsCount={tour.reviewCount}
@@ -220,8 +226,11 @@ const TourDetailPage = () => {
               </div>
 
               <div className="md:col-span-1">
-                <BookingCard price={tour.priceAdult} onBookingClick={() => console.log("Đã nhấn đặt tour!")} />
-                <div className='flex justify-between mt-2'>
+                <BookingCard
+                  price={tour.priceAdult}
+                  onBookingClick={() => console.log('Đã nhấn đặt tour!')}
+                />
+                <div className="flex justify-between mt-2">
                   <LikeButton />
                   <ShareButton />
                 </div>
@@ -229,11 +238,11 @@ const TourDetailPage = () => {
             </div>
 
             {canEdit && (
-              <button 
+              <button
                 className="text-6xl fixed bottom-20 right-20 text-blue-500 bg-white rounded-full shadow-lg p-4 hover:bg-blue-700 hover:text-white transition"
                 onClick={() => setIsEditing(true)} // Kích hoạt trạng thái chỉnh sửa
               >
-                <Icon icon="game-icons:feather" /> 
+                <Icon icon="game-icons:feather" />
               </button>
             )}
           </>

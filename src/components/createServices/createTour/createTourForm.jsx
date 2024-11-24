@@ -27,7 +27,8 @@ const CreateTourForm = () => {
   const [multiDaySchedules, setMultiDaySchedules] = useState([]); // Lịch trình cho nhiều ngày
   const [scheduleDetails, setScheduleDetails] = useState([]); // Lưu tiêu đề và thời gian trong ngày
   const [errors, setErrors] = useState({});
-
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   // Lịch khởi hành
   const [tourType, setTourType] = useState('day');
   const [departureDate, setDepartureDate] = useState('');
@@ -229,6 +230,13 @@ const CreateTourForm = () => {
       { time: '', title: '', description: '' },
     ]);
   };
+  const updateImages = (updatedExistingImages, updatedNewImages) => {
+    setExistingImages(updatedExistingImages); // Cập nhật ảnh cũ
+    setNewImages(updatedNewImages); // Cập nhật ảnh mới
+
+    // Cập nhật IMAGE tổng hợp
+    setIMAGE([...updatedExistingImages, ...updatedNewImages]);
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -290,12 +298,23 @@ const CreateTourForm = () => {
     if (multiDaySchedules.length > 0) {
       formData.append('multiDaySchedules', JSON.stringify(multiDaySchedules));
     }
+    // Đưa các file ảnh mới vào FormData
+    newImages.forEach((file) => {
+      formData.append('newImages', file); // Đổi từ 'newImages[]' thành 'newImages'
+    });
 
-    // Append ảnh nếu có
-    if (IMAGE) {
-      formData.append('IMAGE', IMAGE);
+    // Đưa danh sách ảnh cũ vào FormData
+    formData.append('existingImages', JSON.stringify(existingImages));
+
+    // Log dữ liệu trước khi gửi
+    console.log('FormData to send:');
+    for (let [key, value] of formData.entries()) {
+      if (key === 'newImages[]') {
+        console.log(`${key}:`, value.name); // Log tên file mới
+      } else {
+        console.log(`${key}:`, value); // Log các giá trị khác
+      }
     }
-
     try {
       const response = await axios.post(
         'http://localhost:3000/createtour',
@@ -400,7 +419,17 @@ const CreateTourForm = () => {
         {/* File Uploader */}
         <div>
           <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
-          <FileUploader IMAGE={IMAGE} setIMAGE={setIMAGE} errors={errors} />
+          <FileUploader
+            IMAGE={IMAGE}
+            setIMAGE={(files) => {
+              if (files.length > 0) {
+                setNewImages(files); // Lưu các file mới tải lên
+              }
+            }}
+            newImages={newImages} // Pass newImages to FileUploader
+            setNewImages={setNewImages}
+            updateImages={updateImages}
+          />
         </div>
 
         {/* Submit Button */}

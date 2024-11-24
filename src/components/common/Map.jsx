@@ -1,202 +1,173 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import Fuse from "fuse.js";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  Polyline,
+} from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import 'leaflet/dist/leaflet.css';
+import 'react-leaflet-markercluster/dist/styles.min.css';
+import L from 'leaflet';
 
-// Custom marker icon
+// Icon marker tùy chỉnh
 const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [30, 40],
+  iconAnchor: [15, 41],
 });
 
-// FlyTo helper component
-const FlyToLocation = ({ position }) => {
+// Red Icon for Current Location
+const currentLocationIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+  iconSize: [40, 41],
+  iconAnchor: [20, 41],
+});
+
+// Component xử lý zoom
+const ZoomToLocation = ({ location }) => {
   const map = useMap();
   useEffect(() => {
-    if (position) {
-      map.flyTo(position, 10, { duration: 1.5 });
+    if (location) {
+      map.flyTo([location.lat, location.lng], 13); // Zoom đến vị trí
     }
-  }, [position, map]);
+  }, [location, map]);
+
   return null;
 };
 
-const Map = () => {
-  const [tourLocations, setTourLocations] = useState([]); // Danh sách tour với tọa độ
-  const [filteredTours, setFilteredTours] = useState([]); // Danh sách tour đã được lọc
-  const [searchQuery, setSearchQuery] = useState(""); // Từ khóa tìm kiếm
-  const [selectedProvince, setSelectedProvince] = useState(""); // Tỉnh được chọn
-  const [focusedTour, setFocusedTour] = useState(null); // Vị trí tour cần tập trung
-  const [isLoading, setIsLoading] = useState(false); // Trạng thái loading
-  const coordinateCache = {}; // Lưu cache tọa độ
-
-  const fuse = new Fuse(tourLocations, {
-    keys: ["name", "description", "location"],
-    threshold: 0.3,
-  });
-
-  // Fetch coordinates from OpenStreetMap
-  const fetchCoordinates = async (location) => {
-    try {
-        const API_KEY = "39d7dc112d3c437a846692b915cd488a"; // API Key của bạn
-        const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-          location
-        )}&key=${API_KEY}`;
-    
-        const response = await axios.get(url);
-    
-        if (response.data && response.data.results.length > 0) {
-          const { lat, lng } = response.data.results[0].geometry;
-          return { lat, lng };
-        } else {
-          throw new Error(`Không tìm thấy tọa độ cho địa điểm: ${location}`);
-        }
-      } catch (error) {
-        console.error("Lỗi khi gọi OpenCage API:", error);
-        throw error;
-      }
-  };
-
-  // Load tours with coordinates on mount
-  useEffect(() => {
-    const loadLocations = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get("http://localhost:3000/public-tours");
-        const tours = response.data.tours;
-
-        const toursWithCoordinates = await Promise.all(
-          tours.map(async (tour) => {
-            try {
-              const coordinates = await fetchCoordinates(tour.location);
-              return { ...tour, ...coordinates }; // Thêm tọa độ vào tour
-            } catch (error) {
-              console.error(error);
-              return null;
-            }
-          })
-        );
-
-        const validTours = toursWithCoordinates.filter((tour) => tour !== null);
-        setTourLocations(validTours);
-        setFilteredTours(validTours);
-      } catch (error) {
-        console.error("Lỗi khi tải danh sách tour:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadLocations();
-  }, []);
-
-  // Handle search functionality
-  const handleSearch = () => {
-    let filtered = [...tourLocations];
-    if (selectedProvince) {
-      filtered = filtered.filter((tour) => tour.location === selectedProvince);
-    }
-    if (searchQuery) {
-      const fuzzyResults = fuse.search(searchQuery).map((result) => result.item);
-      filtered = filtered.filter((tour) =>
-        fuzzyResults.some((fuzzyTour) => fuzzyTour.name === tour.name)
-      );
-    }
-    setFilteredTours(filtered);
-    if (filtered.length > 0) {
-      setFocusedTour([filtered[0].lat, filtered[0].lng]); // Di chuyển đến tour đầu tiên
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading tours...</div>;
-  }
+const MapComponent = ({
+  tourLocations,
+  zoomToLocation,
+  selectedPath,
+  currentLocation,
+  distance, // Truyền thông tin độ dài đường đi
+  handleGetDirections,
+}) => {
+  // Lọc danh sách tour có tọa độ hợp lệ
+  const validTourLocations = tourLocations.filter(
+    (tour) => typeof tour.lat === 'number' && typeof tour.lng === 'number'
+  );
 
   return (
-    <div>
-      {/* Search controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "10px", margin: "20px" }}>
-        <input
-          type="text"
-          placeholder="Search for tours"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ padding: "10px", fontSize: "16px", flex: 1 }}
-        />
-        <select
-          value={selectedProvince}
-          onChange={(e) => setSelectedProvince(e.target.value)}
-          style={{ padding: "10px", fontSize: "16px" }}
-        >
-          <option value="">All Provinces</option>
-          {Array.from(new Set(tourLocations.map((tour) => tour.location))).map(
-            (province, index) => (
-              <option key={index} value={province}>
-                {province}
-              </option>
-            )
-          )}
-        </select>
-        <button onClick={handleSearch} style={{ padding: "10px", fontSize: "16px" }}>
-          Search
-        </button>
-      </div>
+    <MapContainer
+      center={[16.047079, 108.20623]} // Tâm bản đồ tại Việt Nam
+      zoom={6}
+      style={{ height: '100vh', width: '100%' }}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
 
-      {/* Map display */}
-      <MapContainer center={[21.028511, 105.804817]} zoom={6} style={{ height: "70vh", width: "100%" }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {focusedTour && <FlyToLocation position={focusedTour} />}
-        {filteredTours.map((tour, index) => (
-          <Marker
-            key={index}
-            position={[tour.lat, tour.lng]}
-            icon={customIcon}
-            eventHandlers={{
-              mouseover: (e) => {
-                const marker = e.target;
-                if (!marker.isPopupOpen()) {
-                  marker
-                    .bindPopup(
-                      `<b>${tour.name}</b><br>${tour.description}<br><i>${tour.location}</i>`
-                    )
-                    .openPopup();
-                }
-              },
-              mouseout: (e) => {
-                const marker = e.target;
-                marker.closePopup();
-              },
+      {/* Zoom đến vị trí tìm kiếm */}
+      <ZoomToLocation location={zoomToLocation} />
+
+      {/* Hiển thị đường đi */}
+      {selectedPath && selectedPath.length > 1 && (
+        <>
+          <Polyline positions={selectedPath} color="blue" />
+          {/* Hiển thị thông tin độ dài đường đi */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              left: '20px',
+              background: 'rgba(255, 255, 255, 0.9)',
+              padding: '10px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+              zIndex: 1000,
             }}
           >
-            <Popup>
-              <b>{tour.name}</b>
-              <br />
-              {tour.description}
-              <br />
-              <i>{tour.location}</i>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+            <strong>Độ dài đường đi:</strong> {distance} km
+          </div>
+        </>
+      )}
 
-      {/* Tour list */}
-      <div style={{ padding: "10px", background: "#f9f9f9", maxHeight: "150px", overflowY: "auto" }}>
-        <ul>
-          {filteredTours.map((tour, index) => (
-            <li key={index}>
-              <b>{tour.name}</b> ({tour.location}) - {tour.description}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+      {/* Vị trí hiện tại */}
+      {currentLocation && (
+        <Marker position={currentLocation} icon={currentLocationIcon}>
+          <Popup>Vị trí hiện tại của bạn</Popup>
+        </Marker>
+      )}
+
+      <MarkerClusterGroup maxClusterRadius={50}>
+        {validTourLocations.map((tour, index) => {
+          const isZoomedLocation =
+            zoomToLocation &&
+            Math.abs(zoomToLocation.lat - tour.lat) < 0.0001 &&
+            Math.abs(zoomToLocation.lng - tour.lng) < 0.0001;
+
+          return (
+            <Marker
+              key={tour.id}
+              position={[tour.lat, tour.lng]}
+              icon={customIcon}
+            >
+              <Popup autoOpen={isZoomedLocation}>
+                <div style={{ width: '250px', textAlign: 'center' }}>
+                  <img
+                    src={`http://localhost:3000${tour.imageUrl}`}
+                    alt={tour.name}
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                    }}
+                  />
+                  <h3 style={{ margin: '10px 0', color: '#007bff' }}>
+                    {tour.name}
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#555' }}>
+                    {tour.province}
+                  </p>
+                  <p style={{ fontSize: '14px', color: '#777' }}>
+                    {tour.duration} ngày | Giá: {tour.priceAdult} đ/Người
+                  </p>
+                  <div>
+                    <button
+                      style={{
+                        padding: '8px',
+                        background: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        marginRight: '8px',
+                      }}
+                      onClick={() =>
+                        (window.location.href = `/tours/${tour.id}`)
+                      }
+                    >
+                      Xem chi tiết
+                    </button>
+                    <button
+                      style={{
+                        padding: '8px',
+                        background: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handleGetDirections(tour)}
+                    >
+                      Hiển thị đường đi
+                    </button>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MarkerClusterGroup>
+    </MapContainer>
   );
 };
 
-export default Map;
+export default MapComponent;

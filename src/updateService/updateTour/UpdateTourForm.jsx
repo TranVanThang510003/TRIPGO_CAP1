@@ -194,8 +194,14 @@ const UpdateTourForm = () => {
       setScheduleDetails(tour.services || []);
 
       // Xử lý hình ảnh
-      if (tour.images) {
+
+      if (tour.images && tour.images.length > 0) {
+        // Đặt giá trị IMAGE với cả ảnh cũ
         setIMAGE(tour.images.map((img) => img.imageUrl));
+        setExistingImages(tour.images.map((img) => img.imageUrl)); // Cập nhật danh sách ảnh cũ
+      } else {
+        setIMAGE([]); // Đảm bảo IMAGE luôn là mảng
+        setExistingImages([]);
       }
 
       // Tách địa điểm thành từng phần: Xã/Phường, Quận/Huyện, Tỉnh/Thành phố
@@ -354,6 +360,21 @@ const UpdateTourForm = () => {
       { time: '', title: '', description: '' },
     ]);
   };
+  const handleDeleteTour = async () => {
+    const isConfirmed = window.confirm('Bạn có chắc muốn xóa tour này?');
+    if (!isConfirmed) return; // Nếu không xác nhận, thoát khỏi hàm
+
+    try {
+      // Gửi yêu cầu xóa tour
+      await axios.delete(`http://localhost:3000/public-tours/${tourId}`);
+      alert('Tour đã được xóa thành công!');
+      // Chuyển hướng về trang danh sách tour sau khi xóa
+      window.location.href = '/public-tours';
+    } catch (error) {
+      console.error('Lỗi khi xóa tour:', error.response?.data || error.message);
+      alert('Không thể xóa tour. Vui lòng thử lại.');
+    }
+  };
 
   // Validate the form
   const validateForm = () => {
@@ -373,7 +394,11 @@ const UpdateTourForm = () => {
   const updateImages = (updatedExistingImages, updatedNewImages) => {
     setExistingImages(updatedExistingImages); // Cập nhật ảnh cũ
     setNewImages(updatedNewImages); // Cập nhật ảnh mới
+
+    // Cập nhật IMAGE tổng hợp
+    setIMAGE([...updatedExistingImages, ...updatedNewImages]);
   };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -397,15 +422,23 @@ const UpdateTourForm = () => {
     if (multiDaySchedules.length > 0) {
       formData.append('multiDaySchedules', JSON.stringify(multiDaySchedules));
     }
+    // Đưa các file ảnh mới vào FormData
+    newImages.forEach((file) => {
+      formData.append('newImages', file); // Đổi từ 'newImages[]' thành 'newImages'
+    });
 
-    // Đưa danh sách URL ảnh cũ (sau khi đã xử lý xóa)
-    existingImages.forEach((imgUrl) =>
-      formData.append('existingImages', imgUrl)
-    );
+    // Đưa danh sách ảnh cũ vào FormData
+    formData.append('existingImages', JSON.stringify(existingImages));
 
-    // Đưa các file ảnh mới (nếu có)
-
-    newImages.forEach((file) => formData.append('newImages', file));
+    // Log dữ liệu trước khi gửi
+    console.log('FormData to send:');
+    for (let [key, value] of formData.entries()) {
+      if (key === 'newImages[]') {
+        console.log(`${key}:`, value.name); // Log tên file mới
+      } else {
+        console.log(`${key}:`, value); // Log các giá trị khác
+      }
+    }
     try {
       await axios.put(
         `http://localhost:3000/public-tours/${tourId}`,
@@ -429,7 +462,7 @@ const UpdateTourForm = () => {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-8 max-w-4/5 mx-auto grid gap-6">
       <FormHeader
         title="Cập Nhật Tour"
         description="Điền các thông tin dưới đây để cập nhật tour."
@@ -437,109 +470,142 @@ const UpdateTourForm = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 gap-y-6 bg-white p-8 rounded-lg shadow-lg"
+        className="grid grid-cols-1 gap-y-6 bg-white p-6 rounded-lg shadow-lg"
+        style={{
+          border: '1px solid #d1d5db',
+          backgroundColor: '#f9fafb',
+        }}
       >
         {/* Thông tin chi tiết */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
-          <TourDetails
-            tourTypes={tourTypes}
-            PUCLIC_TOUR_NAME={PUCLIC_TOUR_NAME}
-            setPUCLIC_TOUR_NAME={setPUCLIC_TOUR_NAME}
-            PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
-            setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
-            DESCRIPIONS_HIGHLIGHT={DESCRIPIONS_HIGHLIGHT}
-            setDESCRIPIONS_HIGHLIGHT={setDESCRIPIONS_HIGHLIGHT}
-            DESCRIPTIONS={DESCRIPTIONS}
-            setDESCRIPTIONS={setDESCRIPTIONS}
-            errors={errors}
-          />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">
+            Thông tin chi tiết
+          </h3>
+          <div className="grid grid-cols-1 gap-4">
+            <TourDetails
+              tourTypes={tourTypes}
+              PUCLIC_TOUR_NAME={PUCLIC_TOUR_NAME}
+              setPUCLIC_TOUR_NAME={setPUCLIC_TOUR_NAME}
+              PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
+              setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
+              DESCRIPIONS_HIGHLIGHT={DESCRIPIONS_HIGHLIGHT}
+              setDESCRIPIONS_HIGHLIGHT={setDESCRIPIONS_HIGHLIGHT}
+              DESCRIPTIONS={DESCRIPTIONS}
+              setDESCRIPTIONS={setDESCRIPTIONS}
+              errors={errors}
+            />
+          </div>
         </div>
 
         {/* Địa điểm */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Địa điểm</h3>
-          <LocationSelector
-            provinces={provinces}
-            districts={districts}
-            wards={wards}
-            selectedProvince={selectedProvince}
-            selectedDistrict={selectedDistrict}
-            selectedWard={selectedWard}
-            handleProvinceChange={handleProvinceChange}
-            handleDistrictChange={handleDistrictChange}
-            handleWardChange={handleWardChange}
-            errors={errors}
-          />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">Địa điểm</h3>
+          <div className="grid grid-cols-1 gap-4">
+            <LocationSelector
+              provinces={provinces}
+              districts={districts}
+              wards={wards}
+              selectedProvince={selectedProvince}
+              selectedDistrict={selectedDistrict}
+              selectedWard={selectedWard}
+              handleProvinceChange={handleProvinceChange}
+              handleDistrictChange={handleDistrictChange}
+              handleWardChange={handleWardChange}
+              errors={errors}
+            />
+          </div>
         </div>
 
         {/* Ngôn ngữ */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Ngôn ngữ</h3>
-          <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE} />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">Ngôn ngữ</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE} />
+          </div>
         </div>
-        {/* loại dịch vụ */}
+
+        {/* Loại dịch vụ */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Loại Tour</h3>
-          <TourTypeSelector
-            tourType={tourType}
-            setTourType={setTourType}
-            numDays={numDays}
-            setNumDays={setNumDays}
-            scheduleDetails={scheduleDetails}
-            setScheduleDetails={setScheduleDetails}
-            multiDaySchedules={multiDaySchedules}
-            setMultiDaySchedules={setMultiDaySchedules}
-            addScheduleDetail={addScheduleDetail}
-            resetSchedules={() => setSchedules([])}
-            PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
-            setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
-          />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">
+            Loại Tour
+          </h3>
+          <div className="grid grid-cols-1 gap-4">
+            <TourTypeSelector
+              tourType={tourType}
+              setTourType={setTourType}
+              numDays={numDays}
+              setNumDays={setNumDays}
+              scheduleDetails={scheduleDetails}
+              setScheduleDetails={setScheduleDetails}
+              multiDaySchedules={multiDaySchedules}
+              setMultiDaySchedules={setMultiDaySchedules}
+              addScheduleDetail={addScheduleDetail}
+              resetSchedules={() => setSchedules([])}
+              PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
+              setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
+            />
+          </div>
         </div>
 
         {/* Lịch trình */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Lịch trình</h3>
-          <ScheduleList
-            schedules={schedules}
-            addSchedule={handleAddOrSave}
-            editSchedule={editSchedule}
-            removeSchedule={removeSchedule}
-            departureDate={departureDate}
-            setDepartureDate={setDepartureDate}
-            priceAdult={priceAdult}
-            setPriceAdult={setPriceAdult}
-            priceChild={priceChild}
-            setPriceChild={setPriceChild}
-            availableAdultCount={availableAdultCount}
-            setAvailableAdultCount={setAvailableAdultCount}
-            errors={errors}
-          />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">
+            Lịch trình
+          </h3>
+          <div className="grid gap-4">
+            <ScheduleList
+              schedules={schedules}
+              addSchedule={handleAddOrSave}
+              editSchedule={editSchedule}
+              removeSchedule={removeSchedule}
+              departureDate={departureDate}
+              setDepartureDate={setDepartureDate}
+              priceAdult={priceAdult}
+              setPriceAdult={setPriceAdult}
+              priceChild={priceChild}
+              setPriceChild={setPriceChild}
+              availableAdultCount={availableAdultCount}
+              setAvailableAdultCount={setAvailableAdultCount}
+              errors={errors}
+            />
+          </div>
         </div>
 
         {/* Hình ảnh */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
-          <FileUploader
-            IMAGE={IMAGE}
-            setIMAGE={(files) => {
-              if (files.length > 0) {
-                setNewImages(files); // Lưu các file mới tải lên
-              }
-            }}
-            existingImages={IMAGE.filter((img) => typeof img === 'string')}
-            newImages={newImages} // Pass newImages to FileUploader
-            setNewImages={setNewImages} // Pass setNewImages to FileUploader
-          />
+          <h3 className="text-lg font-semibold mb-4 text-blue-600">
+            Tải lên hình ảnh
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <FileUploader
+              IMAGE={IMAGE}
+              setIMAGE={(files) => {
+                if (files.length > 0) {
+                  setNewImages(files); // Lưu các file mới tải lên
+                }
+              }}
+              existingImages={IMAGE.filter((img) => typeof img === 'string')}
+              newImages={newImages} // Pass newImages to FileUploader
+              setNewImages={setNewImages}
+              updateImages={updateImages} // /
+            />
+          </div>
         </div>
 
-        {/* Nút submit */}
-        <div>
+        {/* Nút hành động */}
+        <div className="flex justify-between mt-6 gap-4">
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-200"
+            className="flex-1 py-2 px-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-200"
           >
-            Cập Nhật Tour
+            Lưu chỉnh sửa
+          </button>
+          <button
+            type="button"
+            onClick={handleDeleteTour}
+            className="py-2 px-3 bg-red-600 text-white text-lg font-medium rounded-lg hover:bg-red-700 transition duration-200"
+          >
+            Xóa Tour
           </button>
         </div>
       </form>

@@ -1,17 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const FileUploader = ({
-  IMAGE,
-  setIMAGE,
-  setNewImages,
   existingImages = [],
+  newImages = [],
+  updateImages,
 }) => {
-  const [newPreviews, setNewPreviews] = useState([]); // Danh sách ảnh mới
-  const [localExistingImages, setLocalExistingImages] = useState([
-    ...existingImages,
-  ]); // Danh sách ảnh cũ
+  const [localExistingImages, setLocalExistingImages] = useState([]);
+  const [newPreviews, setNewPreviews] = useState([]);
 
-  // Xử lý khi chọn ảnh mới
+  useEffect(() => {
+    if (
+      JSON.stringify(localExistingImages) !== JSON.stringify(existingImages)
+    ) {
+      setLocalExistingImages(existingImages);
+    }
+
+    const updatedPreviews = newImages.map((file) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+    if (
+      JSON.stringify(newPreviews.map((p) => p.file)) !==
+      JSON.stringify(newImages)
+    ) {
+      setNewPreviews(updatedPreviews);
+    }
+  }, [existingImages, newImages]);
+
+  const handleRemoveExistingImage = (imgUrl) => {
+    const updatedExistingImages = localExistingImages.filter(
+      (url) => url !== imgUrl
+    );
+
+    // Cập nhật state và thông báo lên parent
+    setLocalExistingImages(updatedExistingImages);
+    updateImages(
+      updatedExistingImages,
+      newPreviews.map((p) => p.file)
+    );
+  };
+
+  const handleRemoveNewImage = (index) => {
+    const updatedPreviews = newPreviews.filter((_, i) => i !== index);
+
+    // Cập nhật state và thông báo lên parent
+    setNewPreviews(updatedPreviews);
+    updateImages(
+      localExistingImages,
+      updatedPreviews.map((p) => p.file)
+    );
+  };
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const filePreviews = files.map((file) => ({
@@ -19,40 +58,12 @@ const FileUploader = ({
       previewUrl: URL.createObjectURL(file),
     }));
 
-    setNewPreviews((prev) => [...prev, ...filePreviews]); // Cập nhật ảnh mới
-    setIMAGE((prev) => [...prev, ...localExistingImages, ...files]); // Gộp cả ảnh cũ và file mới
-  };
-
-  // Xóa ảnh cũ
-  const handleRemoveExistingImage = (index) => {
-    const updatedExistingImages = localExistingImages.filter(
-      (_, i) => i !== index
-    );
-    setLocalExistingImages(updatedExistingImages); // Cập nhật danh sách hiển thị ảnh cũ
-
-    const updatedIMAGE = [
-      ...updatedExistingImages,
+    // Cập nhật ảnh mới và thông báo lên parent
+    setNewPreviews((prev) => [...prev, ...filePreviews]);
+    updateImages(localExistingImages, [
       ...newPreviews.map((p) => p.file),
-    ];
-    setIMAGE(updatedIMAGE); // Cập nhật mảng `IMAGE` chung
-
-    // Đánh dấu ảnh này là bị xóa, ví dụ: thay vì xóa hẳn ảnh cũ, bạn đánh dấu nó
-    const imageToDelete = localExistingImages[index];
-    setNewImages((prev) => prev.filter((img) => img !== imageToDelete));
-  };
-
-  // Xóa ảnh mới
-  const handleRemoveNewImage = (index) => {
-    const updatedPreviews = newPreviews.filter((_, i) => i !== index);
-    const updatedFiles = updatedPreviews.map((p) => p.file);
-
-    const updatedIMAGE = [...localExistingImages, ...updatedFiles]; // Kết hợp ảnh cũ và file mới
-    setNewPreviews(updatedPreviews); // Cập nhật danh sách xem trước
-    setIMAGE(updatedIMAGE); // Cập nhật mảng `IMAGE` chung
-
-    // Đánh dấu ảnh này là bị xóa, thay vì xóa trực tiếp khỏi mảng
-    const imageToDelete = newPreviews[index].file;
-    setNewImages(newImages.filter((img) => img !== imageToDelete));
+      ...files,
+    ]);
   };
 
   return (
@@ -70,20 +81,23 @@ const FileUploader = ({
 
       {/* Hiển thị ảnh cũ */}
       {localExistingImages.length > 0 && (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
           {localExistingImages.map((imgUrl, index) => (
-            <div key={index} className="relative">
+            <div
+              key={index}
+              className="relative group rounded-lg overflow-hidden shadow-md border hover:shadow-lg transition-transform duration-300"
+            >
               <img
-                src={`http://localhost:3000/${imgUrl}`} // Đường dẫn ảnh cũ từ server
+                src={`http://localhost:3000/${imgUrl}`}
                 alt={`Existing Image ${index}`}
-                className="w-full h-auto rounded-md border"
+                className="w-full h-32 object-cover transform group-hover:scale-105 transition-transform duration-300"
               />
               <button
                 type="button"
-                onClick={() => handleRemoveExistingImage(index)}
-                className="absolute top-0 right-0 bg-red-500 text-white text-xs p-1 rounded-full"
+                onClick={() => handleRemoveExistingImage(imgUrl)}
+                className="absolute top-2 right-2 bg-red-500 text-white text-xs p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               >
-                X
+                ✖
               </button>
             </div>
           ))}
@@ -92,20 +106,23 @@ const FileUploader = ({
 
       {/* Hiển thị ảnh mới */}
       {newPreviews.length > 0 && (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
           {newPreviews.map((preview, index) => (
-            <div key={index} className="relative">
+            <div
+              key={index}
+              className="relative group rounded-lg overflow-hidden shadow-md border hover:shadow-lg transition-transform duration-300"
+            >
               <img
                 src={preview.previewUrl}
                 alt={`New Image ${index}`}
-                className="w-full h-auto rounded-md border"
+                className="w-full h-32 object-cover transform group-hover:scale-105 transition-transform duration-300"
               />
               <button
                 type="button"
                 onClick={() => handleRemoveNewImage(index)}
-                className="absolute top-0 right-0 bg-red-500 text-white text-xs p-1 rounded-full"
+                className="absolute top-2 right-2 bg-red-500 text-white text-xs p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               >
-                X
+                ✖
               </button>
             </div>
           ))}
