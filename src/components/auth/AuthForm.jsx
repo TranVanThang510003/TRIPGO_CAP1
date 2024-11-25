@@ -57,14 +57,27 @@ function AuthForm({ type, onSubmit, onClose }) {
 
     try {
       // Gửi yêu cầu POST đến API đăng nhập
-      const response = await axios.post("http://localhost:3000/users", {
+      const response = await axios.post("http://localhost:3000/login", {
         emailOrPhone,
         password,
       });
 
+      // In phản hồi từ API ra console để kiểm tra
+      console.log("API response:", response.data);
+
       // Kiểm tra phản hồi từ API
       if (response.data.success) {
         const user = response.data.user;
+
+        // Kiểm tra xem `user` có `role` không
+        if (user.role) {
+          console.log("User role:", user.role); // In ra role để kiểm tra
+          localStorage.setItem("role", user.role); // Lưu vào localStorage
+        } else {
+          console.log(
+            "Không tìm thấy thông tin role trong dữ liệu người dùng."
+          );
+        }
 
         // Lưu thông tin người dùng vào localStorage
         localStorage.setItem("user", JSON.stringify(user));
@@ -72,6 +85,7 @@ function AuthForm({ type, onSubmit, onClose }) {
         // Truyền dữ liệu cho `onSubmit` để cập nhật giao diện trong `Header`
         onSubmit(user);
       } else {
+        // Nếu phản hồi không thành công, hiển thị thông báo lỗi cụ thể
         setErrors({ password: response.data.message });
       }
     } catch (error) {
@@ -79,9 +93,19 @@ function AuthForm({ type, onSubmit, onClose }) {
         "Lỗi khi xử lý đăng nhập:",
         error.response ? error.response.data : error.message
       );
-      setErrors({
-        password: "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.",
-      });
+
+      // Thông báo lỗi tùy chỉnh cho các trường hợp cụ thể
+      if (error.response && error.response.status === 404) {
+        setErrors({ emailOrPhone: "Người dùng không tồn tại!" });
+      } else if (error.response && error.response.status === 401) {
+        setErrors({ password: "Mật khẩu không đúng!" });
+      } else {
+        // Thông báo lỗi chung nếu không có thông tin chi tiết
+        setErrors({
+          password:
+            "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.",
+        });
+      }
     }
   };
 
@@ -132,14 +156,11 @@ function AuthForm({ type, onSubmit, onClose }) {
     } else {
       try {
         // Gửi dữ liệu đăng ký đến backend
-        const response = await axios.post(
-          "http://localhost:3000/api/register",
-          {
-            fullName,
-            emailOrPhone,
-            password,
-          }
-        );
+        const response = await axios.post("http://localhost:3000/register", {
+          fullName,
+          emailOrPhone,
+          password,
+        });
 
         // Xử lý phản hồi từ backend nếu đăng ký thành công
         console.log("Đăng ký thành công:", response.data);
@@ -165,8 +186,6 @@ function AuthForm({ type, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
-      {" "}
-      {/* Modal overlay */}
       <div className="auth-container">
         <div className="auth-box">
           {/* Nút đóng */}

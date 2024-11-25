@@ -17,12 +17,14 @@ import "../src/index.css";
 import RestantantDetails from "./Page/RestantantDetails";
 import CamPingPage from "./Page/CamPingPage";
 import CampingDetail from "./Page/CampingDetail";
-
 import CreateTourForm from "./components/CreateServer/CreateTourForm";
 import CreateHotelForm from "./components/CreateServer/CreateHotelForm";
-import MainDashboard from "./components/Dashboard/MainDashboard";
+
 import AdminPage from "./Page/AdminPage/AdminPage";
 
+import MainTransactionDetails from "./components/TransactionDetailForStaff/MainTransactionDetails";
+import MainDashBoard from "./components/DashboardForAmin/MainDashboard";
+import MainDashBoardForStaff from "./components/DashboardForStaff/MainDashBoardForStaff";
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
   return (
@@ -40,9 +42,11 @@ const Main = () => {
         <Route path="/campingsdetails" element={<CampingDetail />} />
         <Route path="/createtours" element={<CreateTourForm />} />
         <Route path="/createhotels" element={<CreateHotelForm />} />
-        <Route path="/dashboardstaff" element={<MainDashboard />} />
+        <Route path="/dashboardforadmins" element={<MainDashBoard />} />
+        <Route path="/dashboardforstaffs" element={<MainDashBoardForStaff />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/transactiondetails" element={<MainTransactionDetails />} />
       </Routes>
     </Router>
   );

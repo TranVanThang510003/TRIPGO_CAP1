@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { FaHeart, FaCog, FaSignOutAlt, FaBars, FaHotel, FaChartBar, FaPlusCircle, FaChevronDown, FaChevronRight } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  FaHeart,
+  FaCog,
+  FaSignOutAlt,
+  FaBars,
+  FaHotel,
+  FaChartBar,
+  FaPlusCircle,
+  FaChevronDown,
+  FaChevronRight,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
+const SideBarProfile = ({ selectedSection, onSectionChange = () => {} }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Toggle sidebar open/close
   const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false); // Toggle service menu open/close
@@ -11,7 +21,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
 
   // Lấy vai trò từ localStorage khi component được mount
   useEffect(() => {
-    const storedRole = localStorage.getItem('role'); // Lấy role từ localStorage
+    const storedRole = localStorage.getItem("role"); // Lấy role từ localStorage
     setRole(storedRole); // Cập nhật role vào state
   }, []);
 
@@ -22,11 +32,10 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
     } else if (label === "Cài đặt") {
       navigate("/setting");
     } else if (label === "Đăng xuất") {
-      localStorage.removeItem('user'); // Clear user info if stored
-      localStorage.removeItem('role'); // Xóa role khi đăng xuất
+      localStorage.removeItem("user"); // Clear user info if stored
+      localStorage.removeItem("role"); // Xóa role khi đăng xuất
       navigate("/"); // Redirect to home
-    } 
-     else if (label === "Thêm Tour") {
+    } else if (label === "Thêm Tour") {
       navigate("/create-tour");
     } else if (label === "Thêm Hotel") {
       navigate("/add-hotel");
@@ -56,10 +65,14 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
   };
 
   return (
-    <div className={`transition-transform ${isSidebarOpen ? "w-[280px]" : "w-[70px]"} bg-white shadow-md font-sans rounded-lg`}>
+    <div
+      className={`transition-transform ${
+        isSidebarOpen ? "w-[280px]" : "w-[70px]"
+      } bg-white shadow-md font-sans rounded-lg`}
+    >
       <div className="relative">
-        <button 
-          onClick={toggleSidebar} 
+        <button
+          onClick={toggleSidebar}
           className="absolute top-4 right-4 p-2 bg-gray-100 rounded-md hover:bg-gray-200"
         >
           <FaBars />
@@ -74,24 +87,28 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
                   className="w-full h-full"
                 />
               </div>
-              <h3 className="mt-4 text-[23px] font-semibold">Người dùng TripGo</h3>
-              <a href="#" className="text-sm no-underline">Cập nhật thông tin cá nhân &gt;</a>
+              <h3 className="mt-4 text-[23px] font-semibold">
+                Người dùng TripGo
+              </h3>
+              <a href="#" className="text-sm no-underline">
+                Cập nhật thông tin cá nhân &gt;
+              </a>
             </>
           )}
         </div>
       </div>
 
       <div className={`px-10 py-5 ${!isSidebarOpen ? "text-center" : ""}`}>
-        <MenuItem 
-          icon={<FaHeart />} 
-          label="Yêu thích" 
+        <MenuItem
+          icon={<FaHeart />}
+          label="Yêu thích"
           isSelected={selectedSection === "Yêu thích"}
           onClick={() => handleNavigate("Yêu thích")}
           isSidebarOpen={isSidebarOpen}
         />
-        <MenuItem 
-          icon={<FaCog />} 
-          label="Cài đặt" 
+        <MenuItem
+          icon={<FaCog />}
+          label="Cài đặt"
           isSelected={selectedSection === "Cài đặt"}
           onClick={() => handleNavigate("Cài đặt")}
           isSidebarOpen={isSidebarOpen}
@@ -108,27 +125,29 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
                 isSelected={selectedSection === "Thêm Dịch Vụ"}
                 onClick={toggleAddServiceMenu}
                 isSidebarOpen={isSidebarOpen}
-                dropdownIcon={isAddServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+                dropdownIcon={
+                  isAddServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />
+                }
               />
               {isAddServiceMenuOpen && (
                 <div className="pl-8">
-                  <MenuItem 
-                    label="Thêm Tour" 
+                  <MenuItem
+                    label="Thêm Tour"
                     onClick={() => handleNavigate("Thêm Tour")}
                     isSidebarOpen={isSidebarOpen}
                   />
-                  <MenuItem 
-                    label="Thêm Hotel" 
+                  <MenuItem
+                    label="Thêm Hotel"
                     onClick={() => handleNavigate("Thêm Hotel")}
                     isSidebarOpen={isSidebarOpen}
                   />
-                  <MenuItem 
-                    label="Thêm Activity" 
+                  <MenuItem
+                    label="Thêm Activity"
                     onClick={() => handleNavigate("Thêm Activity")}
                     isSidebarOpen={isSidebarOpen}
                   />
-                  <MenuItem 
-                    label="Thêm Restaurant" 
+                  <MenuItem
+                    label="Thêm Restaurant"
                     onClick={() => handleNavigate("Thêm Restaurant")}
                     isSidebarOpen={isSidebarOpen}
                   />
@@ -144,17 +163,19 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
                 isSelected={selectedSection === "Quản Lý Dịch Vụ"}
                 onClick={toggleServiceMenu}
                 isSidebarOpen={isSidebarOpen}
-                dropdownIcon={isServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />}
+                dropdownIcon={
+                  isServiceMenuOpen ? <FaChevronDown /> : <FaChevronRight />
+                }
               />
               {isServiceMenuOpen && (
                 <div className="pl-8">
-                  <MenuItem 
-                    label="Quản lý thông tin hóa đơn" 
-                    onClick={() => handleNavigate("Quản lý thông tin hóa đơn")}
+                  <MenuItem
+                    label="Quản lý thông tin giao dịch Tour"
+                    onClick={() => handleNavigate("/transactiondetails")} // Chuyển đến "/manage-tours"
                     isSidebarOpen={isSidebarOpen}
                   />
-                  <MenuItem 
-                    label="Quản lý tour" 
+                  <MenuItem
+                    label="Quản lý tour"
                     onClick={() => handleNavigate("Quản lý tour")}
                     isSidebarOpen={isSidebarOpen}
                   />
@@ -162,9 +183,9 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
               )}
             </div>
 
-            <MenuItem 
-              icon={<FaChartBar />} 
-              label="Thống Kê Doanh Thu" 
+            <MenuItem
+              icon={<FaChartBar />}
+              label="Thống Kê Doanh Thu"
               isSelected={selectedSection === "Thống Kê Doanh Thu"}
               onClick={() => handleNavigate("Thống Kê Doanh Thu")}
               isSidebarOpen={isSidebarOpen}
@@ -172,9 +193,9 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
           </>
         )}
 
-        <MenuItem 
-          icon={<FaSignOutAlt />} 
-          label="Đăng xuất" 
+        <MenuItem
+          icon={<FaSignOutAlt />}
+          label="Đăng xuất"
           onClick={() => handleNavigate("Đăng xuất")}
           isSidebarOpen={isSidebarOpen}
         />
@@ -182,11 +203,20 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
     </div>
   );
 };
-const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen, dropdownIcon }) => (
-  <div 
-    onClick={onClick} 
+const MenuItem = ({
+  icon,
+  label,
+  isSelected,
+  onClick,
+  isSidebarOpen,
+  dropdownIcon,
+}) => (
+  <div
+    onClick={onClick}
     className={`flex items-center py-2.5 text-lg cursor-pointer transition-colors ${
-      isSelected ? "text-[#3E86F5] font-bold" : "text-gray-800 hover:text-gray-600"
+      isSelected
+        ? "text-[#3E86F5] font-bold"
+        : "text-gray-800 hover:text-gray-600"
     }`}
   >
     <span className="mr-2.5">{icon}</span>
@@ -195,4 +225,4 @@ const MenuItem = ({ icon, label, isSelected, onClick, isSidebarOpen, dropdownIco
   </div>
 );
 
-export default SideBar;
+export default SideBarProfile;

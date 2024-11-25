@@ -526,5 +526,42 @@
         300, 500, 700, 550, 800, 1000, 1100, 850, 1200, 1300, 1150, 1500
       ]
     }
+  ],
+  "transactions":[
+    {
+      "id": 1,
+      "username": "Nguyen Van A",
+      "tourName": "Ha Long Bay Tour",
+      "price": 1000000,
+      "bookingDate": "2024-11-24"
+    },
+    {
+      "id": 2,
+      "username": "Tran Thi B",
+      "tourName": "Sa Pa Tour",
+      "price": 1500000,
+      "bookingDate": "2024-11-25"
+    },
+    {
+      "id": 3,
+      "username": "Le Van C",
+      "tourName": "Da Nang Beach Tour",
+      "price": 1200000,
+      "bookingDate": "2024-11-26"
+    },
+    {
+      "id": 4,
+      "username": "Pham Thi D",
+      "tourName": "Hue Citadel Tour",
+      "price": 800000,
+      "bookingDate": "2024-11-27"
+    },
+    {
+      "id": 5,
+      "username": "Bui Van E",
+      "tourName": "Ho Chi Minh City Tour",
+      "price": 950000,
+      "bookingDate": "2024-11-28"
+    }
   ]
 }

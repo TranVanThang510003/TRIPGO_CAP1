@@ -4,7 +4,7 @@ import SidebarDashboard from "./SidebarDashboard";
 import RevenueDetailChart from "./RevenueDetailChart";
 import ShowCard from "./ShowCard";
 
-const MainDashBoard = () => {
+const HeaderDashboardForStaff = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Năm hiện tại mặc định
 
   // Hàm xử lý thay đổi năm
@@ -49,4 +49,4 @@ const MainDashBoard = () => {
   );
 };
 
-export default MainDashBoard;
+export default HeaderDashboardForStaff;

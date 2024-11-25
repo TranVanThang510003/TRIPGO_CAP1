@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../layout/Header';
-import SideBar from '../components/UserProfile/SideBar';
+import SideBarProfile from '../components/UserProfile/SideBarProfile';
 
 const UserProfile = () => {
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ const UserProfile = () => {
             <div className="w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%]">
                 {/* Sidebar */}
                 <div className="mr-2">
-                    <SideBar />
+                    <SideBarProfile />
                 </div>
                 {/* Main content */}
                 <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0">

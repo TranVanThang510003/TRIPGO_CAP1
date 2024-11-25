@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
@@ -11,7 +12,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const RevenueDetailChart = ({ selectedYear }) => {
+const RevenueDetailChartForStaff = ({ selectedYear }) => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +21,7 @@ const RevenueDetailChart = ({ selectedYear }) => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3000/dashboard/admin/totaltourandhotel/${selectedYear}`
+          `http://localhost:3000/dashboard/staff/totaltourandhotel/${selectedYear}`
         );
         const responseData = await response.json();
 
@@ -108,4 +109,4 @@ const RevenueDetailChart = ({ selectedYear }) => {
   );
 };
 
-export default RevenueDetailChart;
+export default RevenueDetailChartForStaff;
