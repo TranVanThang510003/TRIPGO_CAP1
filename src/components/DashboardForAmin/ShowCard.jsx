@@ -36,9 +36,13 @@ const ShowCard = ({ selectedYear }) => {
   }
 
   return (
-    <div className=" ml-[100px] flex p-4 h-[200px] m-3 relative gap-[120px]">
+    <div className=" ml-[100px] flex p-4 h-[200px] m-3 relative gap-[70px]">
       {statsData && (
         <>
+          <StatsCard
+            title="Tổng khách du lịch"
+            value={statsData.Total_Users || "N/A"}
+          />
           <StatsCard
             title="Tổng khách du lịch"
             value={statsData.Total_Unique_Users || "N/A"}

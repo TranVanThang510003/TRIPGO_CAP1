@@ -30,7 +30,7 @@ const HeaderDashboardForStaff = () => {
                 onChange={handleYearChange}
                 className="p-2 bg-gray-100 text-gray-800 rounded"
               >
-                {[2021, 2022, 2023, 2024].map((year) => (
+                {[2023, 2024].map((year) => (
                   <option key={year} value={year}>
                     {year}
                   </option>

@@ -22,9 +22,10 @@ import CreateHotelForm from "./components/CreateServer/CreateHotelForm";
 
 import AdminPage from "./Page/AdminPage/AdminPage";
 
-import MainTransactionDetails from "./components/TransactionDetailForStaff/MainTransactionDetails";
+import MainTransactionDetails from "./components/TransactionDetailForAdmin/MainTransactionDetails";
 import MainDashBoard from "./components/DashboardForAmin/MainDashboard";
 import MainDashBoardForStaff from "./components/DashboardForStaff/MainDashBoardForStaff";
+import TourExpired from "./components/VIewBookedTours/TourExpired";
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
   return (
@@ -47,6 +48,7 @@ const Main = () => {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/transactiondetails" element={<MainTransactionDetails />} />
+        <Route path="/tourexpired" element={<TourExpired />} />
       </Routes>
     </Router>
   );

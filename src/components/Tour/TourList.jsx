@@ -184,7 +184,7 @@ const TourList = () => {
     }
   };
   return (
-    <div className="flex flex-wrap  justify-between w-full">
+    <div className="flex flex-wrap justify-between w-full">
       {currentTour.map((tour, index) => (
         <TourCard key={index} tour={tour} />
       ))}

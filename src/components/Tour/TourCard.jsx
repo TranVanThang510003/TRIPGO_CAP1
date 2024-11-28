@@ -6,7 +6,6 @@ import IconHeart from "../icon/IconHeart";
 const TourCard = ({ tour }) => {
   return (
     <div className="w-[260px] mt-4 rounded-xl overflow-hidden shadow-lg bg-white">
-      {/* Hình ảnh nhà hàng */}
       <div className="relative">
         <img
           className="w-full h-[150px] object-cover"

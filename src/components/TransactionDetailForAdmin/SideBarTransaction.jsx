@@ -1,4 +1,5 @@
-const SidebarDashboard = () => {
+
+const SideBarTransaction = () => {
   return (
     <div className="w-[300px] bg-blue-800 text-white flex flex-col p-4">
       <h2 className="text-xl font-bold mb-6">Trang chủ Admin</h2>
@@ -12,7 +13,7 @@ const SidebarDashboard = () => {
         </ul>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default SidebarDashboard;
+export default SideBarTransaction

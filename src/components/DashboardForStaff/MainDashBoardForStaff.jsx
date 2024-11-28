@@ -2,7 +2,8 @@ import { useState } from "react";
 import HeaderDashboardForStaff from "./HeaderDashboardForStaff";
 import RevenueDetailChartForStaff from "./RevenueDetailChartForStaff";
 import ShowCardForStaff from "./ShowCardForStaff";
-import SidebarDashboardForStaff from "./SidebarDashboardForStaff";
+
+import SideBarProfile from "../UserProfile/SideBarProfile";
 
 const MainDashBoardForStaff = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Năm hiện tại mặc định
@@ -15,7 +16,7 @@ const MainDashBoardForStaff = () => {
   return (
     <div className=" flex bg-slate-100 ">
       {/* Sidebar */}
-      <SidebarDashboardForStaff />
+      <SideBarProfile/>
       <div className="flex-1">
         <HeaderDashboardForStaff />
         <div className="p-4">
@@ -30,7 +31,7 @@ const MainDashBoardForStaff = () => {
                 onChange={handleYearChange}
                 className="p-2 bg-gray-100 text-gray-800 rounded"
               >
-                {[2021, 2022, 2023, 2024].map((year) => (
+                {[2023, 2024].map((year) => (
                   <option key={year} value={year}>
                     {year}
                   </option>
