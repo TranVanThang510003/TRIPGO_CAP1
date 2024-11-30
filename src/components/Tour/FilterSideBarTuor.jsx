@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import TourListAndMap from './mapTour/tourListAndMap';
 
-const FilterSideBarTour = ({ onTourTypeChange }) => {
+const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,onLanguageChange }) => {
   const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
   const [showMap, setShowMap] = useState(false);
+  const [selectedLanguages, setSelectedLanguages] = useState([]); // State to store selected languages
+  const [selectedDuration, setSelectedDuration] = useState([]);
   const [selectedTourTypes, setSelectedTourTypes] = useState([]);
   const handleShowMap = () => {
     setShowMap(true); // Hiển thị bản đồ khi click
+  };
+  // Xử lý khi giá trị thanh trượt thay đổi
+  const handlePriceChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    const newPriceRange = [0, value];
+    setPriceRange(newPriceRange); // Cập nhật giá trị state
+    onPriceChange(newPriceRange); // Gửi giá trị khoảng giá lên component cha
   };
   const handleCheckboxChange = (event) => {
     const { id, checked } = event.target;
@@ -16,6 +25,29 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
 
     setSelectedTourTypes(updatedTourTypes);
     onTourTypeChange(updatedTourTypes);
+  };
+
+  // Xử lý khi checkbox ngôn ngữ thay đổi
+  const handleLanguageChange = (event) => {
+    const { id, checked } = event.target;
+    const updatedLanguages = checked
+        ? [...selectedLanguages, id]
+        : selectedLanguages.filter((language) => language !== id);
+
+    setSelectedLanguages(updatedLanguages);
+    onLanguageChange(updatedLanguages);
+    console.log('Selected Languages:', updatedLanguages);
+  };
+
+  // Xử lý khi checkbox thời gian thay đổi
+  const handleDurationChange = (event) => {
+    const { id, checked } = event.target;
+    const updatedDuration = checked
+        ? [...selectedDuration, id]
+        : selectedDuration.filter((duration) => duration !== id);
+
+    setSelectedDuration(updatedDuration);
+    onDurationChange(updatedDuration);
   };
 
   const tour_type = [
@@ -28,20 +60,14 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
     'Tour khám phá đảo',
   ];
   const ratings = ['3.0+', '3.5+', '4.0+', '4.5+'];
-  const time = ['Tour nữa ngày', 'Tour trong ngày', 'Tour nhiều ngày'];
+  const duration = ['Tour trong ngày', 'Tour nhiều ngày'];
   const service = [
     'Tour riêng',
     'Đón tại khách sạn ',
     'Hoàn tiền dễ dàng',
     'Đảm bảo khới hành',
   ];
-  const language = ['Hưỡng dẫn tiếng anh', 'Hưỡng dẫn tiếng việt'];
-
-  // Hàm xử lý khi người dùng thay đổi giá trị thanh trượt
-  const handlePriceChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    setPriceRange([0, value]); // Cập nhật giá trị khoảng giá mới
-  };
+  const language = ['Tiếng Anh', 'Tiếng Việt'];
 
   return (
     <div className="w-80 flex flex-col">
@@ -66,14 +92,8 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
               </p>
             </div>
 
-            {/* Các bộ lọc (ẩn khi bản đồ mở) */}
-            <div className="w-80 bg-white flex flex-col items-center rounded-3xl border border-[#ACACAC]">
-              <div className="font-medium text-3xl text-center border-b-4 w-80 h-20 rounded-t-3xl flex items-center justify-center">
-                Lựa chọn
-              </div>
-              {/* Bộ lọc và các phần khác */}
-              {/* ... */}
-            </div>
+
+
           </div>
         )}
 
@@ -97,7 +117,15 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
             <h4 className="font-medium text-2xl text-center">Khoảng giá</h4>
             <input
               type="range"
-              className="w-full mt-2"
+              className="w-full mt-2 "
+              style={{
+                appearance: 'none',
+                width: '100%',
+                height: '8px',
+                backgroundColor: '#d1d5db', // Màu nền thanh trượt
+                borderRadius: '4px',
+                outline: 'none',
+              }}
               min="0"
               max="24000000"
               step="100000"
@@ -146,17 +174,18 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
           <div className="mb-6">
             <h4 className="font-medium text-2xl text-center">Thời gian</h4>
             <div className="mt-2">
-              {time.map((amenity, idx) => (
-                <div key={idx} className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    id={amenity}
-                    className="mr-2 w-6 h-6"
-                  />
-                  <label htmlFor={amenity} className="text-base">
-                    {amenity}
-                  </label>
-                </div>
+              {duration.map((amenity, idx) => (
+                  <div key={idx} className="flex items-center mb-2">
+                    <input
+                        type="checkbox"
+                        id={amenity}
+                        className="mr-2 w-6 h-6"
+                        onChange={handleDurationChange}
+                    />
+                    <label htmlFor={amenity} className="text-base">
+                      {amenity}
+                    </label>
+                  </div>
               ))}
             </div>
           </div>
@@ -183,12 +212,17 @@ const FilterSideBarTour = ({ onTourTypeChange }) => {
             </h4>
             <div className="mt-2">
               {language.map((area, idx) => (
-                <div key={idx} className="flex items-center mb-2">
-                  <input type="checkbox" id={area} className="mr-2 w-6 h-6" />
-                  <label htmlFor={area} className="text-base">
-                    {area}
-                  </label>
-                </div>
+                  <div key={idx} className="flex items-center mb-2">
+                    <input
+                        type="checkbox"
+                        id={area}
+                        className="mr-2 w-6 h-6"
+                        onChange={handleLanguageChange}
+                    />
+                    <label htmlFor={area} className="text-base">
+                      {area}
+                    </label>
+                  </div>
               ))}
             </div>
           </div>

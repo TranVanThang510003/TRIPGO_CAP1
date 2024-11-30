@@ -30,6 +30,8 @@ const UpdateTourForm = () => {
   const [scheduleDetails, setScheduleDetails] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
+
+
   const [errors, setErrors] = useState({});
 
   // Lịch khởi hành
@@ -156,6 +158,7 @@ const UpdateTourForm = () => {
       );
 
       const tour = response.data.tour;
+
       // Đặt giá trị cho loại tour
       if (tour.serviceType === 'trong ngày') {
         setTourType('day');
@@ -166,6 +169,7 @@ const UpdateTourForm = () => {
         tour.services,
         tour.services.length
       );
+
       setMultiDaySchedules(formattedSchedules);
       setNumDays(formattedSchedules.length);
 
@@ -189,7 +193,14 @@ const UpdateTourForm = () => {
       setDESCRIPIONS_HIGHLIGHT(tour.highlights?.join(', ') || '');
       setPUCLIC_TOUR_TYPE(tour.tourTypeId || '');
       setDESCRIPTIONS(tour.description || '');
-      setLANGUAGE(tour.language || 'vi');
+      // Kiểm tra giá trị language từ API (có thể là "Tiếng Việt", "Tiếng Anh", ...)
+      if (tour.language === 'Tiếng Anh') {
+        setLANGUAGE('en'); // Chuyển ngôn ngữ sang "en" nếu là Tiếng Anh
+      } else if (tour.language === 'Tiếng Việt' || !tour.language) {
+        setLANGUAGE('vi'); // Chuyển ngôn ngữ sang "vi" nếu là Tiếng Việt hoặc không có giá trị ngôn ngữ
+      } else {
+        setLANGUAGE('vi'); // Nếu không xác định ngôn ngữ, mặc định là Tiếng Việt
+      }
       setSchedules(tour.schedules || []);
       setScheduleDetails(tour.services || []);
 
@@ -413,6 +424,7 @@ const UpdateTourForm = () => {
     formData.append('district', selectedDistrict);
     formData.append('ward', selectedWard);
     formData.append('schedules', JSON.stringify(schedules));
+    formData.append('LANGUAGE', LANGUAGE);
     // Append lịch trình chi tiết trong ngày (scheduleDetails)
     if (scheduleDetails.length > 0) {
       formData.append('scheduleDetails', JSON.stringify(scheduleDetails));

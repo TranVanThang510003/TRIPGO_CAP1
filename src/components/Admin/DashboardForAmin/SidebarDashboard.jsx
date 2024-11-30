@@ -18,24 +18,24 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="w-1/6 bg-blue-800 text-white flex flex-col p-4">
-            <h2 className="text-2xl font-bold mb-6 mt-3 mx-auto">Trang chủ Admin</h2>
+        <div className="w-64 bg-blue-800 text-white flex flex-col p-4">
+            <h2 className="text-xl font-bold mb-6">Trang chủ Admin</h2>
             <nav>
                 <ul>
                     <li
-                        className={`mb-4 p-2 rounded  cursor-pointer ${selectedSection === "DashBoard" ? "bg-blue-700" : "hover:bg-blue-700"}`}
+                        className={`mb-4 p-2 rounded ${selectedSection === "DashBoard" ? "bg-blue-700" : "hover:bg-blue-700"}`}
                         onClick={() => handleNavigate("DashBoard")}
                     >
                         DashBoard
                     </li>
                     <li
-                        className={`mb-4 p-2 rounded  cursor-pointer ${selectedSection === "Quản lý giao dịch" ? "bg-blue-700" : "hover:bg-blue-700"}`}
+                        className={`mb-4 p-2 rounded ${selectedSection === "Quản lý giao dịch" ? "bg-blue-700" : "hover:bg-blue-700"}`}
                         onClick={() => handleNavigate("Quản lý giao dịch")}
                     >
                         Quản lý giao dịch
                     </li>
                     <li
-                        className={`mb-4 p-2 cursor-pointer rounded ${selectedSection === "Quản lý tài khoản" ? "bg-blue-700" : "hover:bg-blue-700"}`}
+                        className={`mb-4 p-2 rounded ${selectedSection === "Quản lý tài khoản" ? "bg-blue-700" : "hover:bg-blue-700"}`}
                         onClick={() => handleNavigate("Quản lý tài khoản")}
                     >
                         Quản lý tài khoản

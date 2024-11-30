@@ -100,7 +100,8 @@ const BookingForm = ({ tour_id, schedules }) => {
       console.error('Lỗi khi gửi yêu cầu thanh toán:', error.message);
     }
   };
-
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   return (
     <div className="p-8 bg-white shadow-lg rounded-md flex flex-row">
       {/* Phần lịch */}
@@ -111,7 +112,7 @@ const BookingForm = ({ tour_id, schedules }) => {
           onChange={handleDateChange}
           includeDates={availableDates} // Chỉ hiển thị và cho phép chọn ngày trong DB
           highlightDates={availableDates} // Làm nổi bật các ngày có trong DB
-          minDate={new Date()} // Chỉ cho phép chọn ngày từ hôm nay trở đi
+          minDate={tomorrow} // Chỉ cho phép chọn ngày từ sau hôm nay trở đi
           inline
           dayClassName={(date) =>
             availableDates.some((availableDate) =>

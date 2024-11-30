@@ -7,7 +7,7 @@ import ScheduleList from './ScheduleList';
 import FileUploader from './FileUploader';
 import TourTypeSelector from './TourTypeSelector';
 import LanguageSelector from './LanguageSelector';
-
+import ReturnButton from '../../common/ReturnButton.jsx';
 const CreateTourForm = () => {
   const [provinces, setProvinces] = useState([]); // Danh sách tỉnh
   const [districts, setDistricts] = useState([]); // Danh sách quận/huyện
@@ -140,60 +140,6 @@ const CreateTourForm = () => {
   const handleWardChange = (e) => {
     setSelectedWard(e.target.value);
   };
-  const resetTourDetails = (type) => {
-    if (type === 'day') {
-      // Xóa dữ liệu của tour nhiều ngày
-      setMultiDaySchedules([]);
-      setNumDays(1);
-    } else if (type === 'multi') {
-      // Xóa dữ liệu của tour trong ngày
-      setScheduleDetails([]);
-    }
-  };
-  const handleTourTypeChange = (e) => {
-    const newType = e.target.value;
-    setTourType(newType);
-
-    // Reset dữ liệu dựa vào loại tour
-    if (newType === 'day') {
-      setNumDays(1); // Đặt lại số ngày là 1 cho tour trong ngày
-      setMultiDaySchedules([]); // Xóa lịch trình nhiều ngày
-    } else if (newType === 'multi') {
-      setNumDays(2); // Đặt mặc định số ngày là 2 cho tour nhiều ngày
-      setScheduleDetails([]); // Xóa lịch trình chi tiết trong ngày
-    }
-  };
-
-  const handleNumDaysChange = (e) => {
-    const inputValue = e.target.value; // Lấy giá trị người dùng nhập
-    const parsedValue = parseInt(inputValue, 10);
-
-    // Cho phép xóa hoàn toàn để nhập giá trị mới
-    if (inputValue === '') {
-      setNumDays('');
-      return;
-    }
-
-    // Đảm bảo giá trị nhập là số hợp lệ và lớn hơn hoặc bằng 1
-    if (parsedValue >= 1) {
-      if (parsedValue < numDays) {
-        // Nếu số ngày mới ít hơn, cắt bớt các ngày dư trong mảng multiDaySchedules
-        setMultiDaySchedules((prev) => prev.slice(0, parsedValue));
-      } else {
-        // Nếu số ngày mới nhiều hơn, thêm các ngày trống vào mảng multiDaySchedules
-        setMultiDaySchedules((prev) => {
-          const updated = [...prev];
-          for (let i = prev.length; i < parsedValue; i++) {
-            updated.push({ title: '', description: '' });
-          }
-          return updated;
-        });
-      }
-
-      // Cập nhật giá trị numDays
-      setNumDays(parsedValue);
-    }
-  };
 
   // Hàm thêm lịch khởi hành vào danh sách
   const addSchedule = () => {
@@ -317,7 +263,7 @@ const CreateTourForm = () => {
     }
     try {
       const response = await axios.post(
-        'http://localhost:3000/createtour',
+        'http://localhost:3000/public-tours/createTour',
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -331,20 +277,25 @@ const CreateTourForm = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <FormHeader
+
+  <div className="relative p-8 max-w-4xl mx-auto">
+    <div className="fixed ml-[-300px]">
+
+    <ReturnButton />
+    </div>
+    <FormHeader
         title="Tạo Tour Cố Định"
         description="Điền các thông tin dưới đây để tạo tour mới."
-      />
+    />
 
-      <form
+    <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-y-6 bg-white p-8 rounded-lg shadow-lg"
-      >
-        {/* Tour Details */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
-          <TourDetails
+    >
+      {/* Tour Details */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
+        <TourDetails
             tourTypes={tourTypes}
             PUCLIC_TOUR_NAME={PUCLIC_TOUR_NAME}
             setPUCLIC_TOUR_NAME={setPUCLIC_TOUR_NAME}
@@ -355,13 +306,13 @@ const CreateTourForm = () => {
             DESCRIPTIONS={DESCRIPTIONS}
             setDESCRIPTIONS={setDESCRIPTIONS}
             errors={errors}
-          />
-        </div>
+        />
+      </div>
 
-        {/* Location Selector */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Địa điểm</h3>
-          <LocationSelector
+      {/* Location Selector */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Địa điểm</h3>
+        <LocationSelector
             provinces={provinces}
             districts={districts}
             wards={wards}
@@ -372,19 +323,19 @@ const CreateTourForm = () => {
             handleDistrictChange={handleDistrictChange}
             handleWardChange={handleWardChange}
             errors={errors}
-          />
-        </div>
+        />
+      </div>
 
-        {/* Language Selector */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Ngôn ngữ</h3>
-          <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE} />
-        </div>
+      {/* Language Selector */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Ngôn ngữ</h3>
+        <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE}/>
+      </div>
 
-        {/* Tour Type Selector */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Loại Tour</h3>
-          <TourTypeSelector
+      {/* Tour Type Selector */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Loại Tour</h3>
+        <TourTypeSelector
             tourType={tourType}
             setTourType={setTourType}
             numDays={numDays}
@@ -395,12 +346,12 @@ const CreateTourForm = () => {
             setMultiDaySchedules={setMultiDaySchedules}
             addScheduleDetail={addScheduleDetail}
             resetSchedules={() => setSchedules([])}
-          />
-        </div>
+        />
+      </div>
 
-        {/* Schedule List */}
-        <div>
-          <ScheduleList
+      {/* Schedule List */}
+      <div>
+        <ScheduleList
             schedules={schedules}
             addSchedule={addSchedule}
             removeSchedule={removeSchedule}
@@ -413,13 +364,13 @@ const CreateTourForm = () => {
             availableAdultCount={availableAdultCount}
             setAvailableAdultCount={setAvailableAdultCount}
             errors={errors}
-          />
-        </div>
+        />
+      </div>
 
-        {/* File Uploader */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
-          <FileUploader
+      {/* File Uploader */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
+        <FileUploader
             IMAGE={IMAGE}
             setIMAGE={(files) => {
               if (files.length > 0) {
@@ -429,21 +380,22 @@ const CreateTourForm = () => {
             newImages={newImages} // Pass newImages to FileUploader
             setNewImages={setNewImages}
             updateImages={updateImages}
-          />
-        </div>
+        />
+      </div>
 
-        {/* Submit Button */}
-        <div>
-          <button
+      {/* Submit Button */}
+      <div>
+        <button
             type="submit"
             className="w-full py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-200"
-          >
-            Tạo Tour
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+        >
+          Tạo Tour
+        </button>
+      </div>
+    </form>
+  </div>
+)
+  ;
 };
 
 export default CreateTourForm;

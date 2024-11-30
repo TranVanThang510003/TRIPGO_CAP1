@@ -20,6 +20,8 @@ const UserSetting = lazy(() => import('./Page/UserSetting'));
 const AdminPage = lazy(() => import('./Page/AdminPage/AdminPage'));
 const  TourManagement= lazy(() => import('../src/components/Staff/TourManagement'));
 const  CreateTour= lazy(() => import('../src/components/createServices/createTour/createTourForm'));
+const  HeaderDashboardForStaff = lazy(() => import('./components/Admin/DashboardForAmin/MainDashBoard.jsx'));
+
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 
 const Loading = () => (
@@ -36,6 +38,7 @@ const Main = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/manage-tours" element={<TourManagement />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/dashboard" element={< HeaderDashboardForStaff />} />
           <Route path="/hotels" element={<HotelPage />} />
           <Route path="/hoteldetails/:hotelId" element={<HotelDetails />} />
           <Route path="/tours" element={<TourPage />} />

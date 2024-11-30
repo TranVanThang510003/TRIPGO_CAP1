@@ -202,9 +202,10 @@
 //   }
 // };
 import React, { useState, useEffect } from 'react';
-import MapComponent from '../../common/Map'; // Import MapComponent
+import MapComponent from '../../MAP/Map'; // Import MapComponent
 import axios from 'axios';
 import Fuse from 'fuse.js';
+import Tags from '../../MAP/Tags';
 
 const TourListAndMap = () => {
   const [tourLocations, setTourLocations] = useState([]);
@@ -212,10 +213,10 @@ const TourListAndMap = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProvince, setSelectedProvince] = useState('');
   const [zoomToLocation, setZoomToLocation] = useState(null); // Vị trí zoom
-  const [selectedPath, setSelectedPath] = useState([]); // Đường đi
+  // const [selectedPath, setSelectedPath] = useState([]); // Đường đi
   const [isLoading, setIsLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null); // Vị trí hiện tại
-  const [distance, setDistance] = useState(0); // Độ dài đường đi
+  // const [distance, setDistance] = useState(0); // Độ dài đường đi
 
   // Fetch danh sách tours
   useEffect(() => {
@@ -292,50 +293,50 @@ const TourListAndMap = () => {
   };
 
   // Xử lý hiển thị đường đi
-  // Updated handleGetDirections to use OpenRouteService API
-  const handleGetDirections = async (tour) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const currentLat = position.coords.latitude;
-          const currentLng = position.coords.longitude;
 
-          try {
-            const API_KEY =
-              '5b3ce3597851110001cf62489456cd3985ec404b90e1a5c14c42c924';
-            const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${API_KEY}&start=${currentLng},${currentLat}&end=${tour.lng},${tour.lat}`;
+  // const handleGetDirections = async (tour) => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         const currentLat = position.coords.latitude;
+  //         const currentLng = position.coords.longitude;
 
-            const response = await axios.get(url);
+  //         try {
+  //           const API_KEY =
+  //             '5b3ce3597851110001cf62489456cd3985ec404b90e1a5c14c42c924';
+  //           const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${API_KEY}&start=${currentLng},${currentLat}&end=${tour.lng},${tour.lat}`;
 
-            if (response.data && response.data.features.length > 0) {
-              const route = response.data.features[0];
-              const routeCoordinates = route.geometry.coordinates.map(
-                ([lng, lat]) => [lat, lng]
-              );
+  //           const response = await axios.get(url);
 
-              // Set the path and distance
-              setSelectedPath(routeCoordinates);
-              setZoomToLocation({ id: tour.id, lat: tour.lat, lng: tour.lng });
-              setDistance(
-                (route.properties.segments[0].distance / 1000).toFixed(2)
-              ); // Convert meters to km
-              setCurrentLocation([currentLat, currentLng]); // Set current location
-            } else {
-              alert('Không tìm thấy đường đi.');
-            }
-          } catch (error) {
-            console.error('Lỗi khi gọi OpenRouteService API:', error);
-            alert('Lỗi khi lấy đường đi.');
-          }
-        },
-        (error) => {
-          alert('Không thể lấy vị trí của bạn. Vui lòng bật định vị.');
-        }
-      );
-    } else {
-      alert('Trình duyệt của bạn không hỗ trợ định vị.');
-    }
-  };
+  //           if (response.data && response.data.features.length > 0) {
+  //             const route = response.data.features[0];
+  //             const routeCoordinates = route.geometry.coordinates.map(
+  //               ([lng, lat]) => [lat, lng]
+  //             );
+
+  //             // Set the path and distance
+  //             setSelectedPath(routeCoordinates);
+  //             setZoomToLocation({ id: tour.id, lat: tour.lat, lng: tour.lng });
+  //             setDistance(
+  //               (route.properties.segments[0].distance / 1000).toFixed(2)
+  //             ); // Convert meters to km
+  //             setCurrentLocation([currentLat, currentLng]); // Set current location
+  //           } else {
+  //             alert('Không tìm thấy đường đi.');
+  //           }
+  //         } catch (error) {
+  //           console.error('Lỗi khi gọi OpenRouteService API:', error);
+  //           alert('Lỗi khi lấy đường đi.');
+  //         }
+  //       },
+  //       (error) => {
+  //         alert('Không thể lấy vị trí của bạn. Vui lòng bật định vị.');
+  //       }
+  //     );
+  //   } else {
+  //     alert('Trình duyệt của bạn không hỗ trợ định vị.');
+  //   }
+  // };
 
   return (
     <div
@@ -403,21 +404,26 @@ const TourListAndMap = () => {
         </button>
       </div>
 
-      <div style={{ display: 'flex', flex: 1 }}>
+      <div style={{ display: 'flex', flex: 1, height: '100%' }}>
         {/* Bản đồ */}
         <div style={{ flex: 1 }}>
           <MapComponent
             tourLocations={filteredTours}
             zoomToLocation={zoomToLocation}
-            selectedPath={selectedPath} // Truyền đường đi vào MapComponent
+            // selectedPath={selectedPath} // Truyền đường đi vào MapComponent
             currentLocation={currentLocation} // Vị trí hiện tại
-            distance={distance} // Độ dài đường đi
-            handleGetDirections={handleGetDirections} // Truyền hàm vào MapComponent
+            // distance={distance} // Độ dài đường đi
+            // handleGetDirections={handleGetDirections} // Truyền hàm vào MapComponent
           />
         </div>
         {/* Danh sách tour */}
         <div
-          style={{ width: '400px', overflowY: 'auto', background: '#f9f9f9' }}
+          style={{
+            width: '400px',
+            overflowY: 'auto',
+            background: '#f9f9f9',
+            height: '100%',
+          }}
         >
           {filteredTours.length > 0 ? (
             filteredTours.map((tour) => (
@@ -432,7 +438,7 @@ const TourListAndMap = () => {
               >
                 <h3 style={{ margin: 0 }}>{tour.name}</h3>
                 <p style={{ margin: 0 }}>{tour.fullLocation}</p>
-                <button
+                {/* <button
                   style={{
                     padding: '5px 10px',
                     marginTop: '5px',
@@ -444,11 +450,11 @@ const TourListAndMap = () => {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleGetDirections(tour);
+                    // handleGetDirections(tour);
                   }}
                 >
                   Hiển thị đường đi
-                </button>
+                </button> */}
               </div>
             ))
           ) : (

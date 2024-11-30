@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Map from '../common/Map';
+import Map from '../MAP/Map.jsx';
 const FilterSidebar = () => {
     const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
     const [showMap, setShowMap] = useState(false); 

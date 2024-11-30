@@ -10,20 +10,20 @@ const TourCard = ({ tour }) => {
 
   // Chuẩn hóa đường dẫn imageUrl
   const handleBookNowClick = () => {
-    navigate(`/tours/${tour.id}`); // Chuyển hướng đến trang chi tiết tour với ID tương ứng
+    navigate(`/tours/${tour.id}`);
   };
 
   // Hàm xác định màu sắc cho trạng thái
   const getStatusColor = (status) => {
     switch (status) {
       case 'Sắp bắt đầu':
-        return 'text-orange-500'; // Màu cam
-      case 'Đã bắt đầu':
-        return 'text-green-500'; // Màu xanh lá
-      case 'Đã hoàn thành':
-        return 'text-gray-500'; // Màu xám
+        return 'text-orange-500';
+      case 'Đang hoạt động':
+        return 'text-green-500';
+      case 'Đã kết thúc':
+        return 'text-gray-500';
       default:
-        return 'text-black'; // Màu mặc định
+        return 'text-black';
     }
   };
 
@@ -42,7 +42,9 @@ const TourCard = ({ tour }) => {
       </div>
 
       {/* Nội dung */}
-      <div className="p-3 mt-2">
+      <div className="p-3 mt-2 flex flex-col justify-between h-[235px]">
+       <div >
+
         <div className="flex text-sm">
           <div className="bg-pink-200 text-pink-600 font-medium rounded-full w-auto h-[22px] flex items-center px-2 justify-center">
             {tour.tourType}
@@ -69,9 +71,12 @@ const TourCard = ({ tour }) => {
           <p className="text-yellow-400 ml-1">{tour.averageRating}</p>
           <p className="text-gray-700 ml-2">({tour.reviewCount} đánh giá)</p>
           <p className="text-gray-500 ml-2">
-            {tour.nub_booking} / {tour.AdultCount} đặt chỗ
+            {tour.nubBooking} lượt đặt
           </p>
         </div>
+       </div>
+
+        <div className="flex flex-col  ">
 
         {/* Hiển thị trạng thái với màu sắc */}
         <p
@@ -81,8 +86,8 @@ const TourCard = ({ tour }) => {
         >
           {tour.status}
         </p>
+            <div className='text-lg flex justify-between items-center'>
 
-        <div className="text-xl flex justify-between items-center mt-4">
           <h1 className="text-gray-700 font-bold">{tour.priceAdult} đ/Người</h1>
           <button
             className="h-[37px] w-[80px] bg-blue-900 text-white rounded-2xl hover:bg-blue-700 text-sm"
@@ -90,6 +95,7 @@ const TourCard = ({ tour }) => {
           >
             Xem
           </button>
+            </div>
         </div>
       </div>
     </div>

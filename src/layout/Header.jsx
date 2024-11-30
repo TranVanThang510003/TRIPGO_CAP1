@@ -4,6 +4,7 @@ import {
   faMagnifyingGlass,
   faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import Search from './Search.jsx'
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthForm from '../components/auth/AuthForm'; 
@@ -65,18 +66,19 @@ const Header = () => {
         />
 
         {/* Input search */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Tìm kiếm tất cả"
-            className="bg-[#f7f7f7] w-[367px] px-4 py-2 pl-10 pr-4 rounded-full border border-slate-400 focus:outline-none focus:border-blue-500"
-          />
-          {/* Search Icon */}
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-          />
-        </div>
+        {/*<div className="relative">*/}
+        {/*  <input*/}
+        {/*    type="text"*/}
+        {/*    placeholder="Tìm kiếm tất cả"*/}
+        {/*    className="bg-[#f7f7f7] w-[367px] px-4 py-2 pl-10 pr-4 rounded-full border border-slate-400 focus:outline-none focus:border-blue-500"*/}
+        {/*  />*/}
+        {/*  /!* Search Icon *!/*/}
+        {/*  <FontAwesomeIcon*/}
+        {/*    icon={faMagnifyingGlass}*/}
+        {/*    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"*/}
+        {/*  />*/}
+        {/*</div>*/}
+        <Search/>
       </div>
 
       <nav className="flex items-center space-x-4">

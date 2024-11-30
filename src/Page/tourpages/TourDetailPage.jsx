@@ -182,6 +182,22 @@ const TourDetailPage = () => {
 
   const canEdit = userRole === 'staff' && tour?.createdBy === userId;
 
+  const today = new Date();
+
+  // Tìm lịch trình có ngày khởi hành gần nhất lớn hơn hoặc bằng ngày hiện tại (tương lai)
+  const nearestSchedule = tour.schedules
+      ?.filter(schedule => new Date(schedule.departureDate) >= today) // Lọc những lịch trình trong tương lai
+      .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))[0]; // Sắp xếp và lấy lịch trình gần nhất
+
+// Nếu không có lịch trình trong tương lai, tìm lịch trình có ngày khởi hành gần nhất trong quá khứ
+  const finalSchedule = nearestSchedule || tour.schedules
+      ?.filter(schedule => new Date(schedule.departureDate) < today) // Lọc những lịch trình trong quá khứ
+      .sort((a, b) => new Date(b.departureDate) - new Date(a.departureDate))[0]; // Sắp xếp và lấy lịch trình gần nhất trong quá khứ
+
+// Lấy giá người lớn từ lịch trình cuối cùng (tương lai nếu có, quá khứ nếu không)
+  const priceAdult = finalSchedule?.priceAdult || tour.priceAdult || 0; // Nếu không có lịch trình gần nhất, lấy giá mặc định từ tour
+
+
   return (
     <div className="bg-[#F8F8F8]">
       <div className="w-4/5 mx-auto mt-[80px]">
@@ -227,7 +243,7 @@ const TourDetailPage = () => {
 
               <div className="md:col-span-1">
                 <BookingCard
-                  price={tour.priceAdult}
+                  price={priceAdult}
                   onBookingClick={() => console.log('Đã nhấn đặt tour!')}
                 />
                 <div className="flex justify-between mt-2">

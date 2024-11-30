@@ -1,6 +1,6 @@
 import TableRow from "./TableRow";
 import { useState, useEffect } from "react";
-import { fetchUserAccounts, updateUserRole } from "../services/api";
+import { fetchUserAccounts, updateUserRole } from "../services/api.js";
 
 const AccountTable = () => {
   const [accounts, setAccounts] = useState([]);
