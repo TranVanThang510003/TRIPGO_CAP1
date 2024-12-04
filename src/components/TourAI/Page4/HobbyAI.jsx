@@ -32,8 +32,10 @@ const HobbyAI = () => {
 
   const handleContinue = () => {
     if (activeButtons.length > 0) {
-      console.log("Selected activity IDs:", activeButtons);
-      navigate("/nextStep");
+      // Điều hướng đến trang FoodType và truyền dữ liệu qua state
+      navigate("/foodtype", {
+        state: { selectedHobbies: activeButtons, city },
+      });
     } else {
       alert("Vui lòng chọn ít nhất một hoạt động trước khi tiếp tục!");
     }

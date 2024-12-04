@@ -78,7 +78,11 @@ const FoodType = () => {
   };
 
   const handleContinue = () => {
-    console.log("Proceeding with preferences:", preferences);
+    if (city) {
+      navigate("/recommendations", { state: { city } });
+    } else {
+      console.error("City not selected.");
+    }
   };
 
   // Enable the "Continue" button if any diet type is selected OR if there's text in the textarea

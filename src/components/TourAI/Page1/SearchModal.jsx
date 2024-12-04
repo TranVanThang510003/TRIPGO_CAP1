@@ -2,7 +2,6 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import "../style.scss"; // Import your SCSS file
-import datacity from "../datacity"; // Import your data list
 
 const SearchModal = ({ results, searchValue, onClose, onSelect, onChange }) => {
   return (

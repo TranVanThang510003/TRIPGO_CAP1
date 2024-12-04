@@ -475,18 +475,24 @@ $map-container-height: 400px;
 .recommendation-container {
   display: flex;
   gap: 20px;
-  padding: 20px;
+  // padding: 20px;
 
   .content-section {
     flex: 2;
     padding-right: 20px;
 
+    h2 {
+      font-size: 1.5rem;
+      padding: 20px 0 30px;
+      color: #333;
+    }
+
     section {
       margin-bottom: 40px;
 
-      h2 {
-        font-size: 1.8rem;
-        margin-bottom: 10px;
+      h3 {
+        font-size: 1.4rem;
+        // margin: 10px;
         color: #333;
       }
 
@@ -496,29 +502,34 @@ $map-container-height: 400px;
         color: #666;
         line-height: 1.6;
       }
-
-      .food-options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-      }
     }
   }
 
   .map-section {
     flex: 1;
-    padding-left: 20px;
+    // padding-left: 20px;
     position: sticky; // Giữ cố định khi cuộn
     top: 20px; // Khoảng cách cố định từ đỉnh màn hình
     height: calc(100vh - 40px); // Đảm bảo chiều cao toàn màn hình trừ padding
     overflow: hidden;
 
-    iframe {
+    .leaflet-container {
       width: 100%;
-      height: 100%;
-      border: none;
+      height: 100%; // Đảm bảo chiều cao toàn bộ để render đầy đủ
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
   }
+}
+
+.fi-check-icon {
+  color: #000;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 5px; /* Padding hợp lý */
+  font-size: 1.5rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  box-sizing: content-box;
 }
