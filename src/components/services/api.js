@@ -50,6 +50,14 @@ export const fetchToursByCreator = async (
   });
   return response.data;
 };
+export const fetchFavorites = async (
+    userId,
+) => {
+  const response = await api.get(`/users/favorites/${userId}`, {
+
+  });
+  return response.data;
+};
 
 // hàm lấy thông tin tài khoản của admin
 export const fetchUserAccounts = async () => {
@@ -59,6 +67,12 @@ export const fetchUserAccounts = async () => {
 //hàm update role của addmin
 export const updateUserRole = async (userId, role) => {
   return await api.put(`/accounts/${userId}/role`, { role });
+};
+// hàm lấy thông tin tài khoản của admin
+export const fetchOrderInfomation = async () => {
+  const userId = JSON.parse(localStorage.getItem('user'))?.id; // Lấy ID người dùng từ localStorage
+  const response = await api.get(`/users/orders/${userId}`);
+  return response.data;
 };
 
 // Hàm gọi API để lấy danh sách các tỉnh thành

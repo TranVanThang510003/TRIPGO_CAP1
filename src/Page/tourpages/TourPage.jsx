@@ -44,7 +44,6 @@ const TourPage = () => {
 
   return (
     <div>
-      <Header />
       <BannerTour
           selectedProvince={selectedProvince}
           setSelectedProvince={setSelectedProvince}

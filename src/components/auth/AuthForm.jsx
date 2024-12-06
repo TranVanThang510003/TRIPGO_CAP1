@@ -6,7 +6,7 @@ import axios from "axios";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import CompletionForm from "./CompletionForm";
-
+import Notification from "./Notification";
 function AuthForm({ type, onSubmit, onClose }) {
   const [emailOrPhone, setEmailOrPhone] = useState(""); // Lưu email hoặc số điện thoại
   const [password, setPassword] = useState(""); // Lưu mật khẩu
@@ -14,6 +14,30 @@ function AuthForm({ type, onSubmit, onClose }) {
   const [fullName, setFullName] = useState(""); // Lưu họ và tên
   const [errors, setErrors] = useState({}); // Lưu các lỗi của form
   const [showCompletionForm, setShowCompletionForm] = useState(false); // Hiển thị form hoàn tất đăng ký
+
+    // State quản lý thông báo
+    const [notification, setNotification] = useState({
+        message: "",
+        type: "", // success hoặc error
+        visible: false,
+    });
+    const showNotification = (message, type) => {
+        setNotification(prev => ({
+            ...prev,
+            message,
+            type,
+        }));
+
+        // Ẩn thông báo sau 3 giây
+        setTimeout(() => {
+            setNotification(prev => ({
+                ...prev,
+                message: "", // Đặt lại message thay vì visible
+                type: "",
+            }));
+        }, 3000);
+    };
+
 
   // Hàm kiểm tra email
   const validateEmail = (value) => {
@@ -35,74 +59,47 @@ function AuthForm({ type, onSubmit, onClose }) {
   };
 
   // Xử lý khi form đăng nhập được gửi
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    let emailOrPhoneError = "";
-    let passwordError = "";
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        let emailOrPhoneError = "";
+        let passwordError = "";
 
-    // Kiểm tra email hoặc số điện thoại
-    if (!validateEmail(emailOrPhone) && !validatePhone(emailOrPhone)) {
-        emailOrPhoneError = "Email hoặc số điện thoại không hợp lệ!";
-    }
-
-    // Kiểm tra mật khẩu
-    if (!validatePassword(password)) {
-        passwordError = "Mật khẩu không hợp lệ!";
-    }
-
-    if (emailOrPhoneError || passwordError) {
-        setErrors({ emailOrPhone: emailOrPhoneError, password: passwordError });
-        return; // Dừng hàm nếu có lỗi
-    }
-
-    try {
-        // Gửi yêu cầu POST đến API đăng nhập
-        const response = await axios.post("http://localhost:3000/login", {
-            emailOrPhone,
-            password,
-        });
-
-        // In phản hồi từ API ra console để kiểm tra
-        console.log("API response:", response.data);
-
-        // Kiểm tra phản hồi từ API
-        if (response.data.success) {
-            const user = response.data.user;
-
-            // Kiểm tra xem `user` có `role` không
-            if (user.role) {
-                console.log("User role:", user.role); // In ra role để kiểm tra
-                localStorage.setItem("role", user.role); // Lưu vào localStorage
-            } else {
-                console.log("Không tìm thấy thông tin role trong dữ liệu người dùng.");
-            }
-
-            // Lưu thông tin người dùng vào localStorage
-            localStorage.setItem("user", JSON.stringify(user));
-
-            // Truyền dữ liệu cho `onSubmit` để cập nhật giao diện trong `Header`
-            onSubmit(user);
-        } else {
-            // Nếu phản hồi không thành công, hiển thị thông báo lỗi cụ thể
-            setErrors({ password: response.data.message });
+        if (!validateEmail(emailOrPhone) && !validatePhone(emailOrPhone)) {
+            emailOrPhoneError = "Email hoặc số điện thoại không hợp lệ!";
         }
-    } catch (error) {
-        console.error("Lỗi khi xử lý đăng nhập:", error.response ? error.response.data : error.message);
-        
-        // Thông báo lỗi tùy chỉnh cho các trường hợp cụ thể
-        if (error.response && error.response.status === 404) {
-            setErrors({ emailOrPhone: "Người dùng không tồn tại!" });
-        } else if (error.response && error.response.status === 401) {
-            setErrors({ password: "Mật khẩu không đúng!" });
-        } else {
-            // Thông báo lỗi chung nếu không có thông tin chi tiết
-            setErrors({
-                password: "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.",
+
+        if (!validatePassword(password)) {
+            passwordError = "Mật khẩu không hợp lệ!";
+        }
+
+        if (emailOrPhoneError || passwordError) {
+            setErrors({ emailOrPhone: emailOrPhoneError, password: passwordError });
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:3000/login", {
+                emailOrPhone,
+                password,
             });
-        }
-    }
-};
 
+            if (response.data.success) {
+                const user = response.data.user;
+                localStorage.setItem("user", JSON.stringify(user));
+                // Tự động tải lại trang
+                window.location.reload();
+                showNotification("Đăng nhập thành công!", "success");
+                onSubmit(user);
+
+            } else {
+                showNotification(response.data.message || "Có lỗi xảy ra. Vui lòng thử lại.", "error");
+                setErrors({ password: response.data.message || "Có lỗi xảy ra. Vui lòng thử lại." });
+            }
+        } catch (error) {
+            console.error("Lỗi khi đăng nhập:", error);
+            showNotification("Có lỗi xảy ra. Vui lòng thử lại.", "error");
+        }
+    };
 
 
   // Xử lý khi form đăng ký được gửi
@@ -185,6 +182,16 @@ function AuthForm({ type, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
+            {/* Hiển thị thông báo nếu có */}
+            {notification.visible && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => {
+                        setNotification(prev => ({ ...prev, visible: false }));
+                    }}
+                />
+            )}
       <div className="auth-container">
         <div className="auth-box">
           {/* Nút đóng */}
@@ -203,7 +210,8 @@ function AuthForm({ type, onSubmit, onClose }) {
               : "Đăng Ký"}
           </h2>
 
-          {/* Form nhập thông tin */}
+
+            {/* Form nhập thông tin */}
           <form
             onSubmit={
               type === "login"

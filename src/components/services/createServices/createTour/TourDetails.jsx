@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './ErrorMessage.jsx';
 
 const TourDetails = ({
   tourTypes,

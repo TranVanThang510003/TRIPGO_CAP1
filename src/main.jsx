@@ -17,13 +17,15 @@ const WaitingScreen = lazy(() => import('./Page/bookingpage/WaitingScreen'));
 const UserProfile = lazy(() => import('./Page/UserProfile'));
 const UserFavourite = lazy(() => import('./Page/UserFavourite'));
 const UserSetting = lazy(() => import('./Page/UserSetting'));
+const OrderInfomation = lazy(() => import('./components/UserProfile/orderInfo/OrderInformation.jsx'));
 const AdminPage = lazy(() => import('./Page/AdminPage/AdminPage'));
 const  TourManagement= lazy(() => import('../src/components/Staff/TourManagement'));
-const  CreateTour= lazy(() => import('../src/components/createServices/createTour/createTourForm'));
+const  CreateTour= lazy(() => import('./components/services/createServices/createTour/createTourForm'));
 const  HeaderDashboardForStaff = lazy(() => import('./components/Admin/DashboardForAmin/MainDashBoard.jsx'));
-
+const Notification = lazy(() => import('../src/components/UserProfile/notification/Notification'));
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
-
+const UpdateTourForm = lazy(() => import('./components/services/updateService/updateTour/UpdateTourForm.jsx'));
+import Header from './layout/Header.jsx';
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
@@ -33,6 +35,8 @@ const Loading = () => (
 const Main = () => {
   return (
     <Router>
+      <Header/>
+      <div className='mt-[80px]'></div>
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -48,11 +52,13 @@ const Main = () => {
           <Route path="/restaurants" element={<Restaurant />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/favourite" element={<UserFavourite />} />
+          <Route path="/notification" element={<Notification />} />
           <Route path="/setting" element={<UserSetting />} />
+          <Route path="/order" element={<OrderInfomation />} />
           <Route path="/bookingcheckoutpage" element={<BookingCheckOutPage />} />
           <Route path="/waitingscreen" element={<WaitingScreen />} />
           <Route path="/create-tour" element={< CreateTour />} />
-
+          <Route path="/update-tour/:tourId" element={<UpdateTourForm />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

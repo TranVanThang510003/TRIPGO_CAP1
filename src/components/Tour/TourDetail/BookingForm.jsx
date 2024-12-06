@@ -13,11 +13,15 @@ const BookingForm = ({ tour_id, schedules }) => {
   const [selectedDate, setSelectedDate] = useState(null); // Ngày được chọn
   const [availableDates, setAvailableDates] = useState([]); // Danh sách ngày có sẵn
   const [currentPrice, setCurrentPrice] = useState({ adult: 0, child: 0 }); // Giá hiện tại
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.id) {
       setUserId(user.id);
+      setIsLoggedIn(true);
+    }
+    else{
+      setIsLoggedIn(false);
     }
 
     // Lấy danh sách ngày khởi hành từ props schedules
@@ -75,6 +79,11 @@ const BookingForm = ({ tour_id, schedules }) => {
       alert('Vui lòng chọn ngày khởi hành.');
       return;
     }
+    if (!isLoggedIn) {
+        alert('Vui lòng đăng nhập trước khi đặt tour.');
+        return; // Dừng lại nếu người dùng chưa đăng nhập
+      }
+
 
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
 

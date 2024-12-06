@@ -61,12 +61,7 @@ const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,o
   ];
   const ratings = ['3.0+', '3.5+', '4.0+', '4.5+'];
   const duration = ['Tour trong ngày', 'Tour nhiều ngày'];
-  const service = [
-    'Tour riêng',
-    'Đón tại khách sạn ',
-    'Hoàn tiền dễ dàng',
-    'Đảm bảo khới hành',
-  ];
+
   const language = ['Tiếng Anh', 'Tiếng Việt'];
 
   return (
@@ -227,22 +222,6 @@ const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,o
             </div>
           </div>
 
-          {/* bộ lọc Dịch vụ khới hành*/}
-          <div className="mb-6">
-            <h4 className="font-medium text-2xl text-center">
-              Dịch vụ khới hành
-            </h4>
-            <div className="mt-2">
-              {service.map((type, idx) => (
-                <div key={idx} className="flex items-center mb-2">
-                  <input type="checkbox" id={type} className="mr-2 w-6 h-6" />
-                  <label htmlFor={type} className="text-base">
-                    {type}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -13,9 +13,9 @@ const ReturnButton = () => {
   return (
     <button
       onClick={handleBack}
-      className="flex items-center gap-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition-colors"
+      className="flex items-center gap-2 pt-4 font-semibold text-blue-500 rounded-md hover:text-blue-700 transition-colors"
     >
-      <FaArrowLeft className="text-white" />
+      <FaArrowLeft className="text-blue-500 hover:text-blue-700 " />
       <span>Quay lại</span>
     </button>
   );

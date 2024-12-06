@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import FormHeader from '../../components/createServices/createTour/FormHeader';
-import LocationSelector from '../../components/createServices/createTour/LocationSelector';
-import TourDetails from '../../components/createServices/createTour/TourDetails';
-import ScheduleList from '../../components/createServices/createTour/ScheduleList';
-import FileUploader from '../../components/createServices/createTour/FileUploader';
-import LanguageSelector from '../../components/createServices/createTour/LanguageSelector';
-import TourTypeSelector from '../../components/createServices/createTour/TourTypeSelector';
+import FormHeader from '../../createServices/createTour/FormHeader.jsx';
+import LocationSelector from '../../createServices/createTour/LocationSelector.jsx';
+import TourDetails from '../../createServices/createTour/TourDetails.jsx';
+import ScheduleList from '../../createServices/createTour/ScheduleList.jsx';
+import FileUploader from '../../createServices/createTour/FileUploader.jsx';
+import LanguageSelector from '../../createServices/createTour/LanguageSelector.jsx';
+import TourTypeSelector from '../../createServices/createTour/TourTypeSelector.jsx';
 const UpdateTourForm = () => {
   const { tourId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -474,7 +474,7 @@ const UpdateTourForm = () => {
   }
 
   return (
-    <div className="p-8 max-w-4/5 mx-auto grid gap-6">
+    <div className="p-8 w-4/5 mx-auto grid gap-6">
       <FormHeader
         title="Cập Nhật Tour"
         description="Điền các thông tin dưới đây để cập nhật tour."

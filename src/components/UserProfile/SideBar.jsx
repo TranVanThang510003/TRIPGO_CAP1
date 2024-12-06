@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaCog, FaSignOutAlt, FaBars, FaHotel, FaChartBar, FaPlusCircle, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaHeart, FaCog,FaShoppingCart ,FaBell, FaSignOutAlt, FaBars, FaHotel, FaChartBar, FaPlusCircle, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
@@ -19,13 +19,18 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
     onSectionChange(label);
     if (label === "Yêu thích") {
       navigate("/favourite");
+    } else if (label === "Đơn hàng") {
+      navigate("/order");
+    } else if (label === "Thông báo") {
+      navigate("/notification");
     } else if (label === "Cài đặt") {
       navigate("/setting");
     } else if (label === "Đăng xuất") {
       localStorage.removeItem('user'); // Clear user info if stored
       localStorage.removeItem('role'); // Xóa role khi đăng xuất
       navigate("/"); // Redirect to home
-    } 
+      window.location.reload();
+    }
      else if (label === "Thêm Tour") {
       navigate("/create-tour");
     } else if (label === "Thêm Hotel") {
@@ -75,21 +80,35 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
                 />
               </div>
               <h3 className="mt-4 text-[23px] font-semibold">Người dùng TripGo</h3>
-              <a href="#" className="text-sm no-underline">Cập nhật thông tin cá nhân &gt;</a>
+              <a href="/profile" className="text-sm no-underline">Cập nhật thông tin cá nhân &gt;</a>
             </>
           )}
         </div>
       </div>
 
       <div className={`px-10 py-5 ${!isSidebarOpen ? "text-center" : ""}`}>
-        <MenuItem 
-          icon={<FaHeart />} 
-          label="Yêu thích" 
+        <MenuItem
+          icon={<FaHeart />}
+          label="Yêu thích"
           isSelected={selectedSection === "Yêu thích"}
           onClick={() => handleNavigate("Yêu thích")}
           isSidebarOpen={isSidebarOpen}
         />
-        <MenuItem 
+        <MenuItem
+            icon={<FaShoppingCart />}
+            label="Đơn hàng"
+            isSelected={selectedSection === "Đơn hàng"}
+            onClick={() => handleNavigate("Đơn hàng")}
+            isSidebarOpen={isSidebarOpen}
+        />
+        <MenuItem
+            icon={<FaBell />}
+            label="Thông báo"
+            isSelected={selectedSection === "Thông báo"}
+            onClick={() => handleNavigate("Thông báo")}
+            isSidebarOpen={isSidebarOpen}
+        />
+        <MenuItem
           icon={<FaCog />} 
           label="Cài đặt" 
           isSelected={selectedSection === "Cài đặt"}
@@ -104,7 +123,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
             <div>
               <MenuItem
                 icon={<FaPlusCircle />}
-                label="Thêm Dịch Vụ"
+                label="Tạo Dịch Vụ"
                 isSelected={selectedSection === "Thêm Dịch Vụ"}
                 onClick={toggleAddServiceMenu}
                 isSidebarOpen={isSidebarOpen}
@@ -113,22 +132,22 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
               {isAddServiceMenuOpen && (
                 <div className="pl-8">
                   <MenuItem 
-                    label="Thêm Tour" 
+                    label="Tour"
                     onClick={() => handleNavigate("Thêm Tour")}
                     isSidebarOpen={isSidebarOpen}
                   />
                   <MenuItem 
-                    label="Thêm Hotel" 
+                    label="Hotel"
                     onClick={() => handleNavigate("Thêm Hotel")}
                     isSidebarOpen={isSidebarOpen}
                   />
                   <MenuItem 
-                    label="Thêm Activity" 
+                    label="Activity"
                     onClick={() => handleNavigate("Thêm Activity")}
                     isSidebarOpen={isSidebarOpen}
                   />
                   <MenuItem 
-                    label="Thêm Restaurant" 
+                    label="Restaurant"
                     onClick={() => handleNavigate("Thêm Restaurant")}
                     isSidebarOpen={isSidebarOpen}
                   />

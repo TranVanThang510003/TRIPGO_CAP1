@@ -1,5 +1,5 @@
 
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './ErrorMessage.jsx';
 import moment from 'moment';
 
 const ScheduleList = ({
@@ -18,7 +18,11 @@ const ScheduleList = ({
 
 
                       }) => {
-  const formatDate = (dateString) => {
+    if (!Array.isArray(schedules)) {
+        schedules = []; // Nếu schedules không phải là mảng, gán nó thành một mảng rỗng
+    }
+
+    const formatDate = (dateString) => {
     return moment(dateString).format('DD/MM/YYYY');
   };
 
@@ -50,11 +54,8 @@ const ScheduleList = ({
                     type="date"
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
-                    min={schedules.length > 0
-                        ? new Date(
-                            new Date(schedules[schedules.length - 1].departureDate).getTime() + 86400000 // Cộng thêm 1 ngày vào ngày khởi hành cuối cùng
-                        ).toISOString().split('T')[0]
-                        : new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0] // Nếu không có lịch trình, chọn từ ngày mai
+                    min={
+                        new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0] // Nếu không có lịch trình, chọn từ ngày mai
                     }
                     className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
                     placeholder="Ngày khởi hành"

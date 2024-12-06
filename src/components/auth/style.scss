@@ -150,3 +150,31 @@ $input-height: 37px;
     margin-top: 5px;
   }
 }
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  background-color: #4caf50; /* Màu nền thành công */
+  transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s; /* Chuyển đổi visibility sau khi opacity hoàn tất */
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000; /* Đảm bảo thông báo luôn trên cùng */
+}
+
+.notification.success {
+  background-color: #4caf50; /* Thành công */
+}
+
+.notification.error {
+  background-color: #f44336; /* Lỗi */
+}
+
+.notification.visible {
+  opacity: 1;
+  visibility: visible; /* Hiển thị thông báo khi có class 'visible' */
+  transition: opacity 0.3s ease-in-out, visibility 0s linear 0s; /* Không có trễ khi đổi visibility */
+}
