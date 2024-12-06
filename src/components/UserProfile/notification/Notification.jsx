@@ -11,7 +11,7 @@ const Notification = () => {
     const [upcomingTours, setUpcomingTours] = useState([]); // State để lưu các chuyến đi sắp khởi hành
     const [finishedTours, setFinishedTours] = useState([]); // State để lưu các chuyến đi đã kết thúc
     const userId = JSON.parse(localStorage.getItem('user'))?.id; // Lấy ID người dùng từ localStorage
-    const role = localStorage.getItem('role'); // Lấy role của người dùng
+    const role =  JSON.parse(localStorage.getItem("user"))?.role; // Lấy role của người dùng
     const navigate = useNavigate();
 
     useEffect(() => {

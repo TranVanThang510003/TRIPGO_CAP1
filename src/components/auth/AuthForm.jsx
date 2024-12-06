@@ -22,22 +22,20 @@ function AuthForm({ type, onSubmit, onClose }) {
         visible: false,
     });
     const showNotification = (message, type) => {
-        setNotification(prev => ({
-            ...prev,
+        setNotification({
             message,
             type,
-        }));
+            visible: true,
+        });
 
         // Ẩn thông báo sau 3 giây
         setTimeout(() => {
-            setNotification(prev => ({
-                ...prev,
-                message: "", // Đặt lại message thay vì visible
-                type: "",
-            }));
+            setNotification({
+                ...notification,
+                visible: false,
+            });
         }, 3000);
     };
-
 
   // Hàm kiểm tra email
   const validateEmail = (value) => {
@@ -86,11 +84,11 @@ function AuthForm({ type, onSubmit, onClose }) {
             if (response.data.success) {
                 const user = response.data.user;
                 localStorage.setItem("user", JSON.stringify(user));
+                showNotification("Đăng nhập thành công!", "success");
+
                 // Tự động tải lại trang
                 window.location.reload();
-                showNotification("Đăng nhập thành công!", "success");
                 onSubmit(user);
-
             } else {
                 showNotification(response.data.message || "Có lỗi xảy ra. Vui lòng thử lại.", "error");
                 setErrors({ password: response.data.message || "Có lỗi xảy ra. Vui lòng thử lại." });
@@ -182,16 +180,6 @@ function AuthForm({ type, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
-            {/* Hiển thị thông báo nếu có */}
-            {notification.visible && (
-                <Notification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => {
-                        setNotification(prev => ({ ...prev, visible: false }));
-                    }}
-                />
-            )}
       <div className="auth-container">
         <div className="auth-box">
           {/* Nút đóng */}
@@ -209,9 +197,16 @@ function AuthForm({ type, onSubmit, onClose }) {
               ? "Hoàn Tất Đăng Ký"
               : "Đăng Ký"}
           </h2>
+            {/* Hiển thị thông báo nếu có */}
+            {notification.visible && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification({ ...notification, visible: false })}
+                />
+            )}
 
-
-            {/* Form nhập thông tin */}
+          {/* Form nhập thông tin */}
           <form
             onSubmit={
               type === "login"

@@ -11,7 +11,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
 
   // Lấy vai trò từ localStorage khi component được mount
   useEffect(() => {
-    const storedRole = localStorage.getItem('role'); // Lấy role từ localStorage
+    const storedRole = JSON.parse(localStorage.getItem("user"))?.role; // Lấy role từ localStorage
     setRole(storedRole); // Cập nhật role vào state
   }, []);
 

@@ -19,8 +19,12 @@ const HotelDetails = () => {
   const [error, setError] = useState(null);
 
   // Lấy thông tin người dùng từ localStorage
-  const [userRole, setUserRole] = useState(localStorage.getItem('role'));
-  const [userId, setUserId] = useState(parseInt(JSON.parse(localStorage.getItem("user")).id), 10); // Lấy ID người dùng từ localStorage và chuyển đổi thành số
+  const [userRole, setUserRole] =  JSON.parse(localStorage.getItem("user"))?.role || null;
+
+  const [userId, setUserId] = useState(() => {
+    const user = localStorage.getItem('user');
+    return user ? parseInt(JSON.parse(user).id, 10) : null;
+  }); // Lấy ID người dùng từ localStorage và chuyển đổi thành số
 
   // Fetch hotel details from the API
   useEffect(() => {

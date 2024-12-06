@@ -25,7 +25,7 @@ const TourDetailPage = () => {
   const { tourId } = useParams();
 
   const [userRole, setUserRole] = useState(
-    localStorage.getItem('role') || null
+      JSON.parse(localStorage.getItem("user"))?.role|| null
   );
   const [userId, setUserId] = useState(() => {
     const user = localStorage.getItem('user');
