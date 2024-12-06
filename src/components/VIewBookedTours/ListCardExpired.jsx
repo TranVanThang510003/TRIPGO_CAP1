@@ -13,7 +13,7 @@
     useEffect(() => {
         const fetchTour = async () => {
         try {
-            const response = await fetch("http://localhost:8000/tours");
+            const response = await fetch("http://localhost:3000/report/expire/:id");
             const result = await response.json();
             setDataTour(result);
             console.log("API Response:", result);
