@@ -41,7 +41,7 @@ const UpdateTourForm = () => {
   const [numDays, setNumDays] = useState(1); // Số ngày cho tour nhiều ngày
   const [priceAdult, setPriceAdult] = useState('');
   const [priceChild, setPriceChild] = useState('');
-  const [availableAdultCount, setAvailableAdultCount] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
 
   // Define tour types
@@ -309,7 +309,7 @@ const UpdateTourForm = () => {
   };
   // Hàm thêm lịch khởi hành vào danh sách
   const addSchedule = () => {
-    if (!departureDate || !priceAdult || !priceChild || !availableAdultCount) {
+    if (!departureDate || !priceAdult || !priceChild || !quantity) {
       alert('Vui lòng điền đầy đủ thông tin lịch khởi hành.');
       return;
     }
@@ -319,7 +319,7 @@ const UpdateTourForm = () => {
       numDays: tourType === 'multi' ? numDays : 1,
       priceAdult,
       priceChild,
-      availableAdultCount,
+      quantity,
     };
 
     setSchedules((prevSchedules) => [...prevSchedules, schedule]);
@@ -327,7 +327,7 @@ const UpdateTourForm = () => {
     setEndDate('');
     setPriceAdult('');
     setPriceChild('');
-    setAvailableAdultCount('');
+    setQuantity('');
   };
 
   const editSchedule = (index) => {
@@ -338,7 +338,7 @@ const UpdateTourForm = () => {
     );
     setPriceAdult(schedule.priceAdult);
     setPriceChild(schedule.priceChild);
-    setAvailableAdultCount(schedule.availableAdultCount);
+    setQuantity(schedule.quantity);
   };
 
   // Hàm lưu sau khi chỉnh sửa:
@@ -348,14 +348,14 @@ const UpdateTourForm = () => {
       departureDate,
       priceAdult,
       priceChild,
-      availableAdultCount,
+      quantity,
     };
     setSchedules(updatedSchedules);
     setEditingIndex(null); // Reset trạng thái chỉnh sửa
     setDepartureDate('');
     setPriceAdult('');
     setPriceChild('');
-    setAvailableAdultCount('');
+    setQuantity('');
   };
   const handleAddOrSave = () => {
     if (editingIndex !== null) {
@@ -576,8 +576,8 @@ const UpdateTourForm = () => {
               setPriceAdult={setPriceAdult}
               priceChild={priceChild}
               setPriceChild={setPriceChild}
-              availableAdultCount={availableAdultCount}
-              setAvailableAdultCount={setAvailableAdultCount}
+              quantity={quantity}
+              setQuantity={setQuantity}
               errors={errors}
             />
           </div>

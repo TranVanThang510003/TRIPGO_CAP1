@@ -26,6 +26,7 @@ const Notification = lazy(() => import('../src/components/UserProfile/notificati
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const UpdateTourForm = lazy(() => import('./components/services/updateService/updateTour/UpdateTourForm.jsx'));
 import Header from './layout/Header.jsx';
+import  CreateHoTelForm from './components/services/createServices/createHotel/CreateHoTelForm';
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
@@ -59,7 +60,10 @@ const Main = () => {
           <Route path="/waitingscreen" element={<WaitingScreen />} />
           <Route path="/create-tour" element={< CreateTour />} />
           <Route path="/update-tour/:tourId" element={<UpdateTourForm />} />
+          CreateHoTelForm
+          <Route path="/create-hotel" element={<  CreateHoTelForm />} />
           <Route path="*" element={<NotFound />} />
+
         </Routes>
       </Suspense>
     </Router>

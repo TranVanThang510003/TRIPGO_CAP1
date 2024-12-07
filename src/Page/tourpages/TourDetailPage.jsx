@@ -108,6 +108,7 @@ const TourDetailPage = () => {
                   priceChild={tour.priceChild}
                   tour_id={tour.id}
                   schedules={tour.schedules}
+
                 />
               </div>
 

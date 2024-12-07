@@ -14,6 +14,7 @@ const BookingForm = ({ tour_id, schedules }) => {
   const [availableDates, setAvailableDates] = useState([]); // Danh sách ngày có sẵn
   const [currentPrice, setCurrentPrice] = useState({ adult: 0, child: 0 }); // Giá hiện tại
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [maxQuantity, setMaxQuantity] = useState(0);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.id) {
@@ -43,13 +44,16 @@ const BookingForm = ({ tour_id, schedules }) => {
     );
 
     if (selectedSchedule) {
+      setMaxQuantity(selectedSchedule.quantity-selectedSchedule.totalBooked || 0);
       setCurrentPrice({
         adult: selectedSchedule.priceAdult || 0, // Giá người lớn từ API
         child: selectedSchedule.priceChild || 0, // Giá trẻ em từ API
       });
     } else {
+      setMaxQuantity(0);
       setCurrentPrice({ adult: 0, child: 0 }); // Không tìm thấy lịch trình
     }
+
   };
 
   const calculateTotalPrice = () => {
@@ -75,6 +79,13 @@ const BookingForm = ({ tour_id, schedules }) => {
   };
 
   const handleBooking = async () => {
+    const totalPeople = adults + children;
+
+    // Kiểm tra xem số lượng tổng có vượt quá số lượng tối đa không
+    if (totalPeople > maxQuantity) {
+      alert(`Số lượng khách tối đa cho ngày này là ${maxQuantity}. Vui lòng giảm số lượng.`);
+      return;
+    }
     if (!selectedDate) {
       alert('Vui lòng chọn ngày khởi hành.');
       return;

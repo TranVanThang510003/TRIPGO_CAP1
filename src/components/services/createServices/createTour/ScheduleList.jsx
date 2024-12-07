@@ -12,8 +12,8 @@ const ScheduleList = ({
                         setPriceAdult,
                         priceChild,
                         setPriceChild,
-                        availableAdultCount,
-                        setAvailableAdultCount,
+                          quantity,
+                        setQuantity,
                         editSchedule,
 
 
@@ -95,8 +95,8 @@ const ScheduleList = ({
             </label>
             <input
                 type="number"
-                value={availableAdultCount}
-                onChange={(e) => setAvailableAdultCount(e.target.value)}
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
                 placeholder="Số lượng"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
             />
@@ -152,7 +152,7 @@ const ScheduleList = ({
                     {schedule.priceChild}
                   </td>
                   <td className="border p-3 text-gray-700 text-sm">
-                      {schedule.totalBooked}/{schedule.availableAdultCount}
+                      {schedule.totalBooked}/{schedule.quantity}
                   </td>
                   <td className="border p-3 text-gray-700 text-sm">
                     {/* Hiển thị trạng thái */}

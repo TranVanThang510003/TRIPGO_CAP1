@@ -59,8 +59,8 @@ const CreateTourForm = () => {
     setPriceAdult,
     priceChild,
     setPriceChild,
-    availableAdultCount,
-    setAvailableAdultCount,
+    quantity,
+    setQuantity,
     tourType,
     setTourType,
     numDays,
@@ -306,8 +306,8 @@ const CreateTourForm = () => {
                 setPriceAdult={setPriceAdult}
                 priceChild={priceChild}
                 setPriceChild={setPriceChild}
-                availableAdultCount={availableAdultCount}
-                setAvailableAdultCount={setAvailableAdultCount}
+                quantity={quantity}
+                setQuantity={setQuantity}
                 errors={errors}
             />
           </div>

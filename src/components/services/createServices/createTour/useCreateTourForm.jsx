@@ -1,4 +1,4 @@
-// useCreateTourForm.js
+// useCreateHotelForm.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -30,7 +30,7 @@ const useCreateTourForm = () => {
   const [numDays, setNumDays] = useState(1); // Số ngày cho tour nhiều ngày
   const [priceAdult, setPriceAdult] = useState('');
   const [priceChild, setPriceChild] = useState('');
-  const [availableAdultCount, setAvailableAdultCount] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [schedules, setSchedules] = useState([]); // Danh sách lịch khởi hành
 
   // Danh sách loại tour
@@ -137,7 +137,7 @@ const useCreateTourForm = () => {
 
   // Hàm thêm lịch khởi hành vào danh sách
   const addSchedule = () => {
-    if (!departureDate || !priceAdult || !priceChild || !availableAdultCount) {
+    if (!departureDate || !priceAdult || !priceChild || !quantity) {
       alert('Vui lòng điền đầy đủ thông tin lịch khởi hành.');
       return;
     }
@@ -147,7 +147,7 @@ const useCreateTourForm = () => {
       numDays: tourType === 'multi' ? numDays : 1,
       priceAdult,
       priceChild,
-      availableAdultCount,
+        quantity,
     };
 
     setSchedules((prevSchedules) => [...prevSchedules, schedule]);
@@ -155,7 +155,7 @@ const useCreateTourForm = () => {
     setEndDate('');
     setPriceAdult('');
     setPriceChild('');
-    setAvailableAdultCount('');
+    setQuantity('');
   };
 
   // Hàm xóa lịch khởi hành
@@ -242,8 +242,8 @@ const useCreateTourForm = () => {
         setPriceAdult,
         priceChild,
         setPriceChild,
-        availableAdultCount,
-        setAvailableAdultCount,
+        quantity,
+        setQuantity,
         tourType, setTourType,
         numDays, setNumDays,
         multiDaySchedules,
