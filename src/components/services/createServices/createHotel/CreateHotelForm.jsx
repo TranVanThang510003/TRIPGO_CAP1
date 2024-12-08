@@ -11,37 +11,57 @@ import RoomTypeForm from './RoomTypeForm.jsx';
 import  ServiceAndPolicyForm from './ServiceAndPolicy.jsx';
 const CreateHotelForm = () => {
     const {
+        //location
         provinces,
         districts,
         wards,
-        selectedProvince,
-        selectedDistrict,
-        selectedWard,
-        setSelectedProvince,
-        setSelectedDistrict,
-        setSelectedWard,
-        hotelName,
-        setHotelName,
-        hotelType,
-        setHotelType,
-        description,
-        setDescription,
-        serviceDescription,
-        setServiceDescription,
-        IMAGE,
-        setIMAGE,
-        LANGUAGE,
-        setLANGUAGE,
-        errors,
+        selectedProvince,setSelectedProvince,
+        selectedDistrict, setSelectedDistrict,
+        selectedWard, setSelectedWard,
+        address, setAddress,
+
+        //hotel detail
+        hotelName, setHotelName,
+        hotelType, setHotelType,
+        descriptions, setDescriptions,
+
+        //service and policy , meal plan
+        services, setServices,
+        cancellationPolicy, setCancellationPolicy,
+        mealPlan, setMealPlan,
+        allServices,
+        allMealPlans,
+
+
+        facilities,
+        setFacilities,
+        roomSize,
+        setRoomSize,
+
+        images,
+        updateImages,
+        errors,setErrors,
+        validateForm,
         hotelTypes,
         handleProvinceChange,
         handleDistrictChange,
         handleWardChange,
-        validateForm,
-        newImages,
-        setNewImages,
-        existingImages,
-        updateImages,
+
+        //roomtype
+        roomName, setRoomName,
+        bedTypes, setBedTypes,
+        bedTypePrices, setBedTypePrices,
+        bedTypeQuantities, setBedTypeQuantities,
+        newBedType, setNewBedType,
+        newBedTypePrice, setNewBedTypePrice,
+        newBedTypeQuantity, setNewBedTypeQuantity,
+        roomTypes, setRoomTypes,
+
+
+        //image
+        existingImages, setExistingImages,
+        newImages, setNewImages,
+        IMAGE, setIMAGE,
     } = useCreateHotelForm();
 
     const handleSubmit = async (e) => {
@@ -57,11 +77,41 @@ const CreateHotelForm = () => {
         // Append các trường thông tin cơ bản
         formData.append('hotelName', hotelName);
         formData.append('hotelType', hotelType);
-        formData.append('description', description);
-        formData.append('serviceDescription', serviceDescription);
+        formData.append('description', descriptions);
         formData.append('province', selectedProvince);
         formData.append('district', selectedDistrict);
         formData.append('ward', selectedWard);
+        formData.append('address', address);
+        // Append các thông tin về dịch vụ, chính sách hủy và meal plan
+        formData.append('services', JSON.stringify(services)); // Dịch vụ chọn lựa
+        formData.append('cancellationPolicy', cancellationPolicy); // Chính sách hủy
+        formData.append('mealPlan', mealPlan); // Meal Plan
+        // Kiểm tra và gửi thông tin phòng
+        if (roomTypes.length > 0) {
+            roomTypes.forEach((room, index) => {
+                // Gộp thông tin phòng vào một đối tượng duy nhất
+                const roomData = {
+                    roomName: room.name,
+                    bedTypes: room.bedTypes.map((bed, i) => ({
+                        type: bed,
+                        price: room.bedTypePrices[i],
+                        quantity: room.bedTypeQuantities[i],
+                        roomSize: room.roomSize[i],
+                        facilities: room.facilities[i],
+                    })),
+                };
+
+                // Gửi dữ liệu phòng đã gộp vào FormData
+                formData.append(`room_${index}`, JSON.stringify(roomData));
+            });
+        } else {
+            alert('Vui lòng thêm ít nhất một loại phòng!');
+            return;
+        }
+
+
+
+
 
         // Append thông tin người dùng từ localStorage
         const user = JSON.parse(localStorage.getItem('user'));
@@ -69,35 +119,44 @@ const CreateHotelForm = () => {
             formData.append('createdBy', parseInt(user.id, 10)); // Chuyển thành số nguyên
         }
 
-        // Append ngôn ngữ
-        formData.append('language', LANGUAGE);
 
-        // Đưa các file ảnh mới vào FormData
-        newImages.forEach((file) => {
-            formData.append('newImages', file);
-        });
+
+        // // Đưa các file ảnh mới vào FormData
+        // newImages.forEach((file) => {
+        //     formData.append('newImages', file);
+        // });
 
         // Đưa danh sách ảnh cũ vào FormData
-        formData.append('existingImages', JSON.stringify(existingImages));
+        // formData.append('existingImages', JSON.stringify(existingImages));
 
-        try {
-            const response = await axios.post(
-                'http://localhost:3000/hotels/createHotel',
-                formData,
-                {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                }
-            );
-            alert('Tạo khách sạn thành công!');
-        } catch (error) {
-            console.error('Lỗi khi tạo khách sạn:', error.response?.data || error.message);
-            alert('Tạo khách sạn thất bại.');
+        // Log dữ liệu trước khi gửi
+        console.log('FormData to send:');
+        for (let [key, value] of formData.entries()) {
+            if (key === 'newImages[]') {
+                console.log(`${key}:`, value.name); // Log tên file mới
+            } else {
+                console.log(`${key}:`, value); // Log các giá trị khác
+            }
         }
+
+        // try {
+        //     const response = await axios.post(
+        //         'http://localhost:3000/hotels/createHotel',
+        //         formData,
+        //         {
+        //             headers: { 'Content-Type': 'multipart/form-data' },
+        //         }
+        //     );
+        //     alert('Tạo khách sạn thành công!');
+        // } catch (error) {
+        //     console.error('Lỗi khi tạo khách sạn:', error.response?.data || error.message);
+        //     alert('Tạo khách sạn thất bại.');
+        // }
     };
 
     return (
-        <div className="relative p-8 max-w-4xl mx-auto">
-            <div className="fixed ml-[-300px]">
+        <div className="relative p-8 max-w-7xl mx-auto">
+            <div className="fixed ml-[-150px]">
                 <ReturnButton />
             </div>
             <FormHeader
@@ -115,10 +174,8 @@ const CreateHotelForm = () => {
                         setHotelName={setHotelName}
                         hotelType={hotelType}
                         setHotelType={setHotelType}
-                        description={description}
-                        setDescription={setDescription}
-                        serviceDescription={serviceDescription}
-                        setServiceDescription={setServiceDescription}
+                        descriptions={descriptions}
+                        setDescriptions={setDescriptions}
                         errors={errors}
                     />
                 </div>
@@ -135,12 +192,24 @@ const CreateHotelForm = () => {
                         handleProvinceChange={handleProvinceChange}
                         handleDistrictChange={handleDistrictChange}
                         handleWardChange={handleWardChange}
+                        address={address}
+                        setAddress={setAddress}
                         errors={errors}
                     />
                 </div>
                 <div>
                     <h3 className="text-lg font-semibold mb-4">Dịch vụ</h3>
-                   <ServiceAndPolicyForm/>
+                   <ServiceAndPolicyForm
+                       services={services}
+                    setServices={setServices}
+                    cancellationPolicy={cancellationPolicy}
+                    setCancellationPolicy={setCancellationPolicy}
+                       mealPlan={mealPlan}
+                    setMealPlan={setMealPlan}
+                    allServices={allServices}
+                    allMealPlans={allMealPlans}
+                       errors={errors}
+                   />
                 </div>
 
 
@@ -150,6 +219,29 @@ const CreateHotelForm = () => {
                 <div>
                     <h3 className="text-lg font-semibold mb-4">Thông tin phòng</h3>
                     <RoomTypeForm
+                        roomName={roomName}
+                    setRoomName={setRoomName}
+                    bedTypes={bedTypes}
+                    setBedTypes={setBedTypes}
+                    bedTypePrices={bedTypePrices}
+                    setBedTypePrices={setBedTypePrices}
+                    bedTypeQuantities={bedTypeQuantities}
+                    setBedTypeQuantities={setBedTypeQuantities}
+                    newBedType={newBedType}
+                    setNewBedType={setNewBedType}
+                    newBedTypePrice={newBedTypePrice}
+                    setNewBedTypePrice={setNewBedTypePrice}
+                    newBedTypeQuantity={newBedTypeQuantity}
+                    setNewBedTypeQuantity={setNewBedTypeQuantity}
+                    roomTypes={roomTypes}
+                    setRoomTypes={setRoomTypes}
+                        facilities={facilities}
+                    setFacilities={setFacilities}
+                    roomSize={roomSize}
+                    setRoomSize={setRoomSize}
+                        errors={errors}
+                        setErrors={setErrors}
+
 
                     />
                 </div>

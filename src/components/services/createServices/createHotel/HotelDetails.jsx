@@ -5,7 +5,7 @@ const HotelDetails = ({
                         hotelName,
                         setHotelName,
                         hotelTypes,
-    hotelType,
+                        hotelType,
                         setHotelType,
                         descriptions,
                         setDescriptions,

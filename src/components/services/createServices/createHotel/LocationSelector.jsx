@@ -10,6 +10,8 @@ const LocationSelector = ({
   handleProvinceChange,
   handleDistrictChange,
   handleWardChange,
+    address,
+    setAddress,
   errors,
 }) => (
   <div className="grid grid-cols-3 gap-4">
@@ -78,8 +80,8 @@ const LocationSelector = ({
             </option>
         ))}
       </select>
-      <input/>
       <ErrorMessage message={errors.selectedWard}/>
+      <input/>
     </div>
       <div className='w-[400px]'>
 
@@ -88,11 +90,12 @@ const LocationSelector = ({
       </label>
       <input
           type="text"
-          // value={hotelName}
-          // onChange={(e) => setHotelName(e.target.value)}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="số nhà tên đường"
           className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300 focus:outline-none transition duration-150"
       />
+        <ErrorMessage message={errors.address} />
       </div>
   </div>
 );

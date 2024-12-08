@@ -8,22 +8,19 @@ const useCreateHotelForm = () => {
     const [selectedProvince, setSelectedProvince] = useState(''); // Mã tỉnh được chọn
     const [selectedDistrict, setSelectedDistrict] = useState(''); // Mã quận được chọn
     const [selectedWard, setSelectedWard] = useState(''); // Mã xã/phường được chọn
-
+    const [address, setAddress] = useState('');
     // Các trường nhập liệu của khách sạn
     const [hotelName, setHotelName] = useState('');
     const [hotelType, setHotelType] = useState(''); // Loại khách sạn (ví dụ: 1 sao, 2 sao)
-    const [highlights, setHighlights] = useState(''); // Điểm nổi bật
     const [descriptions, setDescriptions] = useState(''); // Mô tả chi tiết
     const [facilities, setFacilities] = useState([]); // Danh sách tiện ích
+    const [roomSize, setRoomSize] = useState('');
     const [images, setImages] = useState([]); // Hình ảnh khách sạn
     const [errors, setErrors] = useState({}); // Lưu trữ lỗi khi nhập liệu
 
-    // Danh sách loại phòng
-    const [roomTypes, setRoomTypes] = useState([
-        { id: 1, name: 'Phòng đơn' },
-        { id: 2, name: 'Phòng đôi' },
-        { id: 3, name: 'Phòng gia đình' },
-    ]);
+    const [existingImages, setExistingImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
+    const [IMAGE, setIMAGE] = useState(null);
 
     // Danh sách loại khách sạn
     const hotelTypes = [
@@ -33,6 +30,35 @@ const useCreateHotelForm = () => {
         { id: 4, name: '4 sao' },
         { id: 5, name: '5 sao' },
     ];
+
+    const [services, setServices] = useState([]);
+    const [cancellationPolicy, setCancellationPolicy] = useState('');
+    const [mealPlan, setMealPlan] = useState('');
+    const [allServices] = useState([
+        'Bữa sáng',
+        'Dịch vụ giặt ủi',
+        'Dịch vụ đưa đón sân bay',
+        'Spa & Massage',
+        'Wi-Fi miễn phí',
+    ]);
+
+    const allMealPlans = [
+        'Bữa sáng miễn phí',
+        'Bữa sáng và bữa trưa',
+        'Bữa sáng, bữa trưa và bữa tối',
+        'Không bao gồm bữa ăn'
+    ];
+
+    const [roomName, setRoomName] = useState('');
+    const [bedTypes, setBedTypes] = useState([]);
+    const [bedTypePrices, setBedTypePrices] = useState([]);
+    const [bedTypeQuantities, setBedTypeQuantities] = useState([]); // Dùng để lưu số lượng theo từng loại giường
+    const [price, setPrice] = useState('');
+    const [newBedType, setNewBedType] = useState('');
+    const [newBedTypePrice, setNewBedTypePrice] = useState('');
+    const [newBedTypeQuantity, setNewBedTypeQuantity] = useState(''); // Số lượng phòng cho loại giường mới
+    const [roomTypes, setRoomTypes] = useState([]);
+
 
     // Hàm fetch danh sách tỉnh
     const fetchProvinces = async () => {
@@ -137,18 +163,33 @@ const useCreateHotelForm = () => {
     // Hàm validate form trước khi gửi
     const validateForm = () => {
         const newErrors = {};
+
+        // Kiểm tra các trường liên quan đến khách sạn
         if (!hotelName.trim()) newErrors.hotelName = 'Tên khách sạn không được để trống.';
+        if (!selectedProvince) newErrors.hotelType = 'Vui lòng chọn loại khách sạn.';
         if (!selectedProvince) newErrors.selectedProvince = 'Vui lòng chọn tỉnh.';
         if (!selectedDistrict) newErrors.selectedDistrict = 'Vui lòng chọn quận/huyện.';
         if (!selectedWard) newErrors.selectedWard = 'Vui lòng chọn xã/phường.';
-        if (!highlights.trim()) newErrors.highlights = 'Vui lòng nhập điểm nổi bật.';
         if (!descriptions.trim()) newErrors.descriptions = 'Vui lòng nhập mô tả chi tiết.';
+        if (!address.trim()) newErrors.address = 'Vui lòng địa chỉ';
+
+        // Kiểm tra tiện ích
+        if (services.length === 0) newErrors.services = 'Vui lòng chọn ít nhất một dịch vụ.';
+        if (!cancellationPolicy) newErrors.cancellationPolicy = 'Vui lòng chọn chính sách hủy phòng.';
+        if (!mealPlan) newErrors.mealPlan = 'Vui lòng chọn meal plan.';
+        roomTypes
+        if (roomTypes.length === 0) newErrors.roomTypes = 'Vui nhập thông tin phòng.';
+        // Kiểm tra các hình ảnh
+        if (images.length === 0) newErrors.images = 'Vui lòng tải lên ít nhất một hình ảnh.';
+
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+
     return {
+        //location
         provinces,
         districts,
         wards,
@@ -158,26 +199,56 @@ const useCreateHotelForm = () => {
         setSelectedProvince,
         setSelectedDistrict,
         setSelectedWard,
+        address,
+        setAddress,
+
+        //hotel detail
         hotelName,
         setHotelName,
         hotelType,
         setHotelType,
-        highlights,
-        setHighlights,
         descriptions,
         setDescriptions,
+
+        //service and policy , meal plan
+        services,
+        setServices,
+        cancellationPolicy,
+        setCancellationPolicy,
+        mealPlan,
+        setMealPlan,
+        allServices,
+        allMealPlans,
         facilities,
-        addFacility,
+        setFacilities,
+        roomSize,
+        setRoomSize,
+
+
         images,
         updateImages,
-        errors,
+        errors,setErrors,
         validateForm,
         hotelTypes,
-        roomTypes,
-        setRoomTypes,
         handleProvinceChange,
         handleDistrictChange,
         handleWardChange,
+
+        //roomtype
+        roomName, setRoomName,
+        bedTypes, setBedTypes,
+        bedTypePrices, setBedTypePrices,
+        bedTypeQuantities, setBedTypeQuantities,
+        price, setPrice,
+        newBedType, setNewBedType,
+        newBedTypePrice, setNewBedTypePrice,
+        newBedTypeQuantity, setNewBedTypeQuantity,
+        roomTypes, setRoomTypes,
+
+        //image
+       existingImages, setExistingImages,
+       newImages, setNewImages,
+       IMAGE, setIMAGE,
     };
 };
 

@@ -1,23 +1,16 @@
-import { useState } from 'react';
+import ErrorMessage from "./ErrorMessage.jsx";
 
-const ServiceAndPolicyForm = () => {
-    const [services, setServices] = useState([]);
-    const [cancellationPolicy, setCancellationPolicy] = useState('');
-    const [mealPlan, setMealPlan] = useState('');
-    const [allServices] = useState([
-        'Bữa sáng',
-        'Dịch vụ giặt ủi',
-        'Dịch vụ đưa đón sân bay',
-        'Spa & Massage',
-        'Wi-Fi miễn phí',
-    ]);
 
-    const allMealPlans = [
-        'Bữa sáng miễn phí',
-        'Bữa sáng và bữa trưa',
-        'Bữa sáng, bữa trưa và bữa tối',
-        'Không bao gồm bữa ăn'
-    ];
+const ServiceAndPolicyForm = ({
+    services,
+    setServices,
+    cancellationPolicy,
+    setCancellationPolicy,
+    mealPlan,
+    setMealPlan,
+    allServices,
+    allMealPlans,
+    errors}) => {
 
     const handleServiceChange = (event) => {
         const service = event.target.value;
@@ -49,6 +42,7 @@ const ServiceAndPolicyForm = () => {
                             <label className="ml-2 text-sm text-gray-700">{service}</label>
                         </div>
                     ))}
+                    {errors.services && <ErrorMessage message={errors.services} />}
                 </div>
             </div>
 
@@ -66,6 +60,7 @@ const ServiceAndPolicyForm = () => {
                         <option value="Có phí trước 24h">Có phí trước 24h</option>
                         <option value="Không hoàn lại">Không hoàn lại</option>
                     </select>
+                    <ErrorMessage message={errors.cancellationPolicy} />
                 </div>
             </div>
 
@@ -83,6 +78,7 @@ const ServiceAndPolicyForm = () => {
                             <option key={index} value={plan}>{plan}</option>
                         ))}
                     </select>
+                    <ErrorMessage message={errors.mealPlan} />
                 </div>
             </div>
 

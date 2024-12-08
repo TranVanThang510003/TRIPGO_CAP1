@@ -77,66 +77,6 @@ const CreateTourForm = () => {
 
   const [toursFromExcel, setToursFromExcel] = useState([]);
 
-  const handleExcelFileChange = (tours) => {
-    setToursFromExcel(tours);
-    // Log dữ liệu từ file Excel
-    console.log('Dữ liệu từ file Excel:');
-    tours.forEach((tour) => {
-      console.log('PUCLIC_TOUR_NAME:', tour.PUCLIC_TOUR_NAME);
-      console.log('PUCLIC_TOUR_TYPE:', tour.PUCLIC_TOUR_TYPE);
-      console.log('DESCRIPIONS_HIGHLIGHT:', tour.DESCRIPIONS_HIGHLIGHT);
-      console.log('DESCRIPTIONS:', tour.DESCRIPTIONS);
-      console.log('province:', tour.province);
-      console.log('district:', tour.district);
-      console.log('ward:', tour.ward);
-      console.log('LANGUAGE:', tour.LANGUAGE);
-      console.log('serviceDescription:', tour.serviceDescription);
-      console.log('schedules:', tour.schedules);
-      console.log('numDays:', tour.numDays);
-      console.log('scheduleDetails:', tour.scheduleDetails);
-      console.log('multiDaySchedules:', tour.multiDaySchedules);
-      console.log('---')
-    });
-  };
-
-
-
-  const handleCreateTourFromExcel = () => {
-    toursFromExcel.forEach((tour) => {
-
-      // Đảm bảo rằng scheduleDetails và schedules là mảng hợp lệ
-      const scheduleDetails = Array.isArray(tour.scheduleDetails)
-          ? tour.scheduleDetails
-          : []; // Hoặc xử lý theo cách khác nếu không phải mảng
-      const schedules = Array.isArray(tour.schedules) ? tour.schedules : [];
-
-      setPUCLIC_TOUR_NAME(tour.PUCLIC_TOUR_NAME);
-      console.log('Cập nhật PUCLIC_TOUR_NAME:', tour.PUCLIC_TOUR_NAME);
-      setPUCLIC_TOUR_TYPE(tour.PUCLIC_TOUR_TYPE);
-      setDESCRIPIONS_HIGHLIGHT(tour.DESCRIPIONS_HIGHLIGHT);
-      setDESCRIPTIONS(tour.DESCRIPTIONS);
-      setSelectedProvince(tour.province);
-      setSelectedDistrict(tour.district);
-      setSelectedWard(tour.ward);
-      setLANGUAGE(tour.LANGUAGE);
-      setServiceDescription(tour.serviceDescription);
-      setSchedules(schedules); // Cập nhật schedules
-      setScheduleDetails(scheduleDetails); // Cập nhật scheduleDetails
-      setNumDays(tour.numDays);
-
-      setMultiDaySchedules(tour.multiDaySchedules);
-
-      // Lưu các trường khác vào state
-      // ...
-
-      // Sau khi lưu các trường, bạn có thể gọi hàm validateForm() để kiểm tra và lưu tour
-      if (validateForm()) {
-        // Lưu tour
-        // ...
-      }
-    });
-  };
-
 
 
   const handleSubmit = async (e) => {
@@ -231,14 +171,6 @@ const CreateTourForm = () => {
         >
           {/* Tour Details */}
           <div>
-            {/*<div>*/}
-            {/*  <h3 className="text-lg font-semibold mb-4">Tạo tour từ file Excel</h3>*/}
-            {/*  <ExcelUploader onDataParsed={handleExcelFileChange}/>*/}
-            {/*  <button onClick={handleCreateTourFromExcel}>*/}
-            {/*    Tạo tour từ file Excel*/}
-            {/*  </button>*/}
-            {/*</div>*/}
-
             <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
             <TourDetails
                 tourTypes={tourTypes}
