@@ -39,8 +39,8 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
       navigate("/add-activity");
     } else if (label === "Thêm Restaurant") {
       navigate("/add-restaurant");
-    } else if (label === "Quản lý thông tin hóa đơn") {
-      navigate("/manage-bills");
+    } else if (label === "Quản lý thông tin Khách hàng") {
+      navigate("/order-list");
     } else if (label === "Quản lý tour") {
       navigate("/manage-tours");
     } else if (label === "Thống Kê Doanh Thu") {
@@ -168,8 +168,8 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
               {isServiceMenuOpen && (
                 <div className="pl-8">
                   <MenuItem 
-                    label="Quản lý thông tin hóa đơn" 
-                    onClick={() => handleNavigate("Quản lý thông tin hóa đơn")}
+                    label="Quản lý thông tin Khách hàng"
+                    onClick={() => handleNavigate("Quản lý thông tin Khách hàng")}
                     isSidebarOpen={isSidebarOpen}
                   />
                   <MenuItem 

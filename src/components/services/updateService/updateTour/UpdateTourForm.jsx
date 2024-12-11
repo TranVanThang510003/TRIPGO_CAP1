@@ -380,7 +380,7 @@ const UpdateTourForm = () => {
       await axios.delete(`http://localhost:3000/public-tours/${tourId}`);
       alert('Tour đã được xóa thành công!');
       // Chuyển hướng về trang danh sách tour sau khi xóa
-      window.location.href = '/public-tours';
+      window.location.href = '/tours';
     } catch (error) {
       console.error('Lỗi khi xóa tour:', error.response?.data || error.message);
       alert('Không thể xóa tour. Vui lòng thử lại.');

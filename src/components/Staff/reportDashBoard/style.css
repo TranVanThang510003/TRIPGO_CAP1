@@ -1,0 +1,118 @@
+/* Định dạng chung cho toàn bộ dashboard */
+.report-dashboard {
+    margin: 30px auto;
+    max-width: 1400px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề chính */
+.report-dashboard h1 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    padding: 10px 0;
+    border-bottom: 2px solid #007BFF;
+}
+
+/* Định dạng cho mỗi báo cáo */
+.report-section {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề của mỗi báo cáo */
+.report-section h2 {
+    font-size: 24px;
+    color: #007BFF;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Định dạng nội dung báo cáo */
+.report-section p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+/* Các đoạn văn kiểu thống kê */
+.report-section p strong {
+    font-weight: bold;
+    color: #007BFF;
+}
+
+/* Bảng thống kê - nếu có bảng trong báo cáo */
+.report-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.report-section table th, .report-section table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.report-section table th {
+    background-color: #f1f1f1;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.report-section table td {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Định dạng cho các nút (nếu có các nút tương tác) */
+.report-section .button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.report-section .button:hover {
+    background-color: #0056b3;
+}
+
+/* Điều chỉnh hiển thị trên thiết bị di động */
+@media (max-width: 768px) {
+    .report-dashboard {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .report-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .report-dashboard h1 {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .report-section h2 {
+        font-size: 20px;
+    }
+
+    .report-section p {
+        font-size: 14px;
+    }
+}

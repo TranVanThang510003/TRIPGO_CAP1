@@ -27,6 +27,11 @@ const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const UpdateTourForm = lazy(() => import('./components/services/updateService/updateTour/UpdateTourForm.jsx'));
 import Header from './layout/Header.jsx';
 import  CreateHoTelForm from './components/services/createServices/createHotel/CreateHoTelForm';
+import ReportDashboard from "./components/Staff/reportDashBoard/ReportDashBoard.jsx";
+import TourOrderList from "./components/Staff/TourOrderList.jsx";
+import RevenueDashboard from "./components/Staff/RevenueDashBoard.jsx";
+
+
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
@@ -62,6 +67,11 @@ const Main = () => {
           <Route path="/update-tour/:tourId" element={<UpdateTourForm />} />
           CreateHoTelForm
           <Route path="/create-hotel" element={<  CreateHoTelForm />} />
+          <Route path="/report" element={<  ReportDashboard />} />
+          <Route path="/order-list" element={<  TourOrderList />} />
+          <Route path="/revenue" element={<  RevenueDashboard />} />
+
+
           <Route path="*" element={<NotFound />} />
 
         </Routes>
