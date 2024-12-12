@@ -44,7 +44,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
     } else if (label === "Quản lý tour") {
       navigate("/manage-tours");
     } else if (label === "Thống Kê Doanh Thu") {
-      navigate("/revenue-statistics");
+      navigate("/revenue");
     }
   };
 

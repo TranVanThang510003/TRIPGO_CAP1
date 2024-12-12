@@ -1,5 +1,6 @@
 import React from 'react';
 import * as XLSX from 'xlsx';
+import {Icon} from "@iconify/react";
 
 const ExportButton = ({ data, fileName }) => {
     const exportToExcel = () => {
@@ -22,9 +23,10 @@ const ExportButton = ({ data, fileName }) => {
     return (
         <button
             onClick={exportToExcel}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+            className="bg-[#33c481] text-white px-4 py-2 rounded-lg hover:bg-[#21a366] transition flex items-center gap-2"
         >
             Xuất dữ liệu
+            <Icon icon="vscode-icons:file-type-excel2" width="24" height="24"/>
         </button>
     );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion'; // Import framer-motion
 import Header from '../../layout/Header';
@@ -79,18 +79,17 @@ const TourOrderList = () => {
     );
 
     return (
-        <div className="bg-gray-100 w-full min-h-screen overflow-auto">
-            <Header />
-
-            <div className="w-full flex flex-col md:flex-row gap-6 h-auto bg-gray-100 mx-auto pt-16 md:pt-28 px-[10%]">
-                <div className="w-full md:w-1/4">
-                    <SideBar />
+        <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
+            <Header/>
+            <div className='w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto px-[10%] '>
+                <div className='mr-2 fixed'>
+                    <SideBar/>
                 </div>
 
-                <div className="flex-grow bg-white w-full p-8 rounded-xl shadow-lg mt-6 md:mt-0">
+                <div className="flex-grow bg-white w-full p-8 rounded-xl shadow-lg mt-6 md:mt-0 ml-[300px]">
                     <h1 className="text-[32px] text-gray-800 font-bold mb-8">Danh sách khách hàng theo từng tour</h1>
 
-                    <div className="mb-8">
+                    <div className="mb-2">
                         <input
                             type="text"
                             placeholder="Tìm kiếm tour..."
@@ -113,12 +112,12 @@ const TourOrderList = () => {
                             </div>
 
                             <motion.div
-                                initial={{ height: 0, opacity: 0 }}
+                                initial={{height: 0, opacity: 0}}
                                 animate={{
                                     height: activeTour === tourName ? "auto" : 0,
                                     opacity: activeTour === tourName ? 1 : 0,
                                 }}
-                                transition={{ duration: 0.3 }}
+                                transition={{duration: 0.3}}
                                 className="overflow-hidden"
                             >
                                 <div className="mt-4">

@@ -22,13 +22,13 @@ const  OrderInformation= () => {
 
 
     return (
-        <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto'>
+        <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
             <Header/>
-        <div className='w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%] '>
-            <div className='mr-2'>
+        <div className='w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto px-[10%] '>
+            <div className='mr-2 fixed'>
             <SideBar/>
             </div>
-            <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0">
+            <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0 ml-[300px]">
                 <h1 className="text-[30px] text-[#181E4B] font-bold mb-4">
                     Thông tin đơn hàng
                 </h1>

@@ -81,7 +81,7 @@ const UserProfile = () => {
   return (
     <div className="bg-[#f8f8f8] w-full min-h-screen overflow-auto">
       <Header />
-      <div className="w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%]">
+      <div className="w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto px-[10%]">
         {/* Sidebar */}
         <div className="mr-2">
           <SideBar />

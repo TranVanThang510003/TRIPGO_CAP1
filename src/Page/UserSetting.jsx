@@ -45,21 +45,22 @@ const Settings = () => {
     };
 
     return (
-        <div className='bg-[#f8f8f8] w-full min-h-screen overflow-auto'>
-            <Header />
-
-            <div className="w-full flex flex-col md:flex-row gap-4 h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%]">
-                <div className="w-full md:w-1/4">
-                    <SideBar
-                        selectedSection={selectedSection}
-                        onSectionChange={setSelectedSection}
-                    />
+        <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
+            <Header/>
+            <div className='w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto px-[10%] '>
+                <div className='mr-2 fixed'>
+                     <SideBar
+                    selectedSection={selectedSection}
+                    onSectionChange={setSelectedSection}
+                />
                 </div>
-                {/* Main content */}
-                <div className="flex-grow bg-white p-4 rounded-xl shadow-md mt-6 md:mt-0 relative">
-                    <h1 className="text-[30px] text-[#181E4B] font-bold mb-4">Cài đặt</h1>
 
-                    <div className="w-[824px] h-auto bg-white rounded-[20px] mx-auto relative">
+
+            {/* Main content */}
+            <div className="flex-grow bg-white p-4 rounded-xl shadow-md mt-6 md:mt-0 relative ml-[300px]">
+                <h1 className="text-[30px] text-[#181E4B] font-bold mb-4">Cài đặt</h1>
+
+                <div className="w-[824px] h-auto bg-white rounded-[20px] mx-auto relative">
                         <div className="mb-6">
                             <h2 className="text-xl font-semibold mb-2">Đổi mật khẩu</h2>
                             <p className="text-gray-600 mb-2">Hãy tạo một mật khẩu mạnh để tài khoản của bạn được an toàn</p>

@@ -29,7 +29,7 @@ import Header from './layout/Header.jsx';
 import  CreateHoTelForm from './components/services/createServices/createHotel/CreateHoTelForm';
 import ReportDashboard from "./components/Staff/reportDashBoard/ReportDashBoard.jsx";
 import TourOrderList from "./components/Staff/TourOrderList.jsx";
-import RevenueDashboard from "./components/Staff/RevenueDashBoard.jsx";
+import RevenueDashboard from "./components/Staff/dashBoard/RevenueDashBoard.jsx";
 
 
 const Loading = () => (
