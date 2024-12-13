@@ -215,7 +215,7 @@ const Notification = () => {
                                             <div className="flex items-center justify-start mt-2">
                                                 <button
                                                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                                    onClick={() => navigate(`/tour-detail/${order.tourId}`)}
+                                                    onClick={() => navigate(`/review/${order.bookingId}`)}
                                                 >
                                                     Đánh giá
                                                 </button>

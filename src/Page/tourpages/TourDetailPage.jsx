@@ -1,9 +1,8 @@
 
 
 // export default TourDetailPage;
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
-import Header from '../../layout/Header';
 import Footer from '../../layout/Footer';
 import ImageGallery from '../../components/common/ImageGallery';
 import TourTitleAndRating from '../../components/common/TitleAndRating';
@@ -14,9 +13,32 @@ import LikeButton from '../../components/common/LikeButton';
 import ShareButton from '../../components/common/ShareButton';
 import BookingForm from '../../components/Tour/TourDetail/BookingForm';
 import ReturnButton from '../../components/common/returnButton';
+import ReviewCard from '../../components/common/ReviewCard';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import UpdateTourForm from '../../components/services/updateService/updateTour/UpdateTourForm';
 import { fetchTourDetails } from '../../components/services/api';
+
+const reviews = [
+  {
+    avatar: "/img/avatar1.jpg",
+    username: "Nguyen **",
+    date: "27/2",
+    rating: 5,
+    title: "Rất hài lòng",
+    content:
+        "Lớp học rất thú vị, ấm cúng; nhân viên thân thiện, nhiệt tình và có thể giao tiếp đồng thời tiếng Anh và tiếng Việt...",
+    isLong: true,
+    images: [
+      "/img/review1.jpg",
+      "/img/review2.jpg",
+      "/img/review3.jpg",
+      "/img/review4.jpg",
+      "/img/review5.jpg",
+    ],
+  },
+  // Thêm các đánh giá khác tại đây
+];
+
 
 const TourDetailPage = () => {
   const [tour, setTour] = useState(null);
@@ -93,40 +115,47 @@ const TourDetailPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="md:col-span-2">
                 <TourTitleAndRating
-                  title={tour.name}
-                  rating={tour.averageRating}
-                  reviewsCount={tour.reviewCount}
-                  location={tour.location}
-                  serviceType={tour.serviceType}
-                  language={tour.language}
-                  tourType={tour.tourType}
+                    title={tour.name}
+                    rating={tour.averageRating}
+                    reviewsCount={tour.reviewCount}
+                    location={tour.location}
+                    serviceType={tour.serviceType}
+                    language={tour.language}
+                    tourType={tour.tourType}
                 />
-                <HighlightSection highlights={tour.highlights} />
-                <DetailSection details={tour.services} />
+                <HighlightSection highlights={tour.highlights}/>
+                <DetailSection details={tour.services}/>
                 <BookingForm
-                  priceAdult={tour.priceAdult}
-                  priceChild={tour.priceChild}
-                  tour_id={tour.id}
-                  schedules={tour.schedules}
+                    priceAdult={tour.priceAdult}
+                    priceChild={tour.priceChild}
+                    tour_id={tour.id}
+                    schedules={tour.schedules}
 
                 />
               </div>
 
               <div className="md:col-span-1">
                 <BookingCard
-                  price={priceAdult}
-                  onBookingClick={() => console.log('Đã nhấn đặt tour!')}
+                    price={priceAdult}
+                    onBookingClick={() => console.log('Đã nhấn đặt tour!')}
                 />
                 <div className="flex justify-between mt-2">
-                  <LikeButton />
-                  <ShareButton />
+                  <LikeButton/>
+                  <ShareButton/>
                 </div>
+              </div>
+              <div className="p-4 col-span-2">
+                <h1 className="text-3xl font-bold mb-2">Đánh giá</h1>
+
+                {reviews.map((review, index) => (
+                    <ReviewCard key={index} review={review}/>
+                ))}
               </div>
             </div>
 
             {canEdit && (
-              <button
-                className="text-6xl fixed bottom-20 right-20 text-blue-500 bg-white rounded-full shadow-lg p-4 hover:bg-blue-700 hover:text-white transition"
+                <button
+                    className="text-6xl fixed bottom-20 right-20 text-blue-500 bg-white rounded-full shadow-lg p-4 hover:bg-blue-700 hover:text-white transition"
                 onClick={() => setIsEditing(true)} // Kích hoạt trạng thái chỉnh sửa
               >
                 <Icon icon="game-icons:feather" />
@@ -135,8 +164,8 @@ const TourDetailPage = () => {
           </>
         )}
 
-        <Footer />
       </div>
+        <Footer />
     </div>
   );
 };

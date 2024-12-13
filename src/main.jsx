@@ -26,12 +26,11 @@ const Notification = lazy(() => import('../src/components/UserProfile/notificati
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const UpdateTourForm = lazy(() => import('./components/services/updateService/updateTour/UpdateTourForm.jsx'));
 import Header from './layout/Header.jsx';
-import  CreateHoTelForm from './components/services/createServices/createHotel/CreateHoTelForm';
-import ReportDashboard from "./components/Staff/reportDashBoard/ReportDashBoard.jsx";
-import TourOrderList from "./components/Staff/TourOrderList.jsx";
-import RevenueDashboard from "./components/Staff/dashBoard/RevenueDashBoard.jsx";
-
-
+const  CreateHoTelForm = lazy(() => import( './components/services/createServices/createHotel/CreateHoTelForm'));
+const ReportDashboard = lazy(() => import("./components/Staff/reportDashBoard/ReportDashBoard.jsx"));
+const TourOrderList = lazy(() => import("./components/Staff/TourOrderList.jsx"));
+const RevenueDashboard= lazy(() => import( "./components/Staff/dashBoard/RevenueDashBoard.jsx"));
+const  Review = lazy(() => import('./components/UserProfile/notification/Review.jsx'))
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
@@ -70,6 +69,7 @@ const Main = () => {
           <Route path="/report" element={<  ReportDashboard />} />
           <Route path="/order-list" element={<  TourOrderList />} />
           <Route path="/revenue" element={<  RevenueDashboard />} />
+          <Route path="/review/:bookingId" element={<  Review />} />
 
 
           <Route path="*" element={<NotFound />} />
