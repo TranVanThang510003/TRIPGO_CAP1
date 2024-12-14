@@ -3,72 +3,83 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Star from '../../common/Star.jsx';
 import { fetchOrderInfomation } from "../../services/api.js";
 import axios from 'axios';
+import ImageUploader from "../../common/ImageUploader.jsx";
 
 const Review = () => {
-    const [rating, setRating] = useState(0); // State lưu đánh giá sao
-    const [hover, setHover] = useState(null); // State hover sao
-    const [orderDetails, setOrderDetails] = useState(null); // State lưu thông tin chi tiết gói dịch vụ
-    const [isLoading, setIsLoading] = useState(true); // State xử lý trạng thái đang tải
-    const [feedback, setFeedback] = useState(''); // State lưu nội dung nhận xét
-    const { bookingId } = useParams(); // Lấy bookingId từ URL
-    const navigate = useNavigate(); // Điều hướng trở lại
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(null);
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [feedback, setFeedback] = useState('');
+    const [images, setImages] = useState([]);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State để hiển thị thông báo thành công
+    const { bookingId } = useParams();
+    const navigate = useNavigate();
 
-    // Gọi API để lấy thông tin gói dịch vụ
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetchOrderInfomation(); // Gọi API để lấy danh sách đơn hàng
-                console.log("Response from API:", response); // Kiểm tra dữ liệu API trả về
-                console.log("bookingId from URL:", bookingId, typeof bookingId); // Kiểm tra bookingId từ URL
-
-                const orders = response.orders; // Lấy danh sách orders từ API
-                const selectedOrder = orders.find(order => order.bookingId === Number(bookingId)); // Tìm đơn hàng theo bookingId
-                console.log("Selected Order:", selectedOrder); // Kiểm tra order được tìm thấy
-
-                setOrderDetails(selectedOrder || null); // Cập nhật orderDetails
+                const response = await fetchOrderInfomation();
+                const orders = response.orders;
+                const selectedOrder = orders.find(order => order.bookingId === Number(bookingId));
+                setOrderDetails(selectedOrder || null);
             } catch (error) {
                 console.error("Error fetching order details:", error);
             } finally {
-                setIsLoading(false); // Kết thúc trạng thái loading
+                setIsLoading(false);
             }
         };
-
         fetchData();
     }, [bookingId]);
 
-    // Xử lý gửi đánh giá
     const handleSubmit = async () => {
         if (!rating || !feedback.trim()) {
             alert("Vui lòng cung cấp đầy đủ đánh giá và nhận xét.");
             return;
         }
+
         const userId = JSON.parse(localStorage.getItem("user") || "{}").id || null;
 
         const reviewData = {
-            tourId: orderDetails.tourId, // Lấy tourId từ orderDetails
-            userId: userId, // Thay bằng userId thực tế (ví dụ: lấy từ localStorage hoặc context)
+            tourId: orderDetails.tourId,
+            bookingId: bookingId,
+            userId: userId,
             rating: rating,
             comments: feedback,
-            reviewDate: new Date().toISOString(), // Ngày đánh giá
+            reviewDate: new Date().toISOString(),
         };
 
+        const formData = new FormData();
+        formData.append("reviewData", JSON.stringify(reviewData));
+        images.forEach((image) => {
+            formData.append("newImages", image);
+        });
+
         try {
-            console.log("Submitting review data:", reviewData);
+            const response = await axios.post(
+                "http://localhost:3000/users/review",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
 
-            // Gửi dữ liệu tới API
-            const response = await axios.post('http://localhost:3000/users/review', reviewData);
-            console.log("Review submitted successfully:", response.data);
+            // Hiển thị thông báo thành công
+            setShowSuccessMessage(true);
 
-            // Điều hướng hoặc thông báo thành công
-            alert("Đánh giá đã được gửi thành công!");
-            navigate(-1); // Quay lại trang trước
+            // Điều hướng trở lại sau 3 giây
+            setTimeout(() => {
+                navigate(-1);
+            }, 3000);
+
         } catch (error) {
             console.error("Error submitting review:", error);
             alert("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.");
         }
     };
 
-    // Nếu đang tải
     if (isLoading) {
         return (
             <div className="p-6 flex justify-center items-center">
@@ -77,7 +88,6 @@ const Review = () => {
         );
     }
 
-    // Nếu không tìm thấy thông tin đơn hàng
     if (!orderDetails) {
         return (
             <div className="p-6 flex justify-center items-center">
@@ -97,9 +107,13 @@ const Review = () => {
     return (
         <div className="p-6 flex justify-center items-center">
             <div className="w-full max-w-4xl px-6">
-                <h2 className="text-2xl font-bold text-customBlue mb-4">Đánh giá sản phẩm</h2>
+                {showSuccessMessage && (
+                    <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-lg">
+                        <p>Đánh giá của bạn đã được gửi thành công! Bạn sẽ được chuyển về trang trước trong 3 giây.</p>
+                    </div>
+                )}
 
-                {/* Phần thông tin gói dịch vụ */}
+                <h2 className="text-2xl font-bold text-customBlue mb-4">Đánh giá sản phẩm</h2>
                 <div className="border p-4 rounded-lg shadow-sm">
                     <div className="flex space-x-4">
                         <img
@@ -123,12 +137,8 @@ const Review = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Phần chọn sao để đánh giá */}
                 <div className="h-10 justify-start items-center gap-5 inline-flex mt-4">
-                    <div className="text-[#1A1A1A] text-xl font-['Baloo 2']">
-                        Chất lượng dịch vụ
-                    </div>
+                    <div className="text-[#1A1A1A] text-xl font-['Baloo 2']">Chất lượng dịch vụ</div>
                     <div className="justify-center items-center gap-1 flex">
                         {[...Array(5)].map((_, index) => (
                             <div key={index}>
@@ -142,8 +152,7 @@ const Review = () => {
                         ))}
                     </div>
                 </div>
-
-                {/* Phần nhập phản hồi */}
+                <ImageUploader images={images} setImages={setImages} />
                 <div className="mt-4">
                     <label htmlFor="feedback" className="block text-lg font-['Baloo 2'] mb-1">
                         Nhận xét của bạn:
@@ -157,17 +166,15 @@ const Review = () => {
                         onChange={(e) => setFeedback(e.target.value)}
                     />
                 </div>
-
-                {/* Nút gửi đánh giá và nút Trở lại */}
                 <div className="mt-4 flex justify-end gap-4">
                     <button
-                        onClick={() => navigate(-1)} // Quay lại trang trước
+                        onClick={() => navigate(-1)}
                         className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
                     >
                         TRỞ LẠI
                     </button>
                     <button
-                        onClick={handleSubmit} // Gọi hàm gửi đánh giá
+                        onClick={handleSubmit}
                         className="px-6 py-2 bg-[#03387E] text-white rounded-lg shadow-md hover:bg-[#033E8C]"
                     >
                         Gửi đánh giá

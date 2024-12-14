@@ -38,6 +38,11 @@ export const fetchTourDetails = async (tourId) => {
   const response = await api.get(`/public-tours/${tourId}`);
   return response.data;
 };
+export const fetchTourReviews  = async (tourId) => {
+  const response = await api.get(`/public-tours/reviews/${tourId}`);
+  return response.data;
+};
+
 export const fetchToursByCreator = async (
   creatorId,
   page = 1,
