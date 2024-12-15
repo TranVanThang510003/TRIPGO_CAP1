@@ -45,9 +45,10 @@ const Transaction = () => {
           <tr>
             <th className="py-3 px-6 text-left w-16">STT</th>
             <th className="py-3 px-6 text-left w-32">Username</th>
-            <th className="py-3 px-6 text-left w-48">Tên loại</th>
+            <th className="py-3 px-6 text-left w-48">Tên Tour</th>
             <th className="py-3 px-6 text-left w-32">Giá</th>
             <th className="py-3 px-6 text-left w-48">Ngày đặt</th>
+
             <th className="py-3 px-6 text-center w-40">Action</th>
           </tr>
         </thead>

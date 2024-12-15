@@ -66,12 +66,12 @@ export const fetchFavorites = async (
 
 // hàm lấy thông tin tài khoản của admin
 export const fetchUserAccounts = async () => {
-  const response = await api.get(`/accounts`);
+  const response = await api.get(`/admin/accounts`);
   return response.data;
 };
 //hàm update role của addmin
 export const updateUserRole = async (userId, role) => {
-  return await api.put(`/accounts/${userId}/role`, { role });
+  return await api.put(`/admin/accounts/${userId}/role`, { role });
 };
 // hàm lấy thông tin tài khoản của admin
 export const fetchOrderInfomation = async () => {

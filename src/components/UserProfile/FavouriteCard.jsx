@@ -2,10 +2,12 @@ import React from 'react';
 import { Icon } from "@iconify/react";
 import starIcon from "@iconify/icons-mdi/star"; // Star icon
 import IconHeart from "../icon/IconHeart"; // Assuming you have your custom heart icon
-
+import {useNavigate} from "react-router-dom";
 const FavouriteCard = ({ tour }) => {
+    const navigate = useNavigate();
     return (
-        <div className="w-[268px] min-h-[360px] bg-white rounded-lg shadow-md overflow-hidden   mb-2 relative">
+        <div className="w-[268px] min-h-[360px] bg-white rounded-lg shadow-md overflow-hidden   mb-2 relative " onClick={() => navigate(`/tours/${tour.id}`)}
+        >
             {/* Image Section */}
             <img
                 className="w-full h-[151px] rounded-tl-[10px] rounded-tr-[10px]"

@@ -42,9 +42,7 @@ const TableRow = ({ index, account, onRoleChange }) => {
         </select>
       </td>
       <td className="py-3 px-4 text-center">
-        <button className="bg-yellow-400 text-white px-4 py-2 text-xl rounded-lg mr-2 hover:bg-yellow-500">
-          <Icon icon="fluent:edit-48-filled" />
-        </button>
+
         <button className="bg-red-500 text-xl text-white px-4 py-2 rounded-lg hover:bg-red-600">
           <Icon icon="mingcute:delete-fill" />
         </button>

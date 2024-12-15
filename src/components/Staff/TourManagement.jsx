@@ -110,7 +110,7 @@ const TourManagement = () => {
   return (
       <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
         <Header/>
-        <div className='w-full flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-auto px-[10%] '>
+        <div className=' flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-6 mt-4 '>
           <div className='mr-2 fixed'>
           <SideBar selectedSection={selectedSection} onSectionChange={setSelectedSection}/>
           </div>
@@ -147,7 +147,7 @@ const TourManagement = () => {
             </div>
 
             {/* Hiển thị danh sách tour */}
-            <div className="flex flex-wrap justify-between w-full">
+            <div className="flex flex-wrap gap-8 w-full ml-6">
               {paginatedTours.map((tour) => (
                   <TourCard key={tour.id} tour={tour} />
               ))}

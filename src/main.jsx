@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route , useLocation} from 'react-router-dom';
 import './index.css';
 
 // Lazy load your components
@@ -18,7 +18,7 @@ const UserProfile = lazy(() => import('./Page/UserProfile'));
 const UserFavourite = lazy(() => import('./Page/UserFavourite'));
 const UserSetting = lazy(() => import('./Page/UserSetting'));
 const OrderInfomation = lazy(() => import('./components/UserProfile/orderInfo/OrderInformation.jsx'));
-const AdminPage = lazy(() => import('./Page/AdminPage/AdminPage'));
+const AccountManagement = lazy(() => import('./components/Admin/accountManagement/AccountManagement.jsx'));
 const  TourManagement= lazy(() => import('../src/components/Staff/TourManagement'));
 const  CreateTour= lazy(() => import('./components/services/createServices/createTour/createTourForm'));
 const  HeaderDashboardForStaff = lazy(() => import('./components/Admin/DashboardForAmin/MainDashBoard.jsx'));
@@ -26,28 +26,56 @@ const Notification = lazy(() => import('../src/components/UserProfile/notificati
 const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const UpdateTourForm = lazy(() => import('./components/services/updateService/updateTour/UpdateTourForm.jsx'));
 import Header from './layout/Header.jsx';
+import MainTransactionDetails from "./components/Admin/TransactionDetailForAdmin/MainTransactionDetails.jsx";
 const  CreateHoTelForm = lazy(() => import( './components/services/createServices/createHotel/CreateHoTelForm'));
 const ReportDashboard = lazy(() => import("./components/Staff/reportDashBoard/ReportDashBoard.jsx"));
 const TourOrderList = lazy(() => import("./components/Staff/TourOrderList.jsx"));
 const RevenueDashboard= lazy(() => import( "./components/Staff/dashBoard/RevenueDashBoard.jsx"));
 const  Review = lazy(() => import('./components/UserProfile/notification/Review.jsx'))
+const LoginForAdmin = lazy(() => import('./components/auth/LoginForAdmin.jsx'))
+// const MainTransactionDetails = lazy(() => import('./components/Admin/TransactionDetailForAdmin/MainTransactionDetails.jsx'))
+
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
   </div>
 );
 
+
+// Function to conditionally render Header
+const ConditionalHeader = () => {
+  const location = useLocation();
+
+  // Hide Header on admin routes
+  const hideHeaderRoutes = ["/admin", "/admin/dashboard","/admin/accounts"];
+  const isHidden = hideHeaderRoutes.includes(location.pathname);
+
+  return (
+      <>
+        {!isHidden && (
+            <>
+              <Header />
+              <div className="mt-[80px]"></div>
+            </>
+        )}
+      </>
+  );
+};
+
 const Main = () => {
   return (
     <Router>
-      <Header/>
-      <div className='mt-[80px]'></div>
+      <ConditionalHeader />
+
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/manage-tours" element={<TourManagement />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<LoginForAdmin />} />
           <Route path="/admin/dashboard" element={< HeaderDashboardForStaff />} />
+          <Route path="/admin/accounts" element={<AccountManagement />} />
+          {/*<Route path="/admin/transactions" element={< MainTransactionDetails />} />*/}
+
           <Route path="/hotels" element={<HotelPage />} />
           <Route path="/hoteldetails/:hotelId" element={<HotelDetails />} />
           <Route path="/tours" element={<TourPage />} />
@@ -64,7 +92,6 @@ const Main = () => {
           <Route path="/waitingscreen" element={<WaitingScreen />} />
           <Route path="/create-tour" element={< CreateTour />} />
           <Route path="/update-tour/:tourId" element={<UpdateTourForm />} />
-          CreateHoTelForm
           <Route path="/create-hotel" element={<  CreateHoTelForm />} />
           <Route path="/report" element={<  ReportDashboard />} />
           <Route path="/order-list" element={<  TourOrderList />} />

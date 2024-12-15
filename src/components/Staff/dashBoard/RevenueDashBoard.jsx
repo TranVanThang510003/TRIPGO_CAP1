@@ -168,7 +168,7 @@ const RevenueDashboard = () => {
     return (
         <div className="bg-gray-100 min-h-screen overflow-auto relative">
             <Header />
-            <div className=" flex  w-4/5 flex-col md:flex-row gap-6 h-auto bg-[#F8F8F8] mx-auto ">
+            <div className=" flex   flex-col md:flex-row gap-6 h-auto bg-[#F8F8F8] mx-6 mt-4 ">
                 <div className="w-full md:w-1/4 fixed">
                     <SideBar />
                 </div>

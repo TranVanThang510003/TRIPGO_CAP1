@@ -61,7 +61,7 @@ const FavouriteList = () => {
     );
 
     return (
-        <div className="flex flex-wrap gap-6 w-full">
+        <div className="flex flex-wrap gap-6 ml-6 w-full">
             {/* Hiển thị danh sách tour */}
             {paginatedTours.length > 0 ? (
                 paginatedTours.map((tour) => <FavouriteCard key={tour.id} tour={tour} />)

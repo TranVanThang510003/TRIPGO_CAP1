@@ -1,5 +1,5 @@
-import SearchBar from "../../components/Admin/SearchBar";
-import AccountTable from "../../components/Admin/AccountTable";
+import SearchBar from "../../components/Admin/accountManagement/SearchBar.jsx";
+import AccountTable from "../../components/Admin/accountManagement/AccountTable.jsx";
 import Sidebar from "../../components/Admin/Sidebar";
 
 const AdminPage = () => {

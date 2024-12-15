@@ -13,7 +13,7 @@ const HeaderDashboardForStaff = () => {
   };
 
   return (
-    <div className=" flex bg-slate-100 ">
+    <div className=" flex bg-slate-100 h-screen">
       {/* Sidebar */}
       <Sidebar  />
       <div className="flex-1 w-5/6">
