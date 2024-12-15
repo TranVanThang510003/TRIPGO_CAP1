@@ -8,9 +8,9 @@ import TourSelection from "./TourSelection.jsx";
 import WeekSelection from "./WeekSelection.jsx";
 import YearSelection from "./YearSelection.jsx";
 import { Icon } from '@iconify/react';
-
+import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(weekOfYear);
-
+dayjs.extend(isBetween);
 const ExportButton = ({ allTours, fileName }) => {
     const [selectedTour, setSelectedTour] = useState("all");
     const [selectedYear, setSelectedYear] = useState("");
@@ -67,16 +67,23 @@ const ExportButton = ({ allTours, fileName }) => {
         });
         return Array.from(weeks).sort();
     };
-
     const handleExport = () => {
         let filteredTours = allTours;
 
-        // Filter by selected tour
+        console.log("Selected Filters:", {
+            selectedTour,
+            selectedYear,
+            selectedQuarter,
+            selectedMonth,
+            selectedWeek,
+        });
+
+        // 1. Lọc theo tên tour
         if (selectedTour && selectedTour !== "all") {
             filteredTours = filteredTours.filter((tour) => tour.tourName === selectedTour);
         }
 
-        // Filter by selected year
+        // 2. Lọc theo năm
         if (selectedYear) {
             filteredTours = filteredTours.filter((tour) =>
                 tour.departures.some((departure) =>
@@ -85,73 +92,109 @@ const ExportButton = ({ allTours, fileName }) => {
             );
         }
 
-        // Filter by selected quarter
+        // 3. Lọc theo quý
         if (selectedQuarter) {
             const quarterNumber = parseInt(selectedQuarter.replace("Q", ""), 10);
             filteredTours = filteredTours.filter((tour) =>
                 tour.departures.some((departure) => {
                     const month = dayjs(departure.date).month() + 1;
-                    const quarterOfDeparture = Math.ceil(month / 3);
-                    return quarterOfDeparture === quarterNumber;
+                    return Math.ceil(month / 3) === quarterNumber;
                 })
             );
         }
 
-        // Filter by selected month
+        // 4. Lọc theo tháng
         if (selectedMonth) {
-            filteredTours = filteredTours.filter((tour) =>
-                tour.departures.some((departure) =>
-                    dayjs(departure.date).month() + 1 === parseInt(selectedMonth, 10)
-                )
-            );
+            filteredTours = filteredTours.map((tour) => ({
+                ...tour,
+                departures: tour.departures.filter(
+                    (departure) =>
+                        dayjs(departure.date).month() + 1 === parseInt(selectedMonth, 10) &&
+                        dayjs(departure.date).year() === parseInt(selectedYear, 10)
+                ),
+            })).filter((tour) => tour.departures.length > 0);
         }
 
-        // Filter by selected week
+        // 5. Lọc theo tuần trong tháng được chọn
         if (selectedWeek) {
             const weekNumber = parseInt(selectedWeek.replace("Tuần ", ""), 10);
-            filteredTours = filteredTours.filter((tour) =>
-                tour.departures.some((departure) => dayjs(departure.date).week() === weekNumber)
-            );
+            filteredTours = filteredTours.map((tour) => ({
+                ...tour,
+                departures: tour.departures.filter((departure) => {
+                    const date = dayjs(departure.date);
+                    const isInWeek = date.week() === weekNumber;
+                    const isInMonth = date.month() + 1 === parseInt(selectedMonth, 10);
+                    const isInYear = date.year() === parseInt(selectedYear, 10);
+                    return isInWeek && isInMonth && isInYear;
+                }),
+            })).filter((tour) => tour.departures.length > 0);
         }
 
-        // Create a meaningful file name
+        console.log("Dữ liệu sau lọc:", filteredTours);
+
+        // 6. Gom nhóm dữ liệu
+        const groupedData = {};
+        filteredTours.forEach((tour) => {
+            tour.departures.forEach((departure) => {
+                const date = dayjs(departure.date);
+                const year = date.year();
+                const month = date.month() + 1;
+                const quarter = `Q${Math.ceil(month / 3)}`;
+                const week = date.week();
+
+                const key = `${year}-${quarter}-${month}-${week}-${tour.tourName}`;
+                if (!groupedData[key]) {
+                    groupedData[key] = {
+                        "Năm": year,
+                        "Quý": quarter,
+                        "Tháng": month,
+                        "Tuần": week,
+                        "Tên Tour": tour.tourName,
+                        "Ngày Khởi Hành": [],
+                        "Doanh Thu Tổng": 0,
+                    };
+                }
+
+                groupedData[key]["Ngày Khởi Hành"].push(date.format("YYYY-MM-DD"));
+                groupedData[key]["Doanh Thu Tổng"] += departure.revenue || 0;
+            });
+        });
+
+        // 7. Chuyển dữ liệu thành mảng và sắp xếp
+        const sheetData = Object.values(groupedData).map((item) => ({
+            "Năm": item["Năm"],
+            "Quý": item["Quý"],
+            "Tháng": item["Tháng"],
+            "Tuần": item["Tuần"],
+            "Tên Tour": item["Tên Tour"],
+            "Ngày Khởi Hành": item["Ngày Khởi Hành"].join(", "),
+            "Doanh Thu Tổng": item["Doanh Thu Tổng"].toLocaleString("vi-VN"),
+        }));
+
+        console.log("Dữ liệu cuối cùng:", sheetData);
+
+        // 8. Xuất file Excel
+        const workbook = XLSX.utils.book_new();
+        const sheet = XLSX.utils.json_to_sheet(sheetData);
+        sheet['!cols'] = [
+            { wch: 10 },
+            { wch: 8 },
+            { wch: 8 },
+            { wch: 8 },
+            { wch: 30 },
+            { wch: 40 },
+            { wch: 20 },
+        ];
+
         let dynamicFileName = "revenue_dashboard";
-
-        if (selectedTour && selectedTour !== "all") {
-            dynamicFileName += `_${selectedTour.replace(/\s+/g, "_")}`;
-        }
-
-        if (selectedYear) {
-            dynamicFileName += `_Year_${selectedYear}`;
-        }
-
-        if (selectedQuarter) {
-            dynamicFileName += `_Quarter_${selectedQuarter}`;
-        }
-
-        if (selectedMonth) {
-            dynamicFileName += `_Month_${selectedMonth}`;
-        }
-
-        if (selectedWeek) {
-            dynamicFileName += `_Week_${selectedWeek}`;
-        }
-
+        if (selectedTour && selectedTour !== "all") dynamicFileName += `_${selectedTour.replace(/\s+/g, "_")}`;
+        if (selectedYear) dynamicFileName += `_Year_${selectedYear}`;
+        if (selectedQuarter) dynamicFileName += `_Quarter_${selectedQuarter}`;
+        if (selectedMonth) dynamicFileName += `_Month_${selectedMonth}`;
+        if (selectedWeek) dynamicFileName += `_Week_${selectedWeek}`;
         dynamicFileName += ".xlsx";
 
-        // Create workbook for Excel file
-        const workbook = XLSX.utils.book_new();
-
-        // Prepare the data for export
-        const sheetData = filteredTours.map((tour) => ({
-            "Tên Tour": tour.tourName,
-            "Ngày Khởi Hành": tour.departures.map((d) => d.date).join(", "),
-            "Doanh Thu Tổng": tour.totalRevenue,
-        }));
-        const sheet = XLSX.utils.json_to_sheet(sheetData);
-        XLSX.utils.book_append_sheet(workbook, sheet, "Doanh thu theo ngày");
-
-        // Export the file
+        XLSX.utils.book_append_sheet(workbook, sheet, "Doanh Thu Tổng Hợp");
         XLSX.writeFile(workbook, dynamicFileName);
     };
 
