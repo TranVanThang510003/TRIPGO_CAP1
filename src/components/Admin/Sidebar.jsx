@@ -13,7 +13,7 @@ const Sidebar = () => {
         } else if (label === "Quản lý giao dịch") {
             navigate("/admin/transaction");
         } else if (label === "Quản lý tài khoản") {
-            navigate("/admin");
+            navigate("/admin/accounts");
         }
     };
 

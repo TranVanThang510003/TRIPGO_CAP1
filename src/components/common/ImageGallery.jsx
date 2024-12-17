@@ -13,7 +13,7 @@ const ImageGallery = ({ images }) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-4">
       {/* Hình lớn */}
-      <div className="w-full md:w-2/3">
+      <div className="w-full md:w-3/4">
         <img
           src={`${baseURL}${images[0]}`} // Sử dụng URL đầy đủ cho hình lớn
           alt="Main view of the tour"
@@ -21,7 +21,7 @@ const ImageGallery = ({ images }) => {
         />
       </div>
       {/* Hình nhỏ */}
-      <div className="flex flex-col w-1/3">
+      <div className="flex flex-col w-1/4">
         {images.slice(1, 4).map((image, index) => ( // Chỉ lấy 3 hình nhỏ
           <div key={index} className="relative mb-2 h-[151px]">
             <img

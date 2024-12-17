@@ -37,32 +37,31 @@ const UserFavourite = () => {
   const [selectedSection, setSelectedSection] = useState("Yêu thích"); // Mục được chọn trong SideBar
 
   return (
-    <div className='bg-[#f8f8f8] w-full min-h-screen overflow-auto'>
-      <Header />
-
-      <div className="w-full flex flex-col md:flex-row  h-auto bg-[#f8f8f8] mx-auto pt-16 md:pt-28 px-[10%]">
-        {/* Sidebar */}
-        <div className="w-full md:w-1/4">
-          <SideBar 
-            selectedSection={selectedSection} 
-            onSectionChange={setSelectedSection} 
+      <div  className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
+        <Header/>
+        <div className='flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-6 mt-4 '>
+          <div className='mr-2 fixed'>
+            <SideBar
+              selectedSection={selectedSection}
+              onSectionChange={setSelectedSection}
           />
-        </div>
+          </div>
 
-        {/* Main content */}
-        <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0">
-          <h1 className="text-[30px] text-[#181E4B] font-bold mb-2">Yêu thích</h1>
-          <div className="flex-1 flex justify-center w-full">
-          <CategoryTabs /> {/* Tabs để chọn loại yêu thích */}
+
+          {/* Main content */}
+          <div className="flex-grow bg-white w-full p-4 rounded-xl shadow-md mt-6 md:mt-0 ml-[300px]">
+            <h1 className="text-[30px] text-[#181E4B] font-bold mb-2">Yêu thích</h1>
+            <div className="flex-1 flex justify-center w-full">
+              <CategoryTabs/> {/* Tabs để chọn loại yêu thích */}
+            </div>
+            <FavouriteList/>
+            <div className="text-center text-[#818080] text-lg font-normal font-['Baloo 2'] mt-6">
+              Không còn hoạt động yêu thích nào
+            </div>
+
           </div>
-          <FavouriteList />
-          <div className="text-center text-[#818080] text-lg font-normal font-['Baloo 2'] mt-6">
-            Không còn hoạt động yêu thích nào
-          </div>
-          
         </div>
       </div>
-    </div>
   );
 };
 
