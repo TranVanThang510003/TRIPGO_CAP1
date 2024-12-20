@@ -46,15 +46,15 @@ const SearchBar = () => {
         <div className="mt-[60px] z-50 fixed mx-auto marker:h-auto w-full  ">
            
             <div 
-                className=" max-w-fit  h-28 border border-[#6e6d6d] rounded-xl bg-[#f3f3f3]" 
+                className=" max-w-[1500px]  h-28 border border-[#6e6d6d] rounded-xl bg-[#f3f3f3]"
                 style={{
                     marginTop: "-60px"
                 }}                    
             >           
-                <div className="mx-4 pt-2 flex space-x-2">                       
+                <div className="mx-4 pt-2 flex justify-between space-x-2">
                     <div className="">
                         <div className="text-sm text-slate-600 font-medium">Điểm đến</div>
-                        <div className="w-64 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex justify-between items-center">
+                        <div className=" W-80 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex justify-between items-center">
                             <Icon icon="mdi:location" className="w-7 h-7" />
                             <select 
                                 value={selectedDestination} 
@@ -72,7 +72,7 @@ const SearchBar = () => {
                     {/* Nhận phòng */}
                     <div className="">
                         <div className="text-sm text-slate-600 font-medium">Nhận phòng</div>
-                        <div className="w-[200px] h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex items-center">
+                        <div className="W-80 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex items-center">
                             <DatePicker
                                 selected={checkInDate}
                                 onChange={(date) => {
@@ -93,7 +93,7 @@ const SearchBar = () => {
                     {/* Trả phòng */}
                     <div className="">
                         <div className="text-sm text-slate-600 font-medium">Trả phòng</div>
-                        <div className="w-[200px] h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex items-center">                   
+                        <div className="W-80 h-16 px-6 bg-white rounded-xl text-customBlue font-medium flex items-center">
                             <DatePicker
                                 selected={checkOutDate}
                                 onChange={setCheckOutDate}

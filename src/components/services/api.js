@@ -71,7 +71,7 @@ export const fetchUserAccounts = async () => {
 };
 //hàm update role của addmin
 export const updateUserRole = async (userId, role) => {
-  return await api.put(`/admin/accounts/${userId}/role`, { role });
+  return await api.put(`/admin/${userId}/role`, { role });
 };
 // hàm lấy thông tin tài khoản của admin
 export const fetchOrderInfomation = async () => {

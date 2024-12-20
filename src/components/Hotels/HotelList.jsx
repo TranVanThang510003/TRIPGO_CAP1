@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import HotelCard from './HotelCard'; 
+import HotelCard from './HotelCard';
 import Pagination from '../common/Pagination';
-import { fetchHotels } from "../services/api"; // Import fetchHotels từ api.js
+import axios from "axios";
 
 const HOTELS_PER_PAGE = 7;
 
@@ -12,13 +12,12 @@ const HotelList = () => {
     useEffect(() => {
         const loadHotels = async () => {
             try {
-                const data = await fetchHotels(); // Lấy dữ liệu khách sạn từ API
-                setHotels(data.hotels || []); // Đặt hotels là mảng từ phản hồi API nếu tồn tại
+                const response = await axios.get("http://localhost:3000/hotels"); // Gọi API
+                setHotels(response.data.data || []);
             } catch (error) {
                 console.error("Lỗi khi lấy danh sách khách sạn:", error);
             }
         };
-
         loadHotels();
     }, []);
 
@@ -35,10 +34,10 @@ const HotelList = () => {
     };
 
     return (
-        <div>
-            <div className="grid grid-cols-1 gap-4 w-full">
+        <div className=''>
+            <div className="grid grid-cols-1 gap-4  pt-4 w-full">
                 {currentHotels.map((hotel, index) => (
-                    <HotelCard key={`${hotel.id}-${index}`} hotel={hotel} />
+                    <HotelCard key={`${hotel.HOTEL_ID}-${index}`} hotel={hotel} />
                 ))}
             </div>
 

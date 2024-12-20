@@ -18,10 +18,16 @@ const useCreateHotelForm = () => {
     const [images, setImages] = useState([]); // Hình ảnh khách sạn
     const [errors, setErrors] = useState({}); // Lưu trữ lỗi khi nhập liệu
 
-    const [existingImages, setExistingImages] = useState([]);
-    const [newImages, setNewImages] = useState([]);
-    const [IMAGE, setIMAGE] = useState(null);
 
+    const [IMAGE, setIMAGE] = useState(null);
+    const [existingImages, setExistingImages] = useState([]); // URL ảnh cũ
+    const [newImages, setNewImages] = useState([]); // File ảnh mới
+
+    // Hàm cập nhật ảnh cũ và mới
+    const updateImages = (updatedExistingImages, updatedNewImages) => {
+        setExistingImages(updatedExistingImages);
+        setNewImages(updatedNewImages);
+    };
     // Danh sách loại khách sạn
     const hotelTypes = [
         { id: 1, name: '1 sao' },
@@ -155,10 +161,7 @@ const useCreateHotelForm = () => {
         setFacilities((prevFacilities) => [...prevFacilities, facility]);
     };
 
-    // Hàm cập nhật danh sách hình ảnh
-    const updateImages = (newImages) => {
-        setImages((prevImages) => [...prevImages, ...newImages]);
-    };
+
 
     // Hàm validate form trước khi gửi
     const validateForm = () => {
@@ -174,13 +177,10 @@ const useCreateHotelForm = () => {
         if (!address.trim()) newErrors.address = 'Vui lòng địa chỉ';
 
         // Kiểm tra tiện ích
-        if (services.length === 0) newErrors.services = 'Vui lòng chọn ít nhất một dịch vụ.';
-        if (!cancellationPolicy) newErrors.cancellationPolicy = 'Vui lòng chọn chính sách hủy phòng.';
-        if (!mealPlan) newErrors.mealPlan = 'Vui lòng chọn meal plan.';
-        roomTypes
-        if (roomTypes.length === 0) newErrors.roomTypes = 'Vui nhập thông tin phòng.';
-        // Kiểm tra các hình ảnh
-        if (images.length === 0) newErrors.images = 'Vui lòng tải lên ít nhất một hình ảnh.';
+        if (newImages.length === 0 && existingImages.length === 0) {
+            newErrors.images = 'Vui lòng tải lên ít nhất một hình ảnh.';
+        }
+
 
 
         setErrors(newErrors);
@@ -223,8 +223,6 @@ const useCreateHotelForm = () => {
         setFacilities,
         roomSize,
         setRoomSize,
-
-
         images,
         updateImages,
         errors,setErrors,

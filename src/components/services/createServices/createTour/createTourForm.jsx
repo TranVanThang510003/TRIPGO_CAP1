@@ -1,16 +1,17 @@
-import ExcelUploader from './ExcelUploader';
+
 import {useState} from "react";
 import axios from 'axios';
-import React from 'react';
 import useCreateTourForm from './useCreateTourForm';
-import FormHeader from './FormHeader.jsx';
+
 import LocationSelector from './LocationSelector.jsx';
 import TourDetails from './TourDetails.jsx';
 import ScheduleList from './ScheduleList.jsx';
 import FileUploader from './FileUploader.jsx';
 import TourTypeSelector from './TourTypeSelector.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
-import ReturnButton from '../../../common/ReturnButton.jsx';
+import Header from "../../../../layout/Header.jsx";
+import SideBar from "../../../UserProfile/SideBar.jsx";
+
 
 const CreateTourForm = () => {
   const {
@@ -155,124 +156,128 @@ const CreateTourForm = () => {
   };
   return (
 
-      <div className="relative p-8 max-w-4xl mx-auto">
-        <div className="fixed ml-[-300px]">
-
-          <ReturnButton/>
-        </div>
-        <FormHeader
-            title="Tạo Tour Cố Định"
-            description="Điền các thông tin dưới đây để tạo tour mới."
-        />
-
-        <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-y-6 bg-white p-8 rounded-lg shadow-lg"
-        >
-          {/* Tour Details */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
-            <TourDetails
-                tourTypes={tourTypes}
-                PUCLIC_TOUR_NAME={PUCLIC_TOUR_NAME}
-                setPUCLIC_TOUR_NAME={setPUCLIC_TOUR_NAME}
-                PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
-                setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
-                DESCRIPIONS_HIGHLIGHT={DESCRIPIONS_HIGHLIGHT}
-                setDESCRIPIONS_HIGHLIGHT={setDESCRIPIONS_HIGHLIGHT}
-                DESCRIPTIONS={DESCRIPTIONS}
-                setDESCRIPTIONS={setDESCRIPTIONS}
-                errors={errors}
-            />
-          </div>
-
-          {/* Location Selector */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Địa điểm</h3>
-            <LocationSelector
-                provinces={provinces}
-                districts={districts}
-                wards={wards}
-                selectedProvince={selectedProvince}
-                selectedDistrict={selectedDistrict}
-                selectedWard={selectedWard}
-                handleProvinceChange={handleProvinceChange}
-                handleDistrictChange={handleDistrictChange}
-                handleWardChange={handleWardChange}
-                errors={errors}
-            />
-          </div>
-
-          {/* Language Selector */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Ngôn ngữ</h3>
-            <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE}/>
-          </div>
-
-          {/* Tour Type Selector */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Loại Tour</h3>
-            <TourTypeSelector
-                tourType={tourType}
-                setTourType={setTourType}
-                numDays={numDays}
-                setNumDays={setNumDays}
-                scheduleDetails={scheduleDetails}
-                setScheduleDetails={setScheduleDetails}
-                multiDaySchedules={multiDaySchedules}
-                setMultiDaySchedules={setMultiDaySchedules}
-                addScheduleDetail={addScheduleDetail}
-                resetSchedules={() => setSchedules([])}
-            />
-          </div>
-
-          {/* Schedule List */}
-          <div>
-            <ScheduleList
-                schedules={schedules}
-                addSchedule={addSchedule}
-                removeSchedule={removeSchedule}
-                departureDate={departureDate}
-                setDepartureDate={setDepartureDate}
-                priceAdult={priceAdult}
-                setPriceAdult={setPriceAdult}
-                priceChild={priceChild}
-                setPriceChild={setPriceChild}
-                quantity={quantity}
-                setQuantity={setQuantity}
-                errors={errors}
-            />
-          </div>
-
-          {/* File Uploader */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
-            <FileUploader
-                IMAGE={IMAGE}
-                setIMAGE={(files) => {
-                  if (files.length > 0) {
-                    setNewImages(files); // Lưu các file mới tải lên
-                  }
-                }}
-                newImages={newImages} // Pass newImages to FileUploader
-                setNewImages={setNewImages}
-                updateImages={updateImages}
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div>
-            <button
-                type="submit"
-                className="w-full py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-200"
-            >
-              Tạo Tour
-            </button>
-          </div>
-        </form>
+  <div className='bg-[#f8f8f8] w-full min-h-screen overflow-auto relative'>
+    <Header/>
+    <div className='flex flex-col md:flex-row gap-2 h-auto bg-[#f8f8f8] mx-6 mt-4 '>
+      <div className='mr-2 fixed'>
+        <SideBar/>
       </div>
-  )
-      ;
+
+      <div className="flex-grow bg-white w-full p-8  mt-6 md:mt-0 ml-[300px]">
+        <h1 className="text-[32px] text-gray-800 font-bold mb-8">Tạo thông tin Tour</h1>
+
+        <div className="relative mx-auto">
+          <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 gap-y-6 bg-white p-8 rounded-lg shadow-lg"
+          >
+            {/* Tour Details */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Thông tin chi tiết</h3>
+              <TourDetails
+                  tourTypes={tourTypes}
+                  PUCLIC_TOUR_NAME={PUCLIC_TOUR_NAME}
+                  setPUCLIC_TOUR_NAME={setPUCLIC_TOUR_NAME}
+                  PUCLIC_TOUR_TYPE={PUCLIC_TOUR_TYPE}
+                  setPUCLIC_TOUR_TYPE={setPUCLIC_TOUR_TYPE}
+                  DESCRIPIONS_HIGHLIGHT={DESCRIPIONS_HIGHLIGHT}
+                  setDESCRIPIONS_HIGHLIGHT={setDESCRIPIONS_HIGHLIGHT}
+                  DESCRIPTIONS={DESCRIPTIONS}
+                  setDESCRIPTIONS={setDESCRIPTIONS}
+                  errors={errors}
+              />
+            </div>
+
+            {/* Location Selector */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Địa điểm</h3>
+              <LocationSelector
+                  provinces={provinces}
+                  districts={districts}
+                  wards={wards}
+                  selectedProvince={selectedProvince}
+                  selectedDistrict={selectedDistrict}
+                  selectedWard={selectedWard}
+                  handleProvinceChange={handleProvinceChange}
+                  handleDistrictChange={handleDistrictChange}
+                  handleWardChange={handleWardChange}
+                  errors={errors}
+              />
+            </div>
+
+            {/* Language Selector */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Ngôn ngữ</h3>
+              <LanguageSelector LANGUAGE={LANGUAGE} setLANGUAGE={setLANGUAGE}/>
+            </div>
+
+            {/* Tour Type Selector */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Loại Tour</h3>
+              <TourTypeSelector
+                  tourType={tourType}
+                  setTourType={setTourType}
+                  numDays={numDays}
+                  setNumDays={setNumDays}
+                  scheduleDetails={scheduleDetails}
+                  setScheduleDetails={setScheduleDetails}
+                  multiDaySchedules={multiDaySchedules}
+                  setMultiDaySchedules={setMultiDaySchedules}
+                  addScheduleDetail={addScheduleDetail}
+                  resetSchedules={() => setSchedules([])}
+              />
+            </div>
+
+            {/* Schedule List */}
+            <div>
+              <ScheduleList
+                  schedules={schedules}
+                  addSchedule={addSchedule}
+                  removeSchedule={removeSchedule}
+                  departureDate={departureDate}
+                  setDepartureDate={setDepartureDate}
+                  priceAdult={priceAdult}
+                  setPriceAdult={setPriceAdult}
+                  priceChild={priceChild}
+                  setPriceChild={setPriceChild}
+                  quantity={quantity}
+                  setQuantity={setQuantity}
+                  errors={errors}
+              />
+            </div>
+
+            {/* File Uploader */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Tải lên hình ảnh</h3>
+              <FileUploader
+                  IMAGE={IMAGE}
+                  setIMAGE={(files) => {
+                    if (files.length > 0) {
+                      setNewImages(files); // Lưu các file mới tải lên
+                    }
+                  }}
+                  newImages={newImages} // Pass newImages to FileUploader
+                  setNewImages={setNewImages}
+                  updateImages={updateImages}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div>
+              <button
+                  type="submit"
+                  className="w-full py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-200"
+              >
+                Tạo Tour
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+)
+  ;
 };
 
 export default CreateTourForm;

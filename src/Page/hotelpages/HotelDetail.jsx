@@ -26,12 +26,47 @@ const HotelDetails = () => {
     return user ? parseInt(JSON.parse(user).id, 10) : null;
   }); // Lấy ID người dùng từ localStorage và chuyển đổi thành số
 
-  // Fetch hotel details from the API
+  const processHotelData = (apiData) => {
+    return {
+      id: apiData.hotelId,
+      name: apiData.name,
+      description: apiData.description,
+      imageUrl: apiData.images?.[0] || '', // Ảnh chính của khách sạn
+      location: apiData.address, // Địa chỉ khách sạn
+      hotelType: apiData.hotelType, // Loại khách sạn
+      roomTypes: apiData.rooms.map((room) => ({
+        roomTypeId: room.roomTypeId,
+        roomName: room.roomName,
+        roomPrice: room.beds?.[0]?.price || 0,
+        roomSize: room.beds?.[0]?.roomSize || 0,
+        maxOccupancy: room.beds?.reduce((sum, bed) => sum + bed.bedQuantity, 0) || 0,
+        roomDescription: room.roomName,
+        bedImages: room.images || [],
+        refundPolicy: 'Không hoàn tiền', // Để mặc định như hình
+        mealPlans: '', // Không có mealPlans trong API
+          amenities: room.amenities || [], // Danh sách tiện nghi
+        beds: room.beds.map((bed) => ({
+          title: `${bed.bedTypeName}`, // Loại giường
+          price: bed.price, // Giá
+          size: `${bed.roomSize} m²`, // Kích thước phòng
+          availability: bed.bedQuantity, // Số lượng giường
+        })),
+      })),
+
+
+
+      amenities: apiData.rooms
+          .flatMap((room) => room.beds.flatMap((bed) => bed.amenities))
+          .filter((v, i, a) => a.indexOf(v) === i) // Loại bỏ tiện nghi trùng lặp
+    };
+  };
+
   useEffect(() => {
     const getHotelDetails = async () => {
       try {
-        const data = await fetchHotelDetails(hotelId);
-        setHotel(data.hotel);
+        const response = await fetchHotelDetails(hotelId);
+        const processedData = processHotelData(response.data);
+        setHotel(processedData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -40,6 +75,7 @@ const HotelDetails = () => {
     };
     getHotelDetails();
   }, [hotelId]);
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -55,7 +91,7 @@ const HotelDetails = () => {
     return clonedImages.slice(0, 4);
   };
 
-  const imageUrl = hotel?.imageUrl; 
+  const imageUrl = hotel?.imageUrl;
   const additionalImages = ensureFourImages(
     [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => img) || [])]
   );
@@ -66,71 +102,65 @@ const HotelDetails = () => {
   return (
     <div className='bg-[#F8F8F8]'>
       <Header />
-      <div className="container mx-auto mt-[80px] w-4/5">
-        <SearchBar />
-       
-        <div className='pt-[115px]'>
-          <div className='my-3'><ReturnButton/></div>
-           
-          <ImageGallery images={additionalImages} />
+      <div className="container mx-auto w-4/5">
+        <div className='w-full'>
+        <SearchBar/>
+
         </div>
 
-        <TitleAndDescription 
-          name={hotel?.name || "Không có tên"} 
-          rating={hotel?.hotelType || "Không có xếp hạng"} 
-          description={hotel?.description || "Không có mô tả"} 
-          pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "Liên hệ"} 
+        <div className='pt-[10px]'>
+          <div className='my-3'><ReturnButton/></div>
+
+          <ImageGallery images={additionalImages}/>
+        </div>
+
+        <TitleAndDescription
+            name={hotel?.name || "Không có tên"}
+            rating={hotel?.hotelType || "Không có xếp hạng"}
+            description={hotel?.description || "Không có mô tả"}
+            pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "Liên hệ"}
         />
 
-        <div className="w-full bg-white mx-auto mt-5 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-4">
-          <RatingAndComments 
-            rating={hotel?.averageRating || 0} 
-            comments={hotel?.reviewCount || 0} 
-            latestComment={hotel?.latestComment || "Không có bình luận gần đây"} 
-            userName={hotel?.userName || "Vô danh"} 
-          />
-          <Amenities amenities={hotel?.amenities ? hotel.amenities.split(', ') : []} />
-          <Location 
-            address={hotel?.location || "Không có địa chỉ"} 
-            airportDistance={hotel?.airportTransfer ? 'Có xe đưa đón sân bay' : 'Không có xe đưa đón sân bay'} 
-          />
-        </div>
+
 
         <h4 className="text-3xl font-medium mb-4 mt-4">Chọn phòng của bạn</h4>
         <div className="flex flex-col w-full">
           {hotel?.roomTypes?.length > 0 ? (
-            hotel.roomTypes.map((type) => (
-              <RoomCard 
-                key={type.roomTypeId}
-                room={{
-                  title: type.roomName,
-                  price: type.roomPrice,
-                  mealPlans: type.mealPlans,
-                  refundPolicy: hotel.isFreeCancellation ? "Hủy miễn phí" : "Không hoàn tiền",
-                  availability: type.maxOccupancy,
-                  size: type.roomSize,
-                  description: type.roomDescription,
-                  image: type.bedImages?.[0] || '/default-room.jpg', 
-                  additionalImages: ensureFourImages(type.bedImages?.slice(0, 2) || [])
-                }} 
-              />
-            ))
+              hotel.roomTypes.map((type) => (
+                  <RoomCard
+                      key={type.roomTypeId}
+                      room={{
+                        title: type.roomName,
+                        price: type.roomPrice,
+                        mealPlans: type.mealPlans || 'Không phục vụ bữa ăn',
+                        refundPolicy: type.refundPolicy,
+                        availability: type.maxOccupancy,
+                        size: `${type.roomSize} m²`,
+                        description: type.roomDescription,
+                        image: type.bedImages?.[0] || '/default-room.jpg',
+                        additionalImages: ensureFourImages(type.bedImages || []),
+                        beds: type.beds, // Truyền danh sách giường
+                        amenities:type.amenities
+                      }}
+                  />
+              ))
           ) : (
-            <p>Không có phòng nào có sẵn.</p> // Hiển thị thông báo nếu không có phòng
+              <p>Không có phòng nào có sẵn.</p>
           )}
         </div>
 
+
         {/* Nút "Chỉnh sửa" chỉ hiển thị khi điều kiện canEdit là true */}
         {canEdit && (
-          <button 
-            className="fixed bottom-10 right-10 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
-            onClick={() => alert('Đi tới trang chỉnh sửa')} // Thay bằng chức năng điều hướng tới trang chỉnh sửa
-          >
-            Chỉnh sửa
-          </button>
+            <button
+                className="fixed bottom-10 right-10 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
+                onClick={() => alert('Đi tới trang chỉnh sửa')} // Thay bằng chức năng điều hướng tới trang chỉnh sửa
+            >
+              Chỉnh sửa
+            </button>
         )}
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

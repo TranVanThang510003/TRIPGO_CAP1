@@ -4,13 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const FinishedTours = ({ finishedTours, reviewedBookings = [] }) => {
     const navigate = useNavigate();
 
-    if (finishedTours.length === 0) {
-        return (
-            <div className="text-center text-gray-500 font-medium text-lg">
-                <p>Không có chuyến đi đã kết thúc.</p>
-            </div>
-        );
-    }
+
 
     return (
         <div className="space-y-6">

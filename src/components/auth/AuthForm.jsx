@@ -81,6 +81,8 @@ function AuthForm({ type, onSubmit, onClose }) {
                 password,
             });
 
+            console.log("Phản hồi từ server:", response.data); // Log chi tiết phản hồi từ server
+
             if (response.data.success) {
                 const user = response.data.user;
                 localStorage.setItem("user", JSON.stringify(user));
@@ -90,15 +92,24 @@ function AuthForm({ type, onSubmit, onClose }) {
                 window.location.reload();
                 onSubmit(user);
             } else {
+                console.error("Lỗi phản hồi từ server:", response.data.message);
                 showNotification(response.data.message || "Có lỗi xảy ra. Vui lòng thử lại.", "error");
                 setErrors({ password: response.data.message || "Có lỗi xảy ra. Vui lòng thử lại." });
             }
         } catch (error) {
-            console.error("Lỗi khi đăng nhập:", error);
-            showNotification("Có lỗi xảy ra. Vui lòng thử lại.", "error");
+            console.error("Lỗi khi gọi API đăng nhập:", error); // Log chi tiết lỗi
+            if (error.response) {
+                console.error("Chi tiết lỗi response:", error.response.data); // Log phản hồi lỗi từ server
+                showNotification(error.response.data.message || "Có lỗi xảy ra từ server.", "error");
+            } else if (error.request) {
+                console.error("Chi tiết lỗi request:", error.request); // Log chi tiết request nếu không nhận được phản hồi
+                showNotification("Không nhận được phản hồi từ server. Vui lòng thử lại.", "error");
+            } else {
+                console.error("Lỗi khác:", error.message); // Log lỗi khác (ví dụ cấu hình sai)
+                showNotification("Đã xảy ra lỗi. Vui lòng thử lại.", "error");
+            }
         }
     };
-
 
   // Xử lý khi form đăng ký được gửi
   const handleContinue = (e) => {

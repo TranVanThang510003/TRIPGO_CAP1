@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../layout/Header';
 import SideBar from '../components/UserProfile/SideBar';
-
+import StaffRequestForm from "../components/UserProfile/StaffRequestForm.jsx"
 const UserProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updateMessage, setUpdateMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const userRole = JSON.parse(localStorage.getItem('user'))?.role;
+
+
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen); // Đóng/mở modal
+  };
   // Lấy thông tin người dùng
   const fetchUserData = async () => {
     const userId = JSON.parse(localStorage.getItem('user'))?.id; // Lấy ID người dùng từ localStorage
@@ -132,25 +139,45 @@ const UserProfile = () => {
             />
           </div>
           {/* Update button */}
-          <div className="mt-12">
+          <div className="mt-12 ">
+            {userRole !== 'staff' && (
+                <a
+                    className="px-6 py-2 float-left text-blue-500 font-medium rounded pointer cursor-pointer hover:underline"
+                    onClick={handleModalToggle}
+                >
+                  Đăng ký trở thành staff
+                </a>
+            )}
             {isEditing ? (
-              <button
-                className="px-6 py-2 float-right bg-[#03387E] text-white font-medium rounded hover:bg-[#03255B] focus:ring-2 focus:ring-[#03387E] focus:outline-none"
-                onClick={handleUpdate}
-              >
-                Cập nhật
-              </button>
+                <button
+                    className="px-6 py-2 float-right bg-[#03387E] text-white font-medium rounded hover:bg-[#03255B] focus:ring-2 focus:ring-[#03387E] focus:outline-none"
+                    onClick={handleUpdate}
+                >
+                  Cập nhật
+                </button>
             ) : (
-              <button
-                className="px-6 py-2 float-right bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                onClick={handleEdit}
-              >
-                Chỉnh sửa
-              </button>
+                <button
+                    className="px-6  py-2 float-right bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    onClick={handleEdit}
+                >
+                  Chỉnh sửa
+                </button>
+            )}
+
+
+            {/* Modal thêm phòng */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+
+
+                  <StaffRequestForm
+                           onClose={handleModalToggle}/>
+
+                </div>
             )}
           </div>
           {updateMessage && (
-            <div className="text-red-500 mt-4">{updateMessage}</div>
+              <div className="text-red-500 mt-4">{updateMessage}</div>
           )}{' '}
           {/* Hiển thị thông báo cập nhật */}
         </div>
@@ -160,8 +187,8 @@ const UserProfile = () => {
 };
 
 // Component to display each row of information
-const InfoRow = ({ label, value, isEditing, setValue, inputType }) => (
-  <div className="flex justify-between items-center border-b pb-2">
+const InfoRow = ({label, value, isEditing, setValue, inputType}) => (
+    <div className="flex justify-between items-center border-b pb-2">
     <div>
       <span className="block font-medium">{label}</span>
       {isEditing ? (

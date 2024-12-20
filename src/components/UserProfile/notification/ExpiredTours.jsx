@@ -4,13 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const ExpiredTours = ({ expiredTours }) => {
     const navigate = useNavigate();
 
-    if (expiredTours.length === 0) {
-        return (
-            <div className="text-center text-gray-500 font-medium text-lg">
-                <p>Không có thông báo hết hạn.</p>
-            </div>
-        );
-    }
+
+
 
     return (
         <div className="space-y-6">

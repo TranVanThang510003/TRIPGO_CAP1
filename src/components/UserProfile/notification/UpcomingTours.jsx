@@ -4,13 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const UpcomingTours = ({ upcomingTours }) => {
     const navigate = useNavigate();
 
-    if (upcomingTours.length === 0) {
-        return (
-            <div className="text-center text-gray-500 font-medium text-lg">
-                <p>Không có chuyến đi sắp đến trong vòng 7 ngày.</p>
-            </div>
-        );
-    }
+
+
 
     return (
         <div className="space-y-6">

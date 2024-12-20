@@ -14,7 +14,10 @@ const Sidebar = () => {
             navigate("/admin/transaction");
         } else if (label === "Quản lý tài khoản") {
             navigate("/admin/accounts");
-        }
+
+    }else if (label === "Thông báo") {
+        navigate("/admin/notification");
+    }
     };
 
     return (
@@ -39,6 +42,12 @@ const Sidebar = () => {
                         onClick={() => handleNavigate("Quản lý tài khoản")}
                     >
                         Quản lý tài khoản
+                    </li>
+                    <li
+                        className={`mb-4 p-2 cursor-pointer rounded ${selectedSection === "Thông báo" ? "bg-blue-700" : "hover:bg-blue-700"}`}
+                        onClick={() => handleNavigate("Thông báo")}
+                    >
+                        Thông báo
                     </li>
                 </ul>
             </nav>

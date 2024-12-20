@@ -53,10 +53,16 @@ const TourOrderList = () => {
     const getDisplayData = (tourName) => {
         if (!orders[tourName]) return [];
         if (selectedDate[tourName] === 'all') {
-            return Object.keys(orders[tourName]).flatMap((date) => orders[tourName][date] || []);
+            return Object.keys(orders[tourName]).flatMap((date) =>
+                orders[tourName][date].map((order) => ({ ...order, departureDate: date }))
+            );
         }
-        return orders[tourName][selectedDate[tourName]] || [];
+        return orders[tourName][selectedDate[tourName]]?.map((order) => ({
+            ...order,
+            departureDate: selectedDate[tourName],
+        })) || [];
     };
+
 
     if (loading) {
         return (
@@ -159,6 +165,7 @@ const TourOrderList = () => {
                                             <thead className="bg-indigo-600 text-white">
                                             <tr>
                                                 <th className="px-6 py-3 text-left">Booking ID</th>
+                                                <th className="px-6 py-3 text-left">Ngày bắt đầu</th>
                                                 <th className="px-6 py-3 text-left">Ngày kết thúc</th>
                                                 <th className="px-6 py-3 text-left">Giá tổng</th>
                                                 <th className="px-6 py-3 text-left">Số khách lớn</th>
@@ -172,6 +179,7 @@ const TourOrderList = () => {
                                             {getDisplayData(tourName).map((order) => (
                                                 <tr key={order.bookingId} className="border-b hover:bg-gray-100">
                                                     <td className="px-6 py-4">{order.bookingId}</td>
+                                                    <td className="px-6 py-4">{order.departureDate}</td>
                                                     <td className="px-6 py-4">{order.endDate || 'Chưa có'}</td>
                                                     <td className="px-6 py-4">{order.totalPrice.toLocaleString()} đ</td>
                                                     <td className="px-6 py-4">{order.adultCount}</td>

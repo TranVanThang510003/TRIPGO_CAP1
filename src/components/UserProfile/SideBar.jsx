@@ -34,7 +34,7 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
      else if (label === "Thêm Tour") {
       navigate("/create-tour");
     } else if (label === "Thêm Hotel") {
-      navigate("/add-hotel");
+      navigate("/create-hotel");
     } else if (label === "Thêm Activity") {
       navigate("/add-activity");
     } else if (label === "Thêm Restaurant") {
@@ -43,6 +43,10 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
       navigate("/order-list");
     } else if (label === "Quản lý tour") {
       navigate("/manage-tours");
+    } else if (label === "Quản lý hotel") {
+      navigate("/manage-hotels");
+    } else if (label === "Quản lý room") {
+      navigate("/manage-rooms");
     } else if (label === "Thống Kê Doanh Thu") {
       navigate("/revenue");
     }
@@ -176,6 +180,16 @@ const SideBar = ({ selectedSection, onSectionChange = () => {} }) => {
                     label="Quản lý tour" 
                     onClick={() => handleNavigate("Quản lý tour")}
                     isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem
+                      label="Quản lý hotel"
+                      onClick={() => handleNavigate("Quản lý hotel")}
+                      isSidebarOpen={isSidebarOpen}
+                  />
+                  <MenuItem
+                      label="Quản lý room"
+                      onClick={() => handleNavigate("Quản lý room")}
+                      isSidebarOpen={isSidebarOpen}
                   />
                 </div>
               )}
