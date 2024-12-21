@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route , useLocation} from 'react-router-dom';
 import './index.css';
+import Header from '@/layout/Header.jsx';
 
 // Lazy load your components
 const HomePage = lazy(() => import('@/Page/HomePage'));
@@ -23,10 +24,7 @@ const TourManagement = lazy(() => import('@/components/Staff/TourManagement'));
 const CreateTour = lazy(() => import('@/components/services/createServices/createTour/createTourForm'));
 const HeaderDashboardForStaff = lazy(() => import('@/components/Admin/DashboardForAmin/MainDashBoard.jsx'));
 const Notification = lazy(() => import('@/components/UserProfile/notification/Notification'));
-const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const UpdateTourForm = lazy(() => import('@/components/services/updateService/updateTour/UpdateTourForm.jsx'));
-import Header from '@/layout/Header.jsx';
-import MainTransactionDetails from '@/components/Admin/TransactionDetailForAdmin/MainTransactionDetails.jsx';
 const CreateHoTelForm = lazy(() => import('@/components/services/createServices/createHotel/CreateHoTelForm'));
 const ReportDashboard = lazy(() => import('@/components/Staff/reportDashBoard/ReportDashBoard.jsx'));
 const TourOrderList = lazy(() => import('@/components/Staff/TourOrderList.jsx'));
@@ -37,7 +35,9 @@ const HotelManagement = lazy(() => import('@/components/Staff/hotelMananagement/
 const AddRoom = lazy(() => import('@/components/services/createServices/createHotel/addRooms/AddRoom.jsx'));
 const RoomManagementPage = lazy(() => import('@/components/Staff/hotelMananagement/roomManagement/RoomManagement.jsx'));
 const NotificationAdmin = lazy(() => import('@/components/Admin/Notification/Notification.jsx'));
+const MainTransactionDetails= lazy(() => import('@/components/Admin/TransactionDetailForAdmin/MainTransactionDetails.jsx'));
 
+const NotFound = () => <h2>404 - Trang không tồn tại</h2>;
 const Loading = () => (
   <div className="loading-spinner">
     <div className="spinner"></div>
@@ -50,7 +50,7 @@ const ConditionalHeader = () => {
   const location = useLocation();
 
   // Hide Header on admin routes
-  const hideHeaderRoutes = ["/admin", "/admin/dashboard","/admin/accounts","/admin/notification"];
+  const hideHeaderRoutes = ["/admin", "/admin/dashboard","/admin/accounts","/admin/notification","/admin/transaction"];
   const isHidden = hideHeaderRoutes.includes(location.pathname);
 
   return (
@@ -78,7 +78,7 @@ const Main = () => {
           <Route path="/admin/dashboard" element={< HeaderDashboardForStaff />} />
           <Route path="/admin/accounts" element={<AccountManagement />} />
           <Route path="/admin/notification" element={< NotificationAdmin />} />
-          {/*<Route path="/admin/transactions" element={< MainTransactionDetails />} />*/}
+          <Route path="/admin/transaction" element={< MainTransactionDetails />} />
 
           <Route path="/hotels" element={<HotelPage />} />
           <Route path="/hotels/:hotelId" element={<HotelDetails />} />

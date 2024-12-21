@@ -16,6 +16,8 @@ const TourPage = () => {
   const [selectedDate, setSelectedDate] = useState(null); // Ngày khởi hành
   const [selectedDuration, setSelectedDuration] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null);
+
 
   const handleSortChange = (newPriceOrder, newRatingOrder) => {
     setPriceOrder(newPriceOrder);
@@ -41,6 +43,10 @@ const TourPage = () => {
     setSelectedProvince(province);
     setSelectedDate(date);
   };
+  const handleRatingChange = (ratings) => {
+    console.log('Rating received in parent (TourPage):', ratings);
+    setSelectedRating(ratings);
+  };
 
   return (
     <div>
@@ -53,11 +59,11 @@ const TourPage = () => {
       />
       <div className="flex w-4/5 mx-auto mt-[65px]">
         <FilterSideBarTour
-
           onTourTypeChange={handleTourTypeChange}
           onPriceChange={handlePriceChange}
           onDurationChange={handleDurationChange}
           onLanguageChange={handleLanguageChange}
+          onRatingChange={handleRatingChange}
         />
         <div className="flex-1 ml-6 w-full">
           <SortBar onSortChange={handleSortChange} />
@@ -71,6 +77,7 @@ const TourPage = () => {
               selectedDate={selectedDate}
               selectedDuration={selectedDuration}
               selectedLanguages={selectedLanguages}
+              selectedRating={selectedRating}
             />
           </div>
         </div>

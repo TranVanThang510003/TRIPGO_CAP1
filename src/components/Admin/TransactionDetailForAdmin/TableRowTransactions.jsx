@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import TransactionDetailModal from "./TransactionDetailModal.jsx";
 import { useState } from "react";
-
+import dayjs from "dayjs";
 const TableRowTransactions = ({ transactions, onDeleteSuccess = () => {} }) => {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
@@ -68,42 +68,51 @@ console.log(transactions)
   return (
     <>
       {transactions.map((transaction, index) => (
-        <tr
-          key={transaction.BOOKING_ID || index}
-          className="border-b hover:bg-gray-50"
-        >
-          <td className="py-3 px-6 text-left">{index + 1}</td>
-          <td className="py-3 px-6 text-left">
-            {transaction.USERNAME || "N/A"}
-          </td>
-          <td className="py-3 px-6 text-left">
-            {transaction.TOUR_NAME || "N/A"}
-          </td>
-          <td className="py-3 px-6 text-left">
-            {transaction.TOTAL_PRICE ? `${transaction.TOTAL_PRICE} VNĐ` : "N/A"}
-          </td>
-          <td className="py-3 px-6 text-left">{transaction.DATE || "N/A"}</td>
-          <td className="py-3 px-6 text-center">
-            <button
-              className="bg-blue-400 text-white px-3 py-2 text-lg rounded-lg mr-2 hover:bg-blue-500"
-              onClick={() => handleViewClick(transaction)}
-            >
-              <Icon icon="ion:eye" />
-            </button>
-            <button
-              className="bg-red-500 text-lg text-white px-3 py-2 rounded-lg hover:bg-red-600"
-              onClick={() => handleDeleteClick(transaction.BOOKING_ID)}
-            >
-              <Icon icon="mingcute:delete-fill" />
-            </button>
-          </td>
-        </tr>
+          <tr
+              key={transaction.BOOKING_ID || index}
+              className="border-b hover:bg-gray-50"
+          >
+            <td className="py-3 px-6 text-left">{index + 1}</td>
+            <td className="py-3 px-6 text-left">
+              {transaction.USERNAME || "N/A"}
+            </td>
+            <td className="py-3 px-6 text-left">
+              {transaction.TOUR_NAME || "N/A"}
+            </td>
+            <td className="py-3 px-6 text-left">
+              {transaction.TOTAL_PRICE ? `${transaction.TOTAL_PRICE} VNĐ` : "N/A"}
+            </td>
+            <td className="py-3 px-6 text-left">
+              {transaction.DATE
+                  ? dayjs(transaction.DATE).format("DD/MM/YYYY")
+                  : "N/A"}
+            </td>
+            <td className="py-3 px-6 text-left">
+              {transaction.CREATED_AT
+                  ? dayjs(transaction.CREATED_AT).format("DD/MM/YYYY")
+                  : "N/A"}
+            </td>
+            <td className="py-3 px-6 text-center">
+              <button
+                  className="bg-blue-400 text-white px-3 py-2 text-lg rounded-lg mr-2 hover:bg-blue-500"
+                  onClick={() => handleViewClick(transaction)}
+              >
+                <Icon icon="ion:eye"/>
+              </button>
+              <button
+                  className="bg-red-500 text-lg text-white px-3 py-2 rounded-lg hover:bg-red-600"
+                  onClick={() => handleDeleteClick(transaction.BOOKING_ID)}
+              >
+                <Icon icon="mingcute:delete-fill"/>
+              </button>
+            </td>
+          </tr>
       ))}
       {selectedTransaction && (
-        <TransactionDetailModal
-          transaction={selectedTransaction}
-          onClose={closeModal}
-        />
+          <TransactionDetailModal
+              transaction={selectedTransaction}
+              onClose={closeModal}
+          />
       )}
     </>
   );

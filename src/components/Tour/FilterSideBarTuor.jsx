@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import TourListAndMap from './mapTour/tourListAndMap';
 
-const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,onLanguageChange }) => {
+const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,onLanguageChange , onRatingChange }) => {
   const [priceRange, setPriceRange] = useState([0, 24000000]); // Trạng thái để quản lý khoảng giá
   const [showMap, setShowMap] = useState(false);
   const [selectedLanguages, setSelectedLanguages] = useState([]); // State to store selected languages
   const [selectedDuration, setSelectedDuration] = useState([]);
   const [selectedTourTypes, setSelectedTourTypes] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null); // State for selected rating
+
   const handleShowMap = () => {
     setShowMap(true); // Hiển thị bản đồ khi click
   };
@@ -49,6 +51,14 @@ const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,o
     setSelectedDuration(updatedDuration);
     onDurationChange(updatedDuration);
   };
+  // Xử lý khi nhấn vào điểm đánh giá
+  const handleRatingChange = (rating) => {
+    const updatedRating = rating === selectedRating ? null : rating; // Bỏ chọn nếu nhấn lại cùng 1 nút
+    setSelectedRating(updatedRating);
+    console.log('Selected Rating:', updatedRating); // Log giá trị đã chọn
+    onRatingChange(updatedRating); // Gửi giá trị lên cha
+  };
+
 
   const tour_type = [
     'Tour mạo hiểm',
@@ -190,12 +200,15 @@ const FilterSideBarTour = ({ onTourTypeChange, onPriceChange, onDurationChange,o
             <h4 className="font-medium text-2xl text-center">Điểm đánh giá</h4>
             <div className="flex space-x-2 mt-2">
               {ratings.map((score, idx) => (
-                <button
-                  key={idx}
-                  className="px-3 py-1  bg-white border rounded-xl text-base  hover:bg-yellow-400"
-                >
-                  {score}
-                </button>
+                  <button
+                      key={idx}
+                      className={`px-3 py-1 border rounded-xl text-base ${
+                          selectedRating === score ? 'bg-yellow-400 text-white' : 'bg-white'
+                      }`}
+                      onClick={() => handleRatingChange(score)}
+                  >
+                    {score}
+                  </button>
               ))}
             </div>
           </div>

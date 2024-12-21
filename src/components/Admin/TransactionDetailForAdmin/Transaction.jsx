@@ -42,18 +42,19 @@ const Transaction = () => {
     <div className="overflow-x-auto mt-6">
       <table className="min-w-full bg-white rounded-lg shadow-md table-fixed">
         <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="py-3 px-6 text-left w-16">STT</th>
-            <th className="py-3 px-6 text-left w-32">Username</th>
-            <th className="py-3 px-6 text-left w-48">Tên Tour</th>
-            <th className="py-3 px-6 text-left w-32">Giá</th>
-            <th className="py-3 px-6 text-left w-48">Ngày đặt</th>
+        <tr>
+          <th className="py-3 px-6 text-left w-16">STT</th>
+          <th className="py-3 px-6 text-left w-32">Username</th>
+          <th className="py-3 px-6 text-left w-48">Tên Tour</th>
+          <th className="py-3 px-6 text-left w-32">Giá</th>
+          <th className="py-3 px-6 text-left w-48">Ngày khởi hành</th>
+          <th className="py-3 px-6 text-left w-48">Ngày đặt</th>
 
-            <th className="py-3 px-6 text-center w-40">Action</th>
-          </tr>
+          <th className="py-3 px-6 text-center w-40">Action</th>
+        </tr>
         </thead>
         <tbody>
-          <TableRowTransactions transactions={transactions} />
+        <TableRowTransactions transactions={transactions} />
         </tbody>
       </table>
     </div>

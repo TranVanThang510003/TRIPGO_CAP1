@@ -14,6 +14,7 @@ const TourList = ({
                     selectedDate,
                     selectedDuration,
                     selectedLanguages,
+                    selectedRating,
                   }) => {
   const [tours, setTours] = useState([]); // Dữ liệu tour sau khi lọc
   const [allTours, setAllTours] = useState([]); // Dữ liệu tour gốc
@@ -39,6 +40,8 @@ const TourList = ({
 
   // Lọc danh sách tour dựa trên tất cả các tiêu chí
   useEffect(() => {
+    console.log('Selected Ratings:', selectedRating);
+
     let filteredTours = [...allTours]; // Bắt đầu với toàn bộ danh sách tour
 
     // Lọc theo tỉnh/thành phố
@@ -91,6 +94,13 @@ const TourList = ({
       );
     }
 
+    // Lọc theo đánh giá (rating)
+    if (selectedRating) {
+      const minRating = parseFloat(selectedRating.replace('+', '')); // Lấy giá trị số từ chuỗi (ví dụ: "3.0+" => 3.0)
+      filteredTours = filteredTours.filter((tour) => tour.averageRating >= minRating);
+      console.log('Filtering tours with rating >=', minRating);
+    }
+
     // Sắp xếp theo giá
     if (priceOrder === 'low-to-high') {
       filteredTours.sort((a, b) => a.priceAdult - b.priceAdult);
@@ -116,6 +126,7 @@ const TourList = ({
     selectedTourTypes,
     selectedDuration,
     selectedLanguages,
+    selectedRating,
     priceRange,
     priceOrder,
     ratingOrder,
