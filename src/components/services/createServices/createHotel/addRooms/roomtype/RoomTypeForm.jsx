@@ -53,19 +53,44 @@ const RoomTypeForm = ({
         console.log("Room Sizes:", bedTypeRoomSizes);
         console.log("Facilities:", facilities);
 
-        if (
-            !roomName ||
-            !bedTypes.length ||
-            !bedTypePrices.length ||
-            !bedTypeQuantities.length ||
-            !bedTypeRoomSizes.length ||
-            !facilities.length
-        ) {
-            alert('Vui lòng điền đầy đủ thông tin!');
+        if (!roomName.trim()) {
+            alert('Tên phòng không được để trống!');
             return false;
         }
+
+        if (!bedTypes.length) {
+            alert('Vui lòng thêm ít nhất một loại giường!');
+            return false;
+        }
+
+        if (bedTypePrices.some(price => !price || price <= 0)) {
+            alert('Vui lòng nhập giá hợp lệ cho tất cả các loại giường!');
+            return false;
+        }
+
+        if (bedTypeQuantities.some(quantity => !quantity || quantity <= 0)) {
+            alert('Vui lòng nhập số lượng hợp lệ cho tất cả các loại giường!');
+            return false;
+        }
+
+        if (bedTypeRoomSizes.some(size => !size || size <= 0)) {
+            alert('Vui lòng nhập kích thước hợp lệ cho tất cả các loại giường!');
+            return false;
+        }
+
+        if (!facilities.length) {
+            alert('Vui lòng chọn ít nhất một tiện ích cho phòng!');
+            return false;
+        }
+
+        if (!roomImages.length) {
+            alert('Vui lòng tải lên ít nhất một ảnh phòng!');
+            return false;
+        }
+
         return true;
     };
+
 
 
     const addRoomType = () => {
@@ -158,11 +183,13 @@ const RoomTypeForm = ({
             setBedTypes(room.bedTypes);
             setBedTypePrices(room.bedTypePrices);
             setBedTypeQuantities(room.bedTypeQuantities);
-            setRoomSize(room.roomSize);
+            setBedTypeRoomSizes(room.bedTypeRoomSizes);// Đảm bảo kích thước giường được nạp đúng
             setFacilities(room.facilities);
+            setRoomImages(room.images || []); // Nạp lại ảnh phòng
             setEditedRoomId(room.id);
         }
     };
+
 
     const saveEditedRoom = () => {
         if (!validateForm()) return;
@@ -170,7 +197,7 @@ const RoomTypeForm = ({
         setRoomTypes(prevRoomTypes =>
             prevRoomTypes.map(room =>
                 room.id === editedRoomId ?
-                    { ...room, name: roomName, bedTypes, bedTypePrices, bedTypeQuantities, roomSize, facilities } : room
+                    { ...room, name: roomName, bedTypes, bedTypePrices, bedTypeQuantities, bedTypeRoomSizes, facilities ,  images: roomImages,} : room
             )
         );
 

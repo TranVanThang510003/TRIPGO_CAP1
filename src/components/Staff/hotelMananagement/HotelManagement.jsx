@@ -125,11 +125,12 @@ const HotelManagement = () => {
                                         </button>
                                         {/* Nút Sửa */}
                                         <button
-                                            onClick={() => handleDeleteClick(hotel.HOTEL_ID)}
-                                            className="px-4 py-2 bg-blue-500 text-white font-medium rounded-md hover:bg-red-600 transition-all duration-200"
+                                            onClick={() => navigate(`/create-hotel?isEdit=true&hotelId=${hotel.HOTEL_ID}`)}
+                                            className="px-4 py-2 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 transition-all duration-200"
                                         >
                                             Sửa
                                         </button>
+
 
                                         {/* Nút Xóa */}
                                         <button

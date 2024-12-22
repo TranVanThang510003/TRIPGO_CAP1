@@ -63,12 +63,14 @@ const RoomTable = ({ roomTypes, onRemoveBedType, onEditRoomType }) => (
                     {/* Thao tác */}
                     <td className="p-3 border text-gray-700 text-center">
                         <button
+                            type="button"
                             onClick={() => onRemoveBedType(room.id, bedType)}
                             className="text-red-500 hover:underline"
                         >
                             Xóa
                         </button>
                         <button
+                            type="button"
                             onClick={() => onEditRoomType(room.id)}
                             className="text-blue-500 hover:underline ml-2"
                         >

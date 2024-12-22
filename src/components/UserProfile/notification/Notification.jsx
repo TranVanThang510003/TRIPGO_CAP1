@@ -13,6 +13,22 @@ const Notification = () => {
     const userId = user?.id;
     const role = user?.role;
     const [visibleNotifications, setVisibleNotifications] = useState(10); // Số thông báo hiển thị ban đầu
+    const [reviewedBookings, setReviewedBookings] = useState([]);
+    // Fetch danh sách các bookingId đã đánh giá
+    useEffect(() => {
+        const fetchReviewedStatus = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/users/reviews/status', {
+                    params: { userId },
+                });
+                setReviewedBookings(response.data.reviewedBookings || []);
+            } catch (error) {
+                console.error('Error fetching review status:', error);
+            }
+        };
+        if (userId) fetchReviewedStatus();
+    }, [userId]);
+
     // Fetch dữ liệu từ API
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -131,6 +147,7 @@ const Notification = () => {
                                                 <FinishedTours
                                                     key={`finished-${index}`}
                                                     finishedTours={[notification.data]}
+                                                    reviewedBookings={reviewedBookings}
                                                 />
                                             );
                                         case 'staff':

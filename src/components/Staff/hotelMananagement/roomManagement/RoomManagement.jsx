@@ -37,6 +37,7 @@ const RoomManagementPage = () => {
                     roomTypeId: room.ROOM_TYPE_ID,
                     roomName: room.ROOM_NAME,
                     bedTypeId: bed.BED_TYPE_MASTER_ID,
+                    bedTypeIdR: bed.BED_TYPE_ID,
                     bedType: bed.BED_TYPE_NAME,
                     roomSize: bed.ROOM_SIZE,
                     price: bed.PRICE,
@@ -79,28 +80,27 @@ const RoomManagementPage = () => {
         }
     };
 
-    const handleDeleteRoomBed = async (roomName, bedType, roomTypeId) => {
-        // Hiển thị hộp thoại xác nhận trước khi xóa
+    const handleDeleteRoomBed = async (roomName, bedType, bedTypeIdR, roomTypeId) => {
         const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa giường "${bedType}" trong phòng "${roomName}" không?`);
         if (!confirmDelete) return;
 
         try {
-            // Gửi yêu cầu xóa đến Backend
-            const response = await axios.delete(
-                `http://localhost:3000/hotels/delete-bed/${roomTypeId}/${bedType}`
-            );
+            console.log("Xóa giường:", { roomName, bedType, roomTypeId, bedTypeIdR });
+
+            const response = await axios.delete(`http://localhost:3000/hotels/delete-bed/${roomTypeId}/${bedTypeIdR}`);
 
             if (response.status === 200) {
-                // Xóa thành công, cập nhật lại danh sách phòng
                 setRooms((prevRooms) =>
-                    prevRooms.filter((room) => !(room.roomName === roomName && room.bedType === bedType))
+                    prevRooms.filter(
+                        (room) => !(room.roomTypeId === roomTypeId && room.bedTypeIdR === bedTypeIdR)
+                    )
                 );
                 alert("Xóa thành công!");
             } else {
                 alert("Xóa thất bại! Vui lòng thử lại.");
             }
         } catch (error) {
-            console.error("Lỗi khi xóa giường:", error);
+            console.error("Lỗi khi xóa giường:", error.response?.data || error.message);
             alert("Đã xảy ra lỗi khi xóa giường. Vui lòng thử lại.");
         }
     };
@@ -167,7 +167,9 @@ const RoomManagementPage = () => {
                         rooms={rooms}
                         onViewImages={(roomName, images) => handleViewImages(roomName, images)}
                         onEdit={(roomName,  bedTypeId) => handleEditRoom(roomName,  bedTypeId)}
-                        onDelete={(roomName,  bedTypeId,roomTypeId) => handleDeleteRoomBed(roomName,  bedTypeId,roomTypeId)}
+                        onDelete={(roomName, bedType, bedTypeIdR, roomTypeId) =>
+                            handleDeleteRoomBed(roomName, bedType, bedTypeIdR, roomTypeId)
+                        }
 
                     />
 

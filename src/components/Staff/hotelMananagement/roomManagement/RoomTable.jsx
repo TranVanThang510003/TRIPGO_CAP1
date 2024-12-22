@@ -42,12 +42,13 @@ const RoomTable = ({ rooms, onViewImages, onEdit ,onDelete}) => {
                                 <ActionButtons
                                     roomName={room.roomName}
                                     bedType={room.bedType}  // Truyền bedType
+                                    bedTypeIdR={room.bedTypeIdR} // Thêm bedTypeIdR
+                                    roomTypeId={room.roomTypeId} // Thêm roomTypeId
                                     images={room.images}
                                     onViewImages={onViewImages}
                                     onEdit={() => onEdit(room.roomName, room.bedTypeId)}
-
                                     onDelete={() =>
-                                        onDelete(room.roomName, room.bedType, room.roomTypeId)
+                                        onDelete(room.roomName, room.bedType, room.bedTypeIdR, room.roomTypeId) // Truyền đủ tham số
                                     }
                                 />
 

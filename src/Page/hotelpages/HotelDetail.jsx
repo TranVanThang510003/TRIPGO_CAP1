@@ -30,8 +30,8 @@ const HotelDetails = () => {
     return {
       id: apiData.hotelId,
       name: apiData.name,
+      images: apiData.images || [],
       description: apiData.description,
-      imageUrl: apiData.images?.[0] || '', // Ảnh chính của khách sạn
       location: apiData.address, // Địa chỉ khách sạn
       hotelType: apiData.hotelType, // Loại khách sạn
       roomTypes: apiData.rooms.map((room) => ({
@@ -80,21 +80,22 @@ const HotelDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  // Function to ensure there are exactly 4 images (for ImageGallery)
+
+
   const ensureFourImages = (images) => {
     if (!images || images.length === 0) return [];
-    if (images.length >= 4) return images.slice(0, 4);
     const clonedImages = [...images];
     while (clonedImages.length < 4) {
-      clonedImages.push(...images);
+      clonedImages.push(images[0]); // Lặp lại ảnh đầu tiên nếu chưa đủ 4 ảnh
     }
-    return clonedImages.slice(0, 4);
+    return clonedImages.slice(0, 4); // Đảm bảo chỉ trả về 4 ảnh
   };
 
-  const imageUrl = hotel?.imageUrl;
-  const additionalImages = ensureFourImages(
-    [imageUrl, ...(hotel?.roomTypes?.[0]?.bedImages?.map(img => img) || [])]
-  );
+  const additionalImages = ensureFourImages(hotel?.images || []);
+
+
+
+
 
   // Điều kiện để hiển thị nút "Chỉnh sửa"
   const canEdit = userRole === 'staff' && hotel?.createdBy === userId;
@@ -108,7 +109,7 @@ const HotelDetails = () => {
 
         </div>
 
-        <div className='pt-[10px]'>
+        <div className='pt-[90px]'>
           <div className='my-3'><ReturnButton/></div>
 
           <ImageGallery images={additionalImages}/>
@@ -118,7 +119,7 @@ const HotelDetails = () => {
             name={hotel?.name || "Không có tên"}
             rating={hotel?.hotelType || "Không có xếp hạng"}
             description={hotel?.description || "Không có mô tả"}
-            pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "Liên hệ"}
+            pricePerNight={hotel?.roomTypes?.[0]?.roomPrice || "0"}
         />
 
 

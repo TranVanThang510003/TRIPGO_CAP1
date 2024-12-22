@@ -25,7 +25,7 @@ const CreateTour = lazy(() => import('@/components/services/createServices/creat
 const HeaderDashboardForStaff = lazy(() => import('@/components/Admin/DashboardForAmin/MainDashBoard.jsx'));
 const Notification = lazy(() => import('@/components/UserProfile/notification/Notification'));
 const UpdateTourForm = lazy(() => import('@/components/services/updateService/updateTour/UpdateTourForm.jsx'));
-const CreateHoTelForm = lazy(() => import('@/components/services/createServices/createHotel/CreateHoTelForm'));
+const CreateHoTelForm = lazy(() => import('@components/services/createServices/createHotel/HotelForm.jsx'));
 const ReportDashboard = lazy(() => import('@/components/Staff/reportDashBoard/ReportDashBoard.jsx'));
 const TourOrderList = lazy(() => import('@/components/Staff/TourOrderList.jsx'));
 const RevenueDashboard = lazy(() => import('@/components/Staff/dashBoard/RevenueDashBoard.jsx'));

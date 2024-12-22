@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-const ActionButtons = ({ roomName, bedTypeId, images, onViewImages, onEdit, onDelete }) => {
+const ActionButtons = ({ roomName, bedTypeId, bedType, bedTypeIdR, roomTypeId, images, onViewImages, onEdit, onDelete  }) => {
     return (
         <div className="flex gap-2">
             {/* Nút Xem Ảnh */}
@@ -22,7 +22,7 @@ const ActionButtons = ({ roomName, bedTypeId, images, onViewImages, onEdit, onDe
 
             {/* Nút Xóa */}
             <button
-                onClick={() => onDelete(roomName, bedType)}
+                onClick={() => onDelete(roomName, bedType, bedTypeIdR, roomTypeId)}
                 className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200"
             >
                 <Icon icon="ic:baseline-delete" width="24" height="24" />

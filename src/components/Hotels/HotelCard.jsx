@@ -9,6 +9,7 @@ const HotelCard = ({ hotel }) => {
     navigate(`/hotels/${hotel.HOTEL_ID}`);
   };
 
+
   // Lấy ảnh đầu tiên từ IMAGE_URLS
   const imageUrl = hotel.IMAGE_URLS?.split(", ")[0] || "/placeholder.jpg";
 
@@ -17,12 +18,12 @@ const HotelCard = ({ hotel }) => {
   const rating = hotel.RATING || 0; // Điểm rating
   const reviewCount = hotel.REVIEW_COUNT || 0; // Tổng lượt đánh giá
   const bookings = hotel.NUM_BOOKED || 0; // Tổng lượt đặt
-  const price = hotel.PRICE ? `${hotel.PRICE.toLocaleString()}đ/đêm` : "Liên hệ để biết giá";
+  const price = hotel.MIN_PRICE ? `${hotel.MIN_PRICE.toLocaleString()}đ/đêm` : "Không có sẵn giá";
 
   return (
       <div className="flex bg-white rounded-lg shadow-md p-6 space-x-6 border border-gray-200 hover:shadow-lg transition-all duration-300">
         {/* Hình ảnh */}
-        <div className="relative flex-shrink-0 w-48 h-48">
+        <div className="relative flex-shrink-0 w-60 h-60">
           <img
               src={`http://localhost:3000/${imageUrl}`}
               alt={hotel.HOTEL_NAME}
@@ -37,15 +38,11 @@ const HotelCard = ({ hotel }) => {
           {/* Số sao */}
           <div className="flex items-center space-x-1 mt-2">
             {[...Array(stars)].map((_, i) => (
-                <Icon key={i} icon="mdi:star" className="text-blue-500 text-lg" />
+                <Icon key={i} icon="mdi:star" className="text-blue-500 text-2xl" />
             ))}
           </div>
 
-          {/* Tiện ích */}
-          <div className="flex space-x-2 mt-2">
-            <span className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm">Mát-xa</span>
-            <span className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm">Dịch vụ Spa</span>
-          </div>
+
 
           {/* Các thông tin đặc biệt */}
           <div className="flex items-center space-x-4 text-green-600 mt-2">
