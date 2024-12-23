@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-
+import ErrorMessage from './ErrorMessage.jsx';
 const FileUploader = ({
   existingImages = [],
   newImages = [],
   updateImages,
+    errors,
 }) => {
   const [localExistingImages, setLocalExistingImages] = useState([]);
   const [newPreviews, setNewPreviews] = useState([]);

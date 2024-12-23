@@ -178,23 +178,65 @@ const useCreateTourForm = () => {
     setIMAGE([...updatedExistingImages, ...updatedNewImages]);
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!PUCLIC_TOUR_NAME.trim())
-      newErrors.PUCLIC_TOUR_NAME = 'Tên tour không được để trống.';
-    if (!selectedProvince) newErrors.selectedProvince = 'Vui lòng chọn tỉnh.';
-    if (!selectedDistrict)
-      newErrors.selectedDistrict = 'Vui lòng chọn quận/huyện.';
-    if (!selectedWard) newErrors.selectedWard = 'Vui lòng chọn xã/phường.';
-    if (!DESCRIPIONS_HIGHLIGHT.trim())
-      newErrors.DESCRIPIONS_HIGHLIGHT = 'Vui lòng nhập điểm nổi bật.';
-    if (!LANGUAGE) newErrors.LANGUAGE = 'Vui lòng chọn ngôn ngữ.';
-    if (schedules.length === 0)
-      newErrors.schedules = 'Vui lòng thêm ít nhất một lịch khởi hành.';
+    const validateForm = () => {
+        const newErrors = {};
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+        // Kiểm tra tên tour
+        if (!PUCLIC_TOUR_NAME.trim()) {
+            newErrors.PUCLIC_TOUR_NAME = 'Tên tour không được để trống.';
+        }
+
+        // Kiểm tra tỉnh, quận, xã
+        if (!selectedProvince) {
+            newErrors.selectedProvince = 'Vui lòng chọn tỉnh.';
+        }
+        if (!selectedDistrict) {
+            newErrors.selectedDistrict = 'Vui lòng chọn quận/huyện.';
+        }
+        if (!selectedWard) {
+            newErrors.selectedWard = 'Vui lòng chọn xã/phường.';
+        }
+
+        // Kiểm tra điểm nổi bật
+        if (!DESCRIPIONS_HIGHLIGHT.trim()) {
+            newErrors.DESCRIPIONS_HIGHLIGHT = 'Vui lòng nhập điểm nổi bật.';
+        }
+
+        // Kiểm tra loại tour
+        if (!PUCLIC_TOUR_TYPE) {
+            newErrors.PUCLIC_TOUR_TYPE = 'Vui lòng chọn loại tour.';
+        }
+
+        // Kiểm tra lịch khởi hành
+        if (schedules.length === 0) {
+            newErrors.schedules = 'Vui lòng thêm ít nhất một lịch khởi hành.';
+        }
+
+        // Kiểm tra lịch trình
+        if (tourType === 'day' && scheduleDetails.length === 0) {
+            newErrors.scheduleDetails = 'Vui lòng thêm ít nhất một lịch trình trong ngày.';
+        }
+        if (tourType === 'multi' && multiDaySchedules.length === 0) {
+            newErrors.multiDaySchedules = 'Vui lòng thêm lịch trình cho các ngày.';
+        }
+
+        // Kiểm tra ngôn ngữ
+        if (!LANGUAGE) {
+            newErrors.LANGUAGE = 'Vui lòng chọn ngôn ngữ.';
+        }
+
+        // Kiểm tra ảnh (nếu bắt buộc)
+        if (newImages.length === 0 && existingImages.length === 0) {
+            newErrors.newImages = 'Vui lòng tải lên ít nhất một hình ảnh.';
+        }
+
+        // Lưu lỗi vào state
+        setErrors(newErrors);
+
+        // Trả về true nếu không có lỗi
+        return Object.keys(newErrors).length === 0;
+    };
+
 
     return {
         provinces,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const CreateTourForm = () => {
   const [provinces, setProvinces] = useState([]); // Danh sách tỉnh
@@ -261,10 +262,10 @@ const [scheduleDetails, setScheduleDetails] = useState([]); // Lưu tiêu đề 
       const response = await axios.post("http://localhost:3000/createtour", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("Tạo tour thành công!");
+      enqueueSnackbar("Tạo tour thành công!", { variant: "success" });
     } catch (error) {
       console.error("Lỗi khi tạo tour:", error.response?.data || error.message);
-      alert("Tạo tour thất bại.");
+      enqueueSnackbar("Tạo tour thất bại. Vui lòng thử lại!", { variant: "error" });
     }
   };
   

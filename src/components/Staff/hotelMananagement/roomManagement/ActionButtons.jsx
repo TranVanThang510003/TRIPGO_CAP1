@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Icon } from "@iconify/react";
 
 const ActionButtons = ({ roomName, bedTypeId, bedType, bedTypeIdR, roomTypeId, images, onViewImages, onEdit, onDelete  }) => {
@@ -6,7 +6,15 @@ const ActionButtons = ({ roomName, bedTypeId, bedType, bedTypeIdR, roomTypeId, i
         <div className="flex gap-2">
             {/* Nút Xem Ảnh */}
             <button
-                onClick={() => onViewImages(roomName, images)}
+                onClick={() => {
+                    if (roomTypeId && images) {
+                        onViewImages(roomName, images, roomTypeId);
+                        console.log(roomTypeId)
+                    } else {
+                        alert("Thiếu thông tin cần thiết để xem ảnh phòng!");
+                    }
+                }}
+
                 className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition duration-200"
             >
                 <Icon icon="line-md:image-filled" width="24" height="24" />

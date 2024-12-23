@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../../../../layout/Header";
 import SideBar from "../../../UserProfile/SideBar";
@@ -9,9 +9,10 @@ import RoomTable from "./RoomTable";
 import AddRoom from "../../../services/createServices/createHotel/addRooms/AddRoom";
 import ImageModal from "./ImageModal";
 import RoomBedForm from "./RoomBedForm";
-
+import { useSnackbar } from "notistack";
 
 const RoomManagementPage = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [hotels, setHotels] = useState([]);
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [rooms, setRooms] = useState([]);
@@ -60,17 +61,54 @@ const RoomManagementPage = () => {
     };
     const [imageModal, setImageModal] = useState({ isOpen: false, images: [] });
 
-    const handleViewImages = (roomName, images) => {
+    const handleViewImages = (roomName, images, roomTypeId) => {
         if (images && images.length > 0) {
-            setImageModal({ isOpen: true, images });
+            setImageModal({ isOpen: true, images, roomTypeId }); // Thêm roomTypeId vào state
         } else {
             alert(`Phòng ${roomName} không có ảnh.`);
         }
     };
-    const handleUpdateImages = (updatedImages) => {
-        console.log("Danh sách ảnh sau khi cập nhật:", updatedImages);
-        // Gửi dữ liệu cập nhật ảnh lên API nếu cần
+
+
+    const handleUpdateImages = async (updatedImages, roomTypeId) => {
+        console.log(roomTypeId)
+
+        try {
+            const formData = new FormData();
+
+            // Separate existing and new images
+            const existingImages = updatedImages.filter((img) => typeof img === "string");
+            const newImages = updatedImages.filter((img) => typeof img !== "string");
+
+            formData.append("existingImages", JSON.stringify(existingImages));
+            newImages.forEach((image) => {
+                formData.append("newImages", image);
+            });
+
+            // Send the API request
+            const response = await axios.put(
+                `http://localhost:3000/hotels/update-room-images/${roomTypeId}`, // Use roomTypeId
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
+
+            if (response.status === 200) {
+                enqueueSnackbar("Cập nhật ảnh phòng thành công!", { variant: "success" });
+                fetchRooms(selectedHotel.HOTEL_ID); // Reload rooms
+            } else {
+                enqueueSnackbar("Cập nhật ảnh phòng thất bại!", { variant: "warning" });
+
+            }
+        } catch (error) {
+            console.error("Lỗi khi cập nhật ảnh phòng:", error.response?.data || error.message);
+            enqueueSnackbar("Đã xảy ra lỗi khi cập nhật ảnh phòng.", { variant: "error" });
+        }
     };
+
+
+
     const handleEditRoom = (roomName, bedTypeId) => {
         const roomToEdit = rooms.find(
             (room) => room.roomName === roomName && room.bedTypeId === bedTypeId
@@ -95,13 +133,13 @@ const RoomManagementPage = () => {
                         (room) => !(room.roomTypeId === roomTypeId && room.bedTypeIdR === bedTypeIdR)
                     )
                 );
-                alert("Xóa thành công!");
+                enqueueSnackbar("Xóa giường thành công!", { variant: "success" });
             } else {
-                alert("Xóa thất bại! Vui lòng thử lại.");
+                enqueueSnackbar("Xóa giường thất bại!", { variant: "warning" });
             }
         } catch (error) {
             console.error("Lỗi khi xóa giường:", error.response?.data || error.message);
-            alert("Đã xảy ra lỗi khi xóa giường. Vui lòng thử lại.");
+            enqueueSnackbar("Đã xảy ra lỗi khi xóa giường.", { variant: "error" });
         }
     };
 
@@ -165,7 +203,7 @@ const RoomManagementPage = () => {
 
                     <RoomTable
                         rooms={rooms}
-                        onViewImages={(roomName, images) => handleViewImages(roomName, images)}
+                        onViewImages={(roomName, images, roomTypeId) => handleViewImages(roomName, images, roomTypeId)}
                         onEdit={(roomName,  bedTypeId) => handleEditRoom(roomName,  bedTypeId)}
                         onDelete={(roomName, bedType, bedTypeIdR, roomTypeId) =>
                             handleDeleteRoomBed(roomName, bedType, bedTypeIdR, roomTypeId)
@@ -202,7 +240,7 @@ const RoomManagementPage = () => {
                 <ImageModal
                     images={imageModal.images}
                     onClose={() => setImageModal({ isOpen: false, images: [] })}
-                    onUpdate={handleUpdateImages}
+                    onUpdate={(updatedImages) => handleUpdateImages(updatedImages, imageModal.roomTypeId)} // Đảm bảo roomTypeId được truyền
                 />
             )}
 

@@ -11,7 +11,7 @@ import TourTypeSelector from './TourTypeSelector.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
 import Header from "../../../../layout/Header.jsx";
 import SideBar from "../../../UserProfile/SideBar.jsx";
-
+import { useSnackbar } from "notistack";
 
 const CreateTourForm = () => {
   const {
@@ -74,15 +74,17 @@ const CreateTourForm = () => {
 
 
   } = useCreateTourForm();
+  const { enqueueSnackbar } = useSnackbar();
 
 
-  const [toursFromExcel, setToursFromExcel] = useState([]);
 
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
+      enqueueSnackbar("Vui lòng kiểm tra và hoàn thành tất cả các thông tin yêu cầu.", {
+        variant: "error"})
       const firstErrorField = document.querySelector('.border-red-500');
       if (firstErrorField)
         firstErrorField.scrollIntoView({ behavior: 'smooth' });
@@ -148,10 +150,10 @@ const CreateTourForm = () => {
           headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
-      alert('Tạo tour thành công!');
+      enqueueSnackbar("Tạo tour thành công!", { variant: "success" });
     } catch (error) {
       console.error('Lỗi khi tạo tour:', error.response?.data || error.message);
-      alert('Tạo tour thất bại.');
+      enqueueSnackbar("Tạo tour thất bại. Vui lòng thử lại!", { variant: "error" });
     }
   };
   return (
@@ -225,6 +227,7 @@ const CreateTourForm = () => {
                   setMultiDaySchedules={setMultiDaySchedules}
                   addScheduleDetail={addScheduleDetail}
                   resetSchedules={() => setSchedules([])}
+                  errors={errors}
               />
             </div>
 
@@ -259,6 +262,7 @@ const CreateTourForm = () => {
                   newImages={newImages} // Pass newImages to FileUploader
                   setNewImages={setNewImages}
                   updateImages={updateImages}
+                  errors={errors}
               />
             </div>
 

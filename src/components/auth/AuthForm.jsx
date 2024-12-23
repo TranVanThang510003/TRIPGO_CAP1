@@ -7,6 +7,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import CompletionForm from "./CompletionForm";
 import Notification from "./Notification";
+import { useSnackbar } from "notistack";
 function AuthForm({ type, onSubmit, onClose }) {
   const [emailOrPhone, setEmailOrPhone] = useState(""); // Lưu email hoặc số điện thoại
   const [password, setPassword] = useState(""); // Lưu mật khẩu
@@ -15,6 +16,8 @@ function AuthForm({ type, onSubmit, onClose }) {
   const [errors, setErrors] = useState({}); // Lưu các lỗi của form
   const [showCompletionForm, setShowCompletionForm] = useState(false); // Hiển thị form hoàn tất đăng ký
 
+    // Sử dụng Notistack
+    const { enqueueSnackbar } = useSnackbar();
     // State quản lý thông báo
     const [notification, setNotification] = useState({
         message: "",
@@ -86,28 +89,24 @@ function AuthForm({ type, onSubmit, onClose }) {
             if (response.data.success) {
                 const user = response.data.user;
                 localStorage.setItem("user", JSON.stringify(user));
-                showNotification("Đăng nhập thành công!", "success");
+                enqueueSnackbar("Đăng nhập thành công!", { variant: "success" });
 
                 // Tự động tải lại trang
-                window.location.reload();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000); // Trì hoãn 2 giây để thông báo hiển thị
                 onSubmit(user);
             } else {
-                console.error("Lỗi phản hồi từ server:", response.data.message);
-                showNotification(response.data.message || "Có lỗi xảy ra. Vui lòng thử lại.", "error");
+                enqueueSnackbar(response.data.message || "Có lỗi xảy ra.", {
+                    variant: "error",
+                });
                 setErrors({ password: response.data.message || "Có lỗi xảy ra. Vui lòng thử lại." });
             }
         } catch (error) {
-            console.error("Lỗi khi gọi API đăng nhập:", error); // Log chi tiết lỗi
-            if (error.response) {
-                console.error("Chi tiết lỗi response:", error.response.data); // Log phản hồi lỗi từ server
-                showNotification(error.response.data.message || "Có lỗi xảy ra từ server.", "error");
-            } else if (error.request) {
-                console.error("Chi tiết lỗi request:", error.request); // Log chi tiết request nếu không nhận được phản hồi
-                showNotification("Không nhận được phản hồi từ server. Vui lòng thử lại.", "error");
-            } else {
-                console.error("Lỗi khác:", error.message); // Log lỗi khác (ví dụ cấu hình sai)
-                showNotification("Đã xảy ra lỗi. Vui lòng thử lại.", "error");
-            }
+            const errorMessage =
+                error.response?.data?.message ||
+                "Không thể kết nối với server. Vui lòng thử lại.";
+            enqueueSnackbar(errorMessage, { variant: "error" });
         }
     };
 
@@ -133,55 +132,85 @@ function AuthForm({ type, onSubmit, onClose }) {
     }
   };
 
-  // Xử lý khi form hoàn tất được gửi
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let passwordError = "";
-    let confirmPasswordError = "";
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // Kiểm tra mật khẩu theo tiêu chuẩn hiện nay
-    if (!validatePassword(password)) {
-      passwordError =
-        "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.";
-    }
+        // Xóa lỗi trước khi kiểm tra
+        setErrors({});
+        let passwordError = "";
+        let confirmPasswordError = "";
 
-    // Kiểm tra mật khẩu xác nhận khớp với mật khẩu
-    if (password !== confirmPassword) {
-      confirmPasswordError = "Mật khẩu xác nhận không khớp!";
-    }
+        // Kiểm tra mật khẩu có đáp ứng yêu cầu hay không
+        if (!validatePassword(password)) {
+            passwordError =
+                "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.";
+        }
 
-    if (passwordError || confirmPasswordError) {
-      setErrors({
-        password: passwordError,
-        confirmPassword: confirmPasswordError,
-      });
-    } else {
-      try {
-        // Gửi dữ liệu đăng ký đến backend
-        const response = await axios.post(
-          "http://localhost:3000/register",
-          {
-            fullName,
-            emailOrPhone,
-            password,
-          }
-        );
+        // Kiểm tra mật khẩu xác nhận khớp với mật khẩu chính
+        if (password !== confirmPassword) {
+            confirmPasswordError = "Mật khẩu xác nhận không khớp!";
+        }
 
-        // Xử lý phản hồi từ backend nếu đăng ký thành công
-        console.log("Đăng ký thành công:", response.data);
-        onSubmit({ emailOrPhone, fullName, password });
+        // Nếu có lỗi, đặt lỗi vào state và dừng xử lý
+        if (passwordError || confirmPasswordError) {
+            setErrors({
+                password: passwordError,
+                confirmPassword: confirmPasswordError,
+            });
+            enqueueSnackbar("Vui lòng kiểm tra lại thông tin đăng ký.", { variant: "error" });
+            return;
+        }
 
-        // Chuyển hướng người dùng sau khi đăng ký thành công
-        window.location.href = "/";
-      } catch (error) {
-        console.error(
-          "Lỗi khi đăng ký:",
-          error.response ? error.response.data : error.message
-        );
-        setErrors({ password: "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại." });
-      }
-    }
-  };
+        try {
+            // Gửi dữ liệu đăng ký đến backend
+            const response = await axios.post("http://localhost:3000/register", {
+                fullName,
+                emailOrPhone,
+                password,
+            });
+
+            // Nếu đăng ký thành công
+            if (response.data.success) {
+                console.log("Đăng ký thành công:", response.data);
+
+                // Hiển thị thông báo thành công
+                enqueueSnackbar("Đăng ký thành công! Vui lòng đăng nhập.", { variant: "success" });
+
+                // Chuyển hướng người dùng đến trang đăng nhập
+                setTimeout(() => {
+                    window.location.href = "/"; // Đường dẫn tới trang đăng nhập
+                }, 2000);
+                onSubmit({ emailOrPhone, fullName, password });
+            } else {
+                // Nếu phản hồi từ backend báo lỗi
+                enqueueSnackbar(response.data.message || "Đăng ký không thành công.", { variant: "error" });
+                setErrors({
+                    password: response.data.message || "Đăng ký không thành công.",
+                });
+            }
+        } catch (error) {
+            // Xử lý lỗi từ server hoặc lỗi kết nối
+            const errorMessage =
+                error.response?.data?.message || "Không thể kết nối với server. Vui lòng thử lại.";
+            console.error("Lỗi khi đăng ký:", errorMessage);
+
+
+            // Kiểm tra nếu lỗi liên quan đến email hoặc số điện thoại trùng lặp
+            if (error.response?.data?.code === "DUPLICATE_ENTRY") {
+                enqueueSnackbar("Email hoặc số điện thoại đã tồn tại trong hệ thống.", { variant: "error" });
+                setErrors({
+                    emailOrPhone: "Email hoặc số điện thoại đã tồn tại trong hệ thống.",
+                });
+            } else {
+                console.error("Lỗi khi đăng ký:", errorMessage);
+                enqueueSnackbar(errorMessage, { variant: "error" });
+                setErrors({
+                    emailOrPhone: errorMessage,
+                });
+            }
+        }
+    };
+
 
   // Khi người dùng bắt đầu nhập, xóa lỗi tương ứng
   const handleInputChange = (setter, field) => (e) => {

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { fetchOrderInfomation } from "../../services/api.js";
 import SideBar from "../../UserProfile/SideBar.jsx";
 import  Header from "../../../layout/Header.jsx";
+import axios from "axios";
 const  OrderInformation= () => {
     const [orders, setOrders] = useState([]);
 
@@ -10,7 +11,10 @@ const  OrderInformation= () => {
         const loadOrders = async () => {
             try {
                 const data = await fetchOrderInfomation();
-                setOrders(data.orders|| []);
+
+                // Lọc danh sách đơn hàng có status = "success"
+                const filteredOrders = data.orders?.filter(order => order.status === "success") || [];
+                setOrders(filteredOrders);
             } catch (error) {
                 console.error("Lỗi khi lấy danh sách đơn hàng của người dùng", error);
             }
@@ -18,6 +22,29 @@ const  OrderInformation= () => {
 
         loadOrders();
     }, []);
+    const cancelOrder = async (bookingId) => {
+        try {
+            const response = await axios.delete(`http://localhost:3000/users/orders/cancel/${bookingId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error cancelling order:', error.response?.data || error.message);
+            throw error;
+        }
+    };
+
+    // Hàm xử lý hủy đơn hàng
+    const handleCancelOrder = async (bookingId) => {
+        try {
+
+
+            await cancelOrder(bookingId); // Gọi API hủy đơn
+            setOrders((prevOrders) => prevOrders.filter((order) => order.bookingId !== bookingId)); // Xóa đơn trong state
+            alert("Hủy đơn hàng thành công!");
+        } catch (error) {
+            alert("Lỗi khi hủy đơn hàng. Vui lòng thử lại.");
+        }
+    };
+
 
 
 
@@ -51,6 +78,7 @@ const  OrderInformation= () => {
                                 key={order.bookingId}
                                 index={index + 1}
                                 order={order}
+                                onCancelOrder={handleCancelOrder}
                             />
                         ))}
                         </tbody>

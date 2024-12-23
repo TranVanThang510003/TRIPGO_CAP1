@@ -2,6 +2,7 @@
 import ErrorMessage from './ErrorMessage.jsx';
 import moment from 'moment';
 
+
 const ScheduleList = ({
                         schedules,
                         addSchedule,
@@ -15,6 +16,7 @@ const ScheduleList = ({
                           quantity,
                         setQuantity,
                         editSchedule,
+                        errors
 
 
                       }) => {
@@ -41,10 +43,11 @@ const ScheduleList = ({
 
   return (
       <div className="col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
-        <h3 className="text-lg font-semibold text-blue-600 mb-4">
+        <h3 className="text-lg font-semibold text-blue-600 ">
           Lịch khởi hành
         </h3>
-        <div className="flex flex-row items-center justify-between gap-4 mb-6">
+          <ErrorMessage message={errors.schedules} />
+        <div className="flex flex-row items-center justify-between gap-4 mt-4 mb-6">
           {/* Ngày khởi hành */}
             <div className="w-full sm:w-1/5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">

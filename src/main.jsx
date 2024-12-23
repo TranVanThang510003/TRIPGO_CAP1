@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route , useLocation} from 'react-router-dom';
 import './index.css';
 import Header from '@/layout/Header.jsx';
-
+import { SnackbarProvider } from "notistack";
 // Lazy load your components
 const HomePage = lazy(() => import('@/Page/HomePage'));
 const Restaurant = lazy(() => import('@/Page/Restaurant'));
@@ -117,7 +117,15 @@ const Main = () => {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Main />
-  </React.StrictMode>
+    <React.StrictMode>
+      <SnackbarProvider
+          maxSnack={3} // Tối đa 3 thông báo xuất hiện cùng lúc
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+      >
+        <Main />
+      </SnackbarProvider>
+    </React.StrictMode>
 );
