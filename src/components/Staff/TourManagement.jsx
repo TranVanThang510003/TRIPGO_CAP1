@@ -6,7 +6,7 @@ import TourCard from "../Tour/TourCard";
 import Pagination from "../common/Pagination";
 import { fetchToursByCreator } from "../../components/services/api"; // Import hàm mới
 
-const TOUR_PER_PAGE = 12; // Số lượng tour hiển thị trên mỗi trang
+const TOUR_PER_PAGE = 15; // Số lượng tour hiển thị trên mỗi trang
 
 const TourManagement = () => {
   const navigate = useNavigate();

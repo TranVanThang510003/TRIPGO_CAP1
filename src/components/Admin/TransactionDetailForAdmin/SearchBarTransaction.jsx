@@ -5,7 +5,7 @@ const SearchBarTransaction = ({ searchTerm, onSearchChange }) => {
     <div className="mt-6">
       <input
         type="text"
-        placeholder="Tìm kiếm"
+        placeholder="Tìm kiếm theo tên người dùng"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)} // Cập nhật giá trị tìm kiếm
         className="w-full p-2 border rounded-lg"

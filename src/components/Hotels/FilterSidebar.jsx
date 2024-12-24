@@ -62,14 +62,8 @@ const FilterSidebar = () => {
             <p className="text-center text-sm font-medium mt-2">Hoạt động trên bản đồ</p>
           </div>
 
-          {/* Các bộ lọc (ẩn khi bản đồ mở) */}
-          <div className="w-80 bg-white flex flex-col items-center rounded-3xl border border-[#ACACAC]">
-            <div className="font-medium text-3xl text-center border-b-4 w-80 h-20 rounded-t-3xl flex items-center justify-center">
-              Lựa chọn
-            </div>
-            {/* Bộ lọc và các phần khác */}
-            {/* ... */}
-          </div>
+
+
         </div>
       )}
 

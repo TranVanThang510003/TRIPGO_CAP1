@@ -32,7 +32,7 @@ const FavouriteCard = ({ tour }) => {
                         />
                         <span className="text-[#f09b0a] text-base font-normal font-['Poppins']">{tour.averageRating}</span>
                         <span className="text-[#818080] text-[16px] font-normal font-['Baloo_2'] ml-1">
-                            ({tour.reviewCount} đánh giá) {tour.numBooking} lượt đặt
+                            ({tour.reviewCount} đánh giá) {tour.nubBooking} lượt đặt
                         </span>
                     </div>
                     {/* Price Section */}

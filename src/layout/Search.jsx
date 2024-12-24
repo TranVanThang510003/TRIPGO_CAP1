@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect,useRef  } from 'react';
 import axios from 'axios';
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ const Search = () => {
     const [searchTerm, setSearchTerm] = useState(''); // Từ khóa tìm kiếm
     const [suggestions, setSuggestions] = useState([]); // Gợi ý tìm kiếm
     const navigate = useNavigate();
+    const searchRef = useRef(null); // Ref để theo dõi vùng tìm kiếm
     // Lấy dữ liệu từ API
     useEffect(() => {
         const fetchData = async () => {
@@ -56,8 +57,21 @@ const Search = () => {
         navigate(`/tours/${tourId}`); // Điều hướng đến trang chi tiết của tour
     };
 
+// Xử lý click ra ngoài vùng tìm kiếm
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setSuggestions([]); // Ẩn gợi ý
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
-        <div className="relative">
+        <div className="relative" ref={searchRef}>
             <input
                 type="text"
                 placeholder="Tìm kiếm tất cả"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import IconHeart from '../icon/IconHeart';
 const SpecialOffer = () => {
     const [favorites, setFavorites] = useState([]); // Lưu trạng thái yêu thích
     const [tours, setTours] = useState([]); // Lưu dữ liệu tour
@@ -57,24 +58,16 @@ const SpecialOffer = () => {
                                     className="w-full h-48 object-cover"
                                 />
                                 {/* Nút yêu thích */}
-                                <button
-                                    className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md"
-                                    onClick={() => toggleFavorite(index)}
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6"
-                                        fill={favorites[index] ? "#ff6b6b" : "white"}
-                                        viewBox="0 0 24 24"
-                                        stroke="#ff6b6b"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </button>
+                                <div className="absolute top-2 right-2 p-2">
+                                    <IconHeart
+                                        tourId={tour.id} // Chắc chắn truyền ID tour vào
+                                        onChange={(updatedLikedStatus) => {
+                                            console.log('Trạng thái yêu thích đã thay đổi:', updatedLikedStatus);
+                                        }}
+
+                                    />
+
+                                </div>
                             </div>
 
                             {/* Nội dung */}

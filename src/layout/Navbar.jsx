@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+import "./Style.css"
 const Navbar = () => {
   return (
     <div
@@ -21,15 +22,14 @@ const Navbar = () => {
         </p>
 
         {/* Search */}
-        <div className="bg-white rounded-lg shadow-lg flex items-center w-full max-w-4xl mt-8 p-2">
-          <input
-            type="text"
-            placeholder="Tạo tour trải nghiệm bằng AI"
-            className="w-full px-4 py-2 rounded-l-full text-gray-700 focus:outline-none text-xl ml-3"
-          />
-          <button className="bg-blue-800 text-white font-bold px-8 py-4 rounded-lg hover:bg-blue-700 whitespace-nowrap">
-            Tìm kiếm
+        <div className="rounded-lg shadow-lg flex items-center  mt-14 p-2">
+
+          <button
+              className="text-white text-2xl font-semibold px-8 py-4 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out animated-gradient"
+          >
+            Start with AI
           </button>
+
         </div>
       </div>
     </div>

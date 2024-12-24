@@ -40,7 +40,7 @@ const ShowCard = ({ selectedYear }) => {
       {statsData && (
         <>
           <StatsCard
-            title="Tổng khách du lịch"
+            title="Số lượng người dùng"
             value={statsData.Total_Users || "N/A"}
           />
           <StatsCard

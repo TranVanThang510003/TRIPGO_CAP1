@@ -74,18 +74,23 @@ const TourDetailPage = () => {
 
   const today = new Date();
 
-  // Tìm lịch trình có ngày khởi hành gần nhất lớn hơn hoặc bằng ngày hiện tại (tương lai)
-  const nearestSchedule = tour.schedules
+// Tìm lịch trình có ngày khởi hành gần nhất lớn hơn hoặc bằng ngày hiện tại (tương lai)
+  const nearestFutureSchedule = tour.schedules
       ?.filter(schedule => new Date(schedule.departureDate) >= today) // Lọc những lịch trình trong tương lai
       .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))[0]; // Sắp xếp và lấy lịch trình gần nhất
 
-  // Nếu không có lịch trình trong tương lai, tìm lịch trình có ngày khởi hành gần nhất trong quá khứ
-  const finalSchedule = nearestSchedule || tour.schedules
+// Nếu không có lịch trình tương lai, tìm lịch trình gần nhất trong quá khứ
+  const nearestPastSchedule = !nearestFutureSchedule && tour.schedules
       ?.filter(schedule => new Date(schedule.departureDate) < today) // Lọc những lịch trình trong quá khứ
       .sort((a, b) => new Date(b.departureDate) - new Date(a.departureDate))[0]; // Sắp xếp và lấy lịch trình gần nhất trong quá khứ
 
-  // Lấy giá người lớn từ lịch trình cuối cùng (tương lai nếu có, quá khứ nếu không)
-  const priceAdult = finalSchedule?.priceAdult || tour.priceAdult || 0; // Nếu không có lịch trình gần nhất, lấy giá mặc định từ tour
+// Quyết định sử dụng lịch trình nào (tương lai ưu tiên, sau đó đến quá khứ)
+  const finalSchedule = nearestFutureSchedule || nearestPastSchedule;
+
+// Lấy giá người lớn từ lịch trình đã chọn
+  const priceAdult = finalSchedule?.priceAdult || tour.priceAdult || 0; // Nếu không có lịch trình, lấy giá mặc định từ tour
+
+  console.log("Giá người lớn:", priceAdult);
 
   return (
       <div className="bg-[#F8F8F8]">
