@@ -1,6 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import "./Style.css"
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const navigate=useNavigate();
   return (
     <div
       className="relative bg-cover bg-center h-[500px] "
@@ -26,6 +28,8 @@ const Navbar = () => {
 
           <button
               className="text-white text-2xl font-semibold px-8 py-4 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out animated-gradient"
+              onClick={() => navigate('/tourai')}
+
           >
             Start with AI
           </button>

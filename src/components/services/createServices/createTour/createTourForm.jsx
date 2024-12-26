@@ -76,7 +76,27 @@ const CreateTourForm = () => {
   } = useCreateTourForm();
   const { enqueueSnackbar } = useSnackbar();
 
-
+  const resetState = () => {
+    setPUCLIC_TOUR_NAME('');
+    setPUCLIC_TOUR_TYPE('');
+    setDESCRIPIONS_HIGHLIGHT('');
+    setDESCRIPTIONS('');
+    setSelectedProvince('');
+    setSelectedDistrict('');
+    setSelectedWard('');
+    setLANGUAGE('');
+    setServiceDescription('');
+    setSchedules([]);
+    setScheduleDetails([]);
+    setMultiDaySchedules([]);
+    setNewImages([]);
+    setDepartureDate('');
+    setEndDate('');
+    setPriceAdult('');
+    setPriceChild('');
+    setQuantity('');
+    setNumDays('');
+  };
 
 
 
@@ -150,7 +170,15 @@ const CreateTourForm = () => {
           headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
-      enqueueSnackbar("Tạo tour thành công!", { variant: "success" });
+      if (response.status === 200) {
+        enqueueSnackbar("Tạo tour thành công!", { variant: "success" });
+
+        // Reset toàn bộ trạng thái form
+        resetState();
+
+
+      }
+     
     } catch (error) {
       console.error('Lỗi khi tạo tour:', error.response?.data || error.message);
       enqueueSnackbar("Tạo tour thất bại. Vui lòng thử lại!", { variant: "error" });

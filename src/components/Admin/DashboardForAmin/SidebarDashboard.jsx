@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -18,7 +18,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="w-64 bg-blue-800 text-white flex flex-col p-4">
+        <div className="w-64 bg-blue-400 text-white flex flex-col p-4">
             <h2 className="text-xl font-bold mb-6">Trang chủ Admin</h2>
             <nav>
                 <ul>

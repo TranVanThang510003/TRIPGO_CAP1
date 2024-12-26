@@ -67,7 +67,7 @@ const TourPage = () => {
         />
         <div className="flex-1 ml-6 w-full">
           <SortBar onSortChange={handleSortChange} />
-          <div className="mt-[100px]">
+          <div className="mt-[100px] mx-auto">
             <TourList
               priceOrder={priceOrder}
               ratingOrder={ratingOrder}

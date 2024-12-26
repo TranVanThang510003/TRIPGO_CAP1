@@ -151,7 +151,7 @@ const TourList = ({
   };
 
   return (
-      <div className="flex flex-wrap gap-8 w-full">
+      <div className="flex flex-wrap gap-11 w-full">
         {/* Hiển thị danh sách tour */}
         {currentTours.length > 0 ? (
             currentTours.map((tour) => <TourCard key={tour.id} tour={tour} />)

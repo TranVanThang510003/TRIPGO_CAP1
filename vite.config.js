@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -13,6 +13,10 @@ export default defineConfig({
       "@pages": path.resolve(__dirname, "src/pages"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@context": path.resolve(__dirname, "src/context"),
+      "@mui/x-date-pickers": path.resolve(
+        __dirname,
+        "node_modules/@mui/x-date-pickers"
+      ),
     },
   },
 });

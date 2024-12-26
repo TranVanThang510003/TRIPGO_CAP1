@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../layout/Header";
 import SideBar from "../../UserProfile/SideBar";
@@ -15,14 +15,23 @@ const HotelManagement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalHotels, setTotalHotels] = useState(0);
     const [selectedSection, setSelectedSection] = useState("hotels");
+    const [creatorId, setCreatorId] = useState(null);
 
     useEffect(() => {
         const fetchHotels = async () => {
+            const creatorId = JSON.parse(localStorage.getItem("user"))?.id;
+            if (creatorId) {
+                setCreatorId(parseInt(creatorId));
+            } else {
+                console.error("Không tìm thấy creatorId trong localStorage");
+                return;
+            }
             try {
-                const response = await axios.get("http://localhost:3000/hotels");
-                setHotels(response.data.data || []);
-                setFilteredHotels(response.data.data || []);
-                setTotalHotels(response.data.data?.length || 0);
+                const response = await axios.get(`http://localhost:3000/hotels/by-creator/${creatorId}`);
+                const hotelsData = response.data.hotels || []; // Truy cập đúng cấu trúc API
+                setHotels(hotelsData);
+                setFilteredHotels(hotelsData);
+                setTotalHotels(hotelsData.length);
             } catch (error) {
                 console.error("Lỗi khi tải danh sách khách sạn:", error);
             }
@@ -36,7 +45,7 @@ const HotelManagement = () => {
 
         if (filters.hotelName) {
             filtered = filtered.filter((hotel) =>
-                hotel.HOTEL_NAME.toLowerCase().includes(filters.hotelName.toLowerCase())
+                hotel.name.toLowerCase().includes(filters.hotelName.toLowerCase()) // Sử dụng đúng trường "name"
             );
         }
 
@@ -60,18 +69,16 @@ const HotelManagement = () => {
         }
     };
 
-    // Xử lý xem chi tiết
     const handleViewClick = (hotelId) => {
         navigate(`/hotels/${hotelId}`);
     };
 
-    // Xử lý xóa khách sạn
     const handleDeleteClick = async (hotelId) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa khách sạn này?")) return;
 
         try {
             await axios.delete(`http://localhost:3000/hotels/${hotelId}`);
-            setHotels(hotels.filter((hotel) => hotel.HOTEL_ID !== hotelId));
+            setHotels(hotels.filter((hotel) => hotel.id !== hotelId)); // Sử dụng "id" thay vì "HOTEL_ID"
             alert("Xóa khách sạn thành công!");
         } catch (error) {
             console.error("Lỗi khi xóa khách sạn:", error);
@@ -103,38 +110,33 @@ const HotelManagement = () => {
                             <tbody>
                             {paginatedHotels.map((hotel, index) => (
                                 <tr
-                                    key={hotel.HOTEL_ID}
+                                    key={hotel.id}
                                     className={`hover:bg-blue-50 ${
                                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                                     } transition-all duration-200`}
                                 >
-                                    <td className="p-4 border-b border-gray-200">{hotel.HOTEL_ID}</td>
+                                    <td className="p-4 border-b border-gray-200">{hotel.id}</td>
                                     <td className="p-4 border-b border-gray-200 font-medium text-gray-700">
-                                        {hotel.HOTEL_NAME}
+                                        {hotel.name}
                                     </td>
                                     <td className="p-4 border-b border-gray-200 text-gray-600">
-                                        {hotel.ADDRESS}, {hotel.WARD}, {hotel.DISTRICT}, {hotel.PROVINCE}
+                                        {hotel.address}, {hotel.ward}, {hotel.district}, {hotel.province}
                                     </td>
                                     <td className="p-4 border-b border-gray-200 flex gap-2">
-                                        {/* Nút Xem */}
                                         <button
-                                            onClick={() => handleViewClick(hotel.HOTEL_ID)}
+                                            onClick={() => handleViewClick(hotel.id)}
                                             className="px-4 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 transition-all duration-200"
                                         >
                                             Xem
                                         </button>
-                                        {/* Nút Sửa */}
                                         <button
-                                            onClick={() => navigate(`/create-hotel?isEdit=true&hotelId=${hotel.HOTEL_ID}`)}
+                                            onClick={() => navigate(`/create-hotel?isEdit=true&hotelId=${hotel.id}`)}
                                             className="px-4 py-2 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 transition-all duration-200"
                                         >
                                             Sửa
                                         </button>
-
-
-                                        {/* Nút Xóa */}
                                         <button
-                                            onClick={() => handleDeleteClick(hotel.HOTEL_ID)}
+                                            onClick={() => handleDeleteClick(hotel.id)}
                                             className="px-4 py-2 bg-red-500 text-white font-medium rounded-md hover:bg-red-600 transition-all duration-200"
                                         >
                                             Xóa

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 
-const RoomBedForm = ({ bed, existingBeds, onSave, onCancel }) => {
+const RoomBedForm = ({ bed, existingBeds,onClose, onSave, onCancel }) => {
     const [bedTypeId, setBedTypeId] = useState(bed?.bedTypeId || ""); // ID loại giường
     const [roomSize, setRoomSize] = useState(bed?.roomSize || "");
     const [price, setPrice] = useState(bed?.price || "");
@@ -62,6 +63,7 @@ const RoomBedForm = ({ bed, existingBeds, onSave, onCancel }) => {
 
         console.log("Dữ liệu gửi đi trước khi lưu:", updatedBed);
         onSave(updatedBed);
+        onClose();
     };
 
     return (
